@@ -3,10 +3,12 @@ package ru.job4j.loop;
 public class Mortgage {
     public int year(int amount, int salary, double percent) {
         int year = 0;
-        while (((amount * 100 + amount * percent) / 100) > salary) {
+        do {
             year++;
-            amount = (int) (amount * (100 + percent) / 100 - salary);
+            int percentForYear = (int) percent * amount / 100;
+            amount = amount + percentForYear - salary;
         }
-        return (year + 1);
+        while (amount > 0);
+            return (year);
     }
 }
