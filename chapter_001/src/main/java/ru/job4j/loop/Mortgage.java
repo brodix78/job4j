@@ -9,6 +9,6 @@ public class Mortgage {
             amount = amount + percentForYear - salary;
         }
         while (amount > 0);
-            return (year);
+        return (year);
     }
 }
