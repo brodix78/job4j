@@ -1,6 +1,4 @@
-package array;
-
-import ru.job4j.condition.Max;
+package ru.job4j.array;
 
 public class Square {
 
