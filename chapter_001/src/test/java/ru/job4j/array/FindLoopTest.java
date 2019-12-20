@@ -15,4 +15,15 @@ public class FindLoopTest {
         int expect = 0;
         assertThat(rst, is(expect));
     }
+
+    @Test
+    public void whenFind3() {
+        int input[] = {5, 2, 10, 2, 4};
+        int value = 2;
+        int start = 2;
+        int finish = 4;
+        int rst =FindLoop.indexOf(input, value, start, finish);
+        int expect = 3;
+        assertThat(rst, is(expect));
+    }
 }
