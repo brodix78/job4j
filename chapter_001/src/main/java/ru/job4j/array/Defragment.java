@@ -6,7 +6,7 @@ public class Defragment {
             String cell = array[index];
             if (cell == null) {
                 int in = index;
-                while (in < array.length-1) {
+                while (in < array.length - 1) {
                     array[in] = array[in + 1];
                     in++;
                 }
