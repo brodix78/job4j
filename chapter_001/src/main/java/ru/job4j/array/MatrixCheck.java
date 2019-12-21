@@ -1,65 +1,45 @@
 package ru.job4j.array;
 
 public class MatrixCheck {
-    public static boolean monoHorizontal(char[][] board, char index) {
-        boolean result = false;
-        for (int x = 0; x < board.length; x++) {
-            if (board[x][0] == index) {
-                result = true;
-                for (int y = 0; y < board[x].length; y++) {
-                    if (board[x][y] != index) {
-                        result = false;
-                        break;
-                    }
-                }
-            }
-            if (result == true) {
+    public static boolean monoHorizontal(char[][] board, int index) {
+        boolean result = true;
+        for (int i = 0; i < board.length; i++) {
+            if (board[index][i] != 'X') {
+                result = false;
                 break;
             }
         }
         return result;
     }
 
-    public static boolean monoVertical(char[][] board, char index) {
-        boolean result = false;
-        for (int y = 0; y < board[0].length; y++) {
-            if (board[0][y] == index) {
-                result = true;
-                for (int x = 0; x < board.length; x++) {
-                    if (board[x][y] != index) {
-                        result = false;
-                        break;
-                    }
-                }
-            }
-            if (result == true) {
+    public static boolean monoVertical(char[][] board, int index) {
+        boolean result = true;
+        for (int i = 0; i < board.length; i++) {
+            if (board[i][index] != 'X') {
+                result = false;
                 break;
             }
         }
         return result;
     }
 
-    public static boolean monoDiagonal(char[][] board, char index) {
-        boolean resultLeft = true;
-        boolean resultRight = true;
+    public static int diagonalSearch(char[][] board) {
+        int index = -1;
         for (int x = 0; x < board.length; x++) {
-            if (board[x][x] != index) {
-                resultLeft = false;
-            }
-            if (board[x][board.length - x - 1] != index) {
-                resultRight = false;
+            if (board[x][x] == 'X') {
+                index = x;
             }
         }
-        if (resultLeft == false) {
-            resultLeft = resultRight;
-        }
-            return resultLeft;
+            return index;
     }
 
     public static boolean isWin(char[][] board) {
         boolean result = false;
-        if (monoHorizontal(board, 'X') || monoVertical(board, 'X') ||monoDiagonal(board, 'X')) {
-            result = true;
+        int index = diagonalSearch(board);
+        if (index > -1) {
+            if (monoHorizontal(board, index) || monoVertical(board, index)) {
+                result = true;
+            }
         }
         return result;
     }
