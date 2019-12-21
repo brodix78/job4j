@@ -1,8 +1,6 @@
 package ru.job4j.array;
 
 import org.junit.Test;
-
-import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.*;
 
