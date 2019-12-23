@@ -11,7 +11,7 @@ public class SqMaxTest {
 
     @Test
     public void whenFirstMax() {
-        int result = SqMax.max(15, 5, 2 , 8);
+        int result = SqMax.max(15, 5, 2, 8);
         assertThat(result, is(15));
     }
 

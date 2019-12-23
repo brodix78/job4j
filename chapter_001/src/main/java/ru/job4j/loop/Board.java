@@ -7,8 +7,7 @@ public class Board {
             for (int x = 0; x < width; x++) {
                 if ((x + y) % 2 == 0) {
                     System.out.print("X");
-                }
-                else {
+                } else {
                     System.out.print(" ");
                 }
             }
@@ -19,6 +18,6 @@ public class Board {
     public static void main(String[] args) {
         paint(3, 3);
         System.out.println();
-        paint(4,4);
+        paint(4, 4);
     }
 }

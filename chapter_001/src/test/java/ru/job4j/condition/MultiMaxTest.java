@@ -9,21 +9,21 @@ public class MultiMaxTest {
     @Test
     public void whenSecondMax() {
         MultiMax check = new MultiMax();
-        int result = check.max(1,4,2);
+        int result = check.max(1, 4, 2);
         assertThat(result, is(4));
     }
 
     @Test
     public void whenFirstMax() {
         MultiMax check = new MultiMax();
-        int result = check.max(8,3,6);
+        int result = check.max(8, 3, 6);
         assertThat(result, is(8));
     }
 
     @Test
     public void whenThirdMax() {
         MultiMax check = new MultiMax();
-        int result = check.max(8,16,20);
+        int result = check.max(8, 16, 20);
         assertThat(result, is(20));
     }
 
