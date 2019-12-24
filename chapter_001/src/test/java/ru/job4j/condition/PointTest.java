@@ -3,20 +3,18 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.awt.*;
+import java.sql.PseudoColumnUsage;
 
 public class PointTest {
-    public static double distance(int x1, int y1, int x2, int y2) {
-        return Point.distance(x1, y1, x2, y2);
+    public double distance(Point second) {
+        return this.distance(second);
     }
 
     @Test
     public void poinTest() {
-        int x1 = 5;
-        int y1 = 5;
-        int x2 = -5;
-        int y2 = -5;
+        Point a = new Point(5, 5), b = new Point(-5, -5);
         double expected = Math.sqrt(200);
-        double out = distance(x1, y1, x2, y2);
+        double out = a.distance(b);
         Assert.assertEquals(expected, out, 0.01);
     }
 }
