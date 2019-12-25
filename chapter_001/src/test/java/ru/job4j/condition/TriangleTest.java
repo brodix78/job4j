@@ -8,13 +8,21 @@ public class TriangleTest {
 
     @Test
     public void whenExist() {
-        boolean result = Triangle.exist(2.0, 2.0, 2.0);
+        Point a = new Point(0, 0);
+        Point b = new Point(4, 0);
+        Point c = new Point(2, 3);
+        Triangle newOne = new Triangle(a, b, c);
+        boolean result = newOne.exist();
         assertThat(result, is(true));
     }
 
     @Test
     public void whenNotExist() {
-        boolean result = Triangle.exist(2.0, 10.0, 4.0);
+        Point a = new Point(0, 0);
+        Point b = new Point(5, 0);
+        Point c = new Point(10, 0);
+        Triangle newOne = new Triangle(a, b, c);
+        boolean result = newOne.exist();
         assertThat(result, is(false));
     }
 }
