@@ -33,7 +33,7 @@ public class Triangle {
     public double area() {
         double rsl = -1;
         double p = this.perimHalf();
-        if (this.exist()) {
+        if (p > 0) {
             rsl = Math.sqrt(p * (p - this.ab) * (p - this.bc) * (p - this.ac));
         }
         return rsl;
