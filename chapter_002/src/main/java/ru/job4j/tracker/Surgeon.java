@@ -5,8 +5,8 @@ public class Surgeon extends Doctor {
     public Surgeon() {
     }
 
-    public void makeOperation(Pacient pacient) {
-        SurgOperation operation = new SurgOperation();
+    public void makeOperation(Diagnose diagnose) {
+        SurgOperation operation = new SurgOperation(diagnose);
     }
 
 }

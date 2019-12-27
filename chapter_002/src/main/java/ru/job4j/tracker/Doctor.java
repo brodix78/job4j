@@ -6,7 +6,7 @@ public class Doctor extends Profession {
     }
 
     public Diagnose Heal(Pacient pacient) {
-        Diagnose diagnose = new Diagnose();
+        Diagnose diagnose = new Diagnose(pacient);
         return diagnose;
     }
 }

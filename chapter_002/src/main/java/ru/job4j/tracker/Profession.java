@@ -1,8 +1,9 @@
 package ru.job4j.tracker;
 
 public class Profession {
-    public String name;
-    public String company;
+    private String name;
+    private String company;
+    private String educationLvl;
 
     public Profession() {
     }
