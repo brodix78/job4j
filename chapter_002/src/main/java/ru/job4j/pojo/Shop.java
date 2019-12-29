@@ -36,11 +36,9 @@ public class Shop {
     }
 
     public void moveToL(Product[] products, int index) {
-        if (index + 1 == products.length) {
-            products[index] = null;
-            return;
+        for (int i = index; i < products.length - 1; i++) {
+            products[i] = products[i+1];
         }
-        products[index] = products[++index];
-        moveToL(products, index);
+        products[products.length - 1] = null;
     }
 }
