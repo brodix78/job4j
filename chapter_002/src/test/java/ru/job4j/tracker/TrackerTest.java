@@ -22,8 +22,8 @@ public class TrackerTest {
     @Test
     public void findAllTest() {
         Tracker tracker = new Tracker();
-        String[] names = {"one", null, "two", null, null, "three"};
-        Item[] itemCh = new Item[6];
+        String[] names = {"one", "two", "three"};
+        Item[] itemCh = new Item[3];
         for (int i = 0; i < names.length; i++) {
             itemCh[i] = new Item(names[i]);
             tracker.add(itemCh[i]);
@@ -32,15 +32,15 @@ public class TrackerTest {
         Item[] items = tracker.findAll();
         assertThat(items.length, is (3));
         assertThat(items[0], is (itemCh[0]));
-        assertThat(items[1], is (itemCh[2]));
-        assertThat(items[2], is (itemCh[5]));
+        assertThat(items[1], is (itemCh[1]));
+        assertThat(items[2], is (itemCh[2]));
     }
 
     @Test
     public void findByNameTest() {
         Tracker tracker = new Tracker();
-        String[] names = {"one", null, "two", null, null, "two"};
-        Item[] itemCh = new Item[6];
+        String[] names = {"one", "two", "three", "two"};
+        Item[] itemCh = new Item[4];
         for (int i = 0; i < names.length; i++) {
             itemCh[i] = new Item(names[i]);
             tracker.add(itemCh[i]);
@@ -48,21 +48,21 @@ public class TrackerTest {
         }
         Item[] items = tracker.findByName("two");
         assertThat(items.length, is (2));
-        assertThat(items[0], is (itemCh[2]));
-        assertThat(items[1], is (itemCh[5]));
+        assertThat(items[0], is (itemCh[1]));
+        assertThat(items[1], is (itemCh[3]));
     }
 
     @Test
     public void findByIdTest() {
         Tracker tracker = new Tracker();
-        String[] names = {"one", null, "two", null, null, "five"};
-        Item[] itemCh = new Item[6];
+        String[] names = {"one", "two", "five"};
+        Item[] itemCh = new Item[3];
         for (int i = 0; i < names.length; i++) {
             itemCh[i] = new Item(names[i]);
             tracker.add(itemCh[i]);
             itemCh[i].setId(tracker.getItemByIndex(i).getId());
         }
-        Item item = tracker.findById(itemCh[5].getId());
+        Item item = tracker.findById(itemCh[2].getId());
         assertThat(item.getName(), is ("five"));
     }
 }
