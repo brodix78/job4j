@@ -30,8 +30,8 @@ public class StartUI {
                     System.out.print("Input id for edit: ");
                     editId = scanner.nextLine();
                     System.out.print("Input new name: ");
-                    String name = scanner.nextLine();
-                    tracker.editItem(editId, name);
+                    Item itemCh = new Item(scanner.nextLine());
+                    tracker.replaceById(editId, itemCh);
                     break;
                 case 3:
                     int delPos;

@@ -69,10 +69,10 @@ public class Tracker {
         }
     }
 
-    public void editItem(String id, String name) {
+    public void replaceById(String id, Item item) {
         int index = indexOf(id);
         if (index != -1) {
-            this.items[index].setName(name);
+            this.items[index].setName(item.getName());
         }
     }
 }
