@@ -72,7 +72,8 @@ public class Tracker {
     public void replaceById(String id, Item item) {
         int index = indexOf(id);
         if (index != -1) {
-            this.items[index].setName(item.getName());
+            item.setId(this.items[index].getId());
+            items[index] = item;
         }
     }
 }
