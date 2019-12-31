@@ -26,22 +26,17 @@ public class StartUI {
                     }
                     break;
                 case 2:
-                    int editPos;
-                    System.out.print("Input position #: ");
-                    do {
-                        editPos = Integer.valueOf(scanner.nextLine());
-                    } while (editPos > tracker.getPosition() || editPos < 0);
+                    String editId;
+                    System.out.print("Input id for edit: ");
+                    editId = scanner.nextLine();
                     System.out.print("Input new name: ");
                     String name = scanner.nextLine();
-                    tracker.editItem(editPos, name);
+                    tracker.editItem(editId, name);
                     break;
                 case 3:
                     int delPos;
-                    System.out.print("Input position #: ");
-                    do {
-                        delPos = Integer.valueOf(scanner.nextLine());
-                    } while (delPos > tracker.getPosition() || delPos < 0);
-                    tracker.delItem(delPos);
+                    System.out.print("Input id for delete: ");
+                    tracker.deleteById(scanner.nextLine());
                     break;
                 case 4:
                     System.out.println("Input id: ");

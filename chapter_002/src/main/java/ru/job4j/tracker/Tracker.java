@@ -41,15 +41,7 @@ public class Tracker {
     };
 
     public Item findById(String id) {
-        Item itemsById = null;
-        for (int i = 0; i < this.position; i++) {
-            String theId = this.items[i].getId();
-            if (theId.equals(id)) {
-                itemsById = this.items[i];
-                break;
-            }
-        }
-        return itemsById;
+        return items[this.indexOf(id)];
     }
 
     private String generateId() {
@@ -57,15 +49,30 @@ public class Tracker {
         return String.valueOf(rm.nextLong() + System.currentTimeMillis());
     }
 
-    public void delItem(int delPos) {
-        for (int i = delPos; i < (position - 1); i++) {
-            this.items[i] = this.items[i + 1];
+    private int indexOf(String id) {
+        int index = -1;
+        for (int i = 0; i < this.position; i++) {
+            String theId = this.items[i].getId();
+            if (id.equals(theId)) {
+                index = i;
+                break;
+            }
         }
-        this.items[this.position - 1] = null;
-        this.position--;
+        return index;
     }
 
-    public void editItem(int editPos, String name) {
-        this.items[editPos].setName(name);
+    public void deleteById(String id) {
+        int index = indexOf(id);
+        if (index != -1) {
+            System.arraycopy(this.items,  index + 1, this.items, index, position - index - 1);
+            this.position--;
+        }
+    }
+
+    public void editItem(String id, String name) {
+        int index = indexOf(id);
+        if (index != -1) {
+            this.items[index].setName(name);
+        }
     }
 }
