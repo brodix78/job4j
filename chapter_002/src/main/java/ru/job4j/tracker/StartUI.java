@@ -10,46 +10,56 @@ public class StartUI {
             this.showMenu();
             System.out.println();
             int select;
-            do{
+            do {
                 select = Integer.valueOf(scanner.nextLine());
             } while (select < 0 || select > 6);
             switch (select) {
-                case 0: {
+                case 0:
                     System.out.println("Input new item name: ");
-                    Item item =new Item(scanner.nextLine());
+                    Item item = new Item(scanner.nextLine());
                     tracker.add(item);
                     break;
-                }
-                case 1: {
-                    for (Item item: tracker.findAll()) {
-                        System.out.println(item.getName());
+                case 1:
+                    int pos = 0;
+                    for (Item it: tracker.findAll()) {
+                        System.out.println("#" + pos++ + ". " + it.getName() + " id:" + it.getId());
                     }
                     break;
-                }
-                case 2: {// Этот метод в tracker не реализовывали, если надо допишу
+                case 2:
+                    int editPos;
+                    System.out.print("Input position #: ");
+                    do {
+                        editPos = Integer.valueOf(scanner.nextLine());
+                    } while (editPos > tracker.getPosition() || editPos < 0);
+                    System.out.print("Input new name: ");
+                    String name = scanner.nextLine();
+                    tracker.editItem(editPos, name);
                     break;
-                }
-                case 3: {// Этот метод в tracker не реализовывали, если надо допишу
+                case 3:
+                    int delPos;
+                    System.out.print("Input position #: ");
+                    do {
+                        delPos = Integer.valueOf(scanner.nextLine());
+                    } while (delPos > tracker.getPosition() || delPos < 0);
+                    tracker.delItem(delPos);
                     break;
-                }
-                case 4: {
+                case 4:
                     System.out.println("Input id: ");
                     tracker.findById(scanner.nextLine());
                     break;
-                }
-                case 5: {
+                case 5:
                     System.out.println("Input name: ");
-                    for (Item item : tracker.findByName(scanner.nextLine())){
-                        System.out.println(item.getName() + " id:" + item.getId());
+                    for (Item it : tracker.findByName(scanner.nextLine())) {
+                        System.out.println(it.getName() + " id:" + it.getId());
                     }
                     break;
-                }
-                case 6: {
-                    System.out.println("CUB good :)");
+                case 6:
+                    System.out.println("C U B good :)");
                     run = false;
                     break;
-                }
+                default: break;
             }
+            System.out.println();
         }
     }
 
