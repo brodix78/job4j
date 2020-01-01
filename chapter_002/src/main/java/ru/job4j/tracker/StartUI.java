@@ -2,6 +2,49 @@ package ru.job4j.tracker;
 
 public class StartUI {
 
+    public static void createItem(Input input, Tracker tracker) {
+        Item item = new Item(input.askString("Input new item name: "));
+        tracker.add(item);
+    }
+
+    public static void listItems(Tracker tracker) {
+        int pos = 0;
+        for (Item it: tracker.findAll()) {
+            System.out.println("#" + pos++ + ". " + it.getName() + " id:" + it.getId());
+        }
+    }
+
+    public static void replace(Input input, Tracker tracker) {
+        String editId;
+        editId = input.askString("Input id for edit: ");
+        Item itemCh = new Item(input.askString("Input new name: "));
+        tracker.replaceById(editId, itemCh);
+    }
+
+    public static void delete(Input input, Tracker tracker) {
+        tracker.deleteById(input.askString("Input id for delete: "));
+    }
+
+    public static void findById(Input input, Tracker tracker) {
+        Item itemFI = tracker.findById(input.askString("Input id: "));
+        if (itemFI != null) {
+            System.out.println(itemFI.getName() + " id:" + itemFI.getId());
+        } else {
+            System.out.println("No item");
+        }
+    }
+
+    public static void findByName(Input input, Tracker tracker) {
+        Item[] itemFN = tracker.findByName(input.askString("Input name: "));
+        if (itemFN != null) {
+            for (Item it : itemFN) {
+                System.out.println(it.getName() + " id:" + it.getId());
+            }
+        } else {
+            System.out.println("No item");
+        }
+    }
+
     public void init(Tracker tracker, Input input) {
         boolean run = true;
         while (run) {
@@ -13,42 +56,22 @@ public class StartUI {
             } while (select < 0 || select > 6);
             switch (select) {
                 case 0:
-                    Item item = new Item(input.askString("Input new item name: "));
-                    tracker.add(item);
+                    this.createItem(input, tracker);
                     break;
                 case 1:
-                    int pos = 0;
-                    for (Item it: tracker.findAll()) {
-                        System.out.println("#" + pos++ + ". " + it.getName() + " id:" + it.getId());
-                    }
+                    this.listItems(tracker);
                     break;
                 case 2:
-                    String editId;
-                    editId = input.askString("Input id for edit: ");
-                    Item itemCh = new Item(input.askString("Input new name: "));
-                    tracker.replaceById(editId, itemCh);
+                    this.replace(input, tracker);
                     break;
                 case 3:
-                    int delPos;
-                    tracker.deleteById(input.askString("Input id for delete: "));
+                    this.delete(input, tracker);
                     break;
                 case 4:
-                    Item itemFI = tracker.findById(input.askString("Input id: "));
-                    if (itemFI != null) {
-                        System.out.println(itemFI.getName() + " id:" + itemFI.getId());
-                    } else {
-                        System.out.println("No item");
-                    }
+                    this.findById(input, tracker);
                     break;
                 case 5:
-                    Item[] itemFN = tracker.findByName(input.askString("Input name: "));
-                    if (itemFN != null) {
-                        for (Item it : itemFN) {
-                            System.out.println(it.getName() + " id:" + it.getId());
-                        }
-                    } else {
-                        System.out.println("No item");
-                    }
+                    this.findByName(input, tracker);
                     break;
                 case 6:
                     System.out.println("C U B good :)");
