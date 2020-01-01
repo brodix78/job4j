@@ -38,13 +38,9 @@ public class Tracker {
                 size++;
             }
         }
-        if (find) {
-            itemsByName = Arrays.copyOf(itemsByName, size);
-        } else {
-            itemsByName = null;
-        }
+        itemsByName = find ? Arrays.copyOf(itemsByName, size) : null;
         return itemsByName;
-    };
+    }
 
     public Item findById(String id) {
         Item item = null;
