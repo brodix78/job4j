@@ -66,19 +66,25 @@ public class Tracker {
         return index;
     }
 
-    public void deleteById(String id) {
+    public boolean deleteById(String id) {
+        boolean rsl = false;
         int index = indexOf(id);
         if (index != -1) {
             System.arraycopy(this.items,  index + 1, this.items, index, position - index - 1);
             this.position--;
+            rsl = true;
         }
+        return rsl;
     }
 
-    public void replaceById(String id, Item item) {
+    public boolean replaceById(String id, Item item) {
+        boolean rsl = false;
         int index = indexOf(id);
         if (index != -1) {
             item.setId(this.items[index].getId());
             items[index] = item;
+            rsl = true;
         }
+        return rsl;
     }
 }

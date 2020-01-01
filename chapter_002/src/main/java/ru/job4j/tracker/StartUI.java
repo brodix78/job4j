@@ -18,11 +18,19 @@ public class StartUI {
         String editId;
         editId = input.askString("Input id for edit: ");
         Item itemCh = new Item(input.askString("Input new name: "));
-        tracker.replaceById(editId, itemCh);
+        if (tracker.replaceById(editId, itemCh)) {
+            System.out.println("Done");
+        } else {
+            System.out.println("No such item");
+        }
     }
 
     public static void delete(Input input, Tracker tracker) {
-        tracker.deleteById(input.askString("Input id for delete: "));
+        if (tracker.deleteById(input.askString("Input id for delete: "))) {
+            System.out.println("Done");
+        } else {
+            System.out.println("No such item");
+        }
     }
 
     public static void findById(Input input, Tracker tracker) {
