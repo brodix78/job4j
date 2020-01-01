@@ -36,7 +36,7 @@ public class StartUI {
 
     public static void findByName(Input input, Tracker tracker) {
         Item[] itemFN = tracker.findByName(input.askString("Input name: "));
-        if (itemFN != null) {
+        if (itemFN.length > 0) {
             for (Item it : itemFN) {
                 System.out.println(it.getName() + " id:" + it.getId());
             }
