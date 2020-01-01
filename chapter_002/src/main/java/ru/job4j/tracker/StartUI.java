@@ -4,19 +4,18 @@ import java.util.Scanner;
 
 public class StartUI {
 
-    public void init(Scanner scanner, Tracker tracker) {
+    public void init(Tracker tracker, Input input) {
         boolean run = true;
         while (run) {
             this.showMenu();
             System.out.println();
             int select;
             do {
-                select = Integer.valueOf(scanner.nextLine());
+                select = input.askInt("Your choice: ");
             } while (select < 0 || select > 6);
             switch (select) {
                 case 0:
-                    System.out.println("Input new item name: ");
-                    Item item = new Item(scanner.nextLine());
+                    Item item = new Item(input.askString("Input new item name: "));
                     tracker.add(item);
                     break;
                 case 1:
@@ -27,25 +26,30 @@ public class StartUI {
                     break;
                 case 2:
                     String editId;
-                    System.out.print("Input id for edit: ");
-                    editId = scanner.nextLine();
-                    System.out.print("Input new name: ");
-                    Item itemCh = new Item(scanner.nextLine());
+                    editId = input.askString("Input id for edit: ");
+                    Item itemCh = new Item(input.askString("Input new name: "));
                     tracker.replaceById(editId, itemCh);
                     break;
                 case 3:
                     int delPos;
-                    System.out.print("Input id for delete: ");
-                    tracker.deleteById(scanner.nextLine());
+                    tracker.deleteById(input.askString("Input id for delete: "));
                     break;
                 case 4:
-                    System.out.println("Input id: ");
-                    tracker.findById(scanner.nextLine());
+                    Item itemFI = tracker.findById(input.askString("Input id: "));
+                    if (itemFI != null) {
+                        System.out.println(itemFI.getName() + " id:" + itemFI.getId());
+                    } else {
+                        System.out.println("No item");
+                    }
                     break;
                 case 5:
-                    System.out.println("Input name: ");
-                    for (Item it : tracker.findByName(scanner.nextLine())) {
-                        System.out.println(it.getName() + " id:" + it.getId());
+                    Item[] itemFN = tracker.findByName(input.askString("Input name: "));
+                    if (itemFN != null) {
+                        for (Item it : itemFN) {
+                            System.out.println(it.getName() + " id:" + it.getId());
+                        }
+                    } else {
+                        System.out.println("No item");
                     }
                     break;
                 case 6:
@@ -72,8 +76,8 @@ public class StartUI {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         Tracker tracker = new Tracker();
-        new StartUI().init(scanner, tracker);
+        Input input = new ConsoleInput();
+        new StartUI().init(tracker, input);
     }
 }

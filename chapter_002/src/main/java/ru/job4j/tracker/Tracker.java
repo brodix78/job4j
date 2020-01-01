@@ -29,19 +29,30 @@ public class Tracker {
     public Item[] findByName(String key) {
         Item[] itemsByName = new Item[this.position];
         int size = 0;
+        boolean find = false;
         for (int i = 0; i < this.position; i++) {
             String name = this.items[i].getName();
             if (name.equals(key)) {
                 itemsByName[size] = this.items[i];
+                find = true;
                 size++;
             }
         }
-        itemsByName = Arrays.copyOf(itemsByName, size);
+        if (find) {
+            itemsByName = Arrays.copyOf(itemsByName, size);
+        } else {
+            itemsByName = null;
+        }
         return itemsByName;
     };
 
     public Item findById(String id) {
-        return items[this.indexOf(id)];
+        Item item = null;
+        int index = indexOf(id);
+        if (index != -1) {
+            item = this.items[index];
+        }
+        return item;
     }
 
     private String generateId() {
