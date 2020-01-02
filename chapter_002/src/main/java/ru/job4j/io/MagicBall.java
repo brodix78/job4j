@@ -26,14 +26,12 @@ public class MagicBall {
         int rand = new Random().nextInt(3);
         String answer = "Может быть";
         switch (rand) {
-            case 0: {
+            case 0:
                 answer = "Да";
                 break;
-            }
-            case 1: {
+            case 1:
                 answer = "Нет";
                 break;
-            }
             default: break;
         }
         return answer;

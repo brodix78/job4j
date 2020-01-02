@@ -6,7 +6,7 @@ public class HierarchyUsage {
         Transport tp = car;
         Object obj = car;
         Object ocar = new Car();
-        Car CarFromObject = (Car) ocar;
+        Car carFromObject = (Car) ocar;
         Object bicycle = new Bicycle();
         //Car cb = (Car) bicycle;
         System.out.println(new Car());

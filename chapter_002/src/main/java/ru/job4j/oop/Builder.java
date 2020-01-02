@@ -17,7 +17,7 @@ public class Builder extends Profession {
         return this.stage;
     }
 
-    public void makeObject(){
+    public void makeObject() {
         BuildJob buildJob = new BuildJob();
     };
 }

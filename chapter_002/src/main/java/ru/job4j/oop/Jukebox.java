@@ -11,7 +11,7 @@ public class Jukebox {
         }
     }
 
-    public static void main(String [] args) {
+    public static void main(String[] args) {
         Jukebox testsong = new Jukebox();
         for (int i = 1; i < 5; i++) {
             System.out.print("Position " + i + ": ");

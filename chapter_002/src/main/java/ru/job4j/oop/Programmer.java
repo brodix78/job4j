@@ -2,7 +2,7 @@ package ru.job4j.oop;
 
 import java.awt.*;
 
-public class Programmer extends Engineer{
+public class Programmer extends Engineer {
     private boolean distanceJob;
     private String langList;
 

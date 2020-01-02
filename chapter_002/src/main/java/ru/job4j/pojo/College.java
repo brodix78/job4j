@@ -10,7 +10,7 @@ public class College {
         Student student = new Student();
         student.setName("Иванов Иван Иванович");
         student.setGroup("1AC");
-        Calendar calendar = new GregorianCalendar(2019, 8 , 2);
+        Calendar calendar = new GregorianCalendar(2019, 8, 2);
         Date date = calendar.getTime();
         student.setDateIn(date);
         System.out.println("Ф.И.О.: " + student.getName());

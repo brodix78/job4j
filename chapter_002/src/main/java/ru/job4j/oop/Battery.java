@@ -16,7 +16,7 @@ public class Battery {
     }
 
     public void showBatSt() {
-        System.out.println(this.brand + " charged "+ this.load + "%");
+        System.out.println(this.brand + " charged " + this.load + "%");
     }
 
     public static void main(String[] args) {
