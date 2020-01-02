@@ -11,15 +11,14 @@ public class Triangle {
     public Triangle(Point ap, Point bp, Point cp) {
         this.first = ap;
         this.second = bp;
-        this.third =cp;
+        this.third = cp;
         this.ab = this.first.distance(this.second);
         this.bc = this.second.distance(this.third);
         this.ac = this.first.distance(this.third);
     }
 
     public boolean exist() {
-        return (((this.ab + this.ac) > this.ac) && ((this.ab + this.bc) > this.ac) &&
-                ((this.ac + this.bc) > this.ab));
+        return (((this.ab + this.ac) > this.ac) && ((this.ab + this.bc) > this.ac) && (this.ac + this.bc) > this.ab));
     }
 
     public double perimHalf() {
