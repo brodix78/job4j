@@ -9,12 +9,12 @@ public class SquareTest {
     public void squareTesting() {
         Square square = new Square();
         assertThat(square.draw(), is(new StringBuilder()
-                .append("+ + + + + +\n")
-                .append("+         +\n")
-                .append("+         +\n")
-                .append("+         +\n")
-                .append("+         +\n")
-                .append("+ + + + + +")
+                .append("+ + + + + +" + System.lineSeparator())
+                .append("+         +" + System.lineSeparator())
+                .append("+         +" + System.lineSeparator())
+                .append("+         +" + System.lineSeparator())
+                .append("+         +" + System.lineSeparator())
+                .append("+ + + + + +" + System.lineSeparator())
                 .toString()));
     }
 }

@@ -9,12 +9,12 @@ public class TriangleTest {
     public void trianglTest() {
         Triangle tri = new Triangle();
         assertThat(tri.draw(), is(new StringBuilder()
-                .append("     +\n")
-                .append("    + +\n")
-                .append("   +   +\n")
-                .append("  +     +\n")
-                .append(" +       +\n")
-                .append("+ + + + + +")
+                .append("     +" + System.lineSeparator())
+                .append("    + +" + System.lineSeparator())
+                .append("   +   +" + System.lineSeparator())
+                .append("  +     +" + System.lineSeparator())
+                .append(" +       +" + System.lineSeparator())
+                .append("+ + + + + +" + System.lineSeparator())
                 .toString()));
     }
 }
