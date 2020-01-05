@@ -1,15 +1,29 @@
 package ru.job4j.tracker;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.StringJoiner;
 
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class StartUITest {
+    private PrintStream stdout = System.out;
+    private ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+    @Before
+    public void loadOut() {
+        System.setOut(new PrintStream(this.out));
+    }
+
+    @After
+    public void returnOut() {
+        System.setOut(this.stdout);
+    }
 
     @Test
     public void initTest() {
@@ -23,16 +37,11 @@ public class StartUITest {
     public void showMenuTest() {
         StubInput input = new StubInput(new String[] {"0"});
         StubAction action = new StubAction();
-        PrintStream stdout = System.out;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(out));
         new StartUI().init(new Tracker(), input, new UserAction[] {action});
-        assertThat(new String(out.toByteArray()),
-                is(new StringBuilder()
-                        .append("0. Stub action" + System.lineSeparator())
-                        .append(System.lineSeparator())
-                        .append(System.lineSeparator())
+        assertThat(new String(this.out.toByteArray()),
+                is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
+                        .add("0. Stub action")
+                        .add(System.lineSeparator())
                         .toString()));
-        System.setOut(stdout);
-    }
+        }
 }
