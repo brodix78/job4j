@@ -18,7 +18,7 @@ public class Triangle {
     }
 
     public boolean exist() {
-        return (((this.ab + this.ac) > this.ac) && ((this.ab + this.bc) > this.ac) && (this.ac + this.bc) > this.ab));
+        return (((this.ab + this.ac) > this.ac) && ((this.ab + this.bc) > this.ac) && (this.ac + this.bc) > this.ab);
     }
 
     public double perimHalf() {
