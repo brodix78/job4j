@@ -7,9 +7,7 @@ public class StartUI {
             this.showMenu(userActions);
             System.out.println();
             int select;
-            do {
-                select = input.askInt("Your choice: ");
-            } while (select < 0 || select > 6);
+            select = input.askInt("Your choice: ", userActions.length - 1);
             run = userActions[select].execute(input, tracker);
             System.out.println();
         }
@@ -23,7 +21,7 @@ public class StartUI {
 
     public static void main(String[] args) {
         Tracker tracker = new Tracker();
-        Input input = new ConsoleInput();
+        Input input = new ValidateInput();
         UserAction[] userActions = {new CreateItem(), new ListItems(), new EditItem(), new DeleteItem(), new FindById(), new FindByName(), new Exit()};
         new StartUI().init(tracker, input, userActions);
     }
