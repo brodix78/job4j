@@ -11,7 +11,12 @@ public class Machine {
         int coin = 0;
         money = money - price;
         while (money > 0) {
-            money = money >= COINS[coin] ? money - (rsl[size++] = COINS[coin]) :  (0 * coin++) + money;
+            if (money >= COINS[coin]) {
+                rsl[size++] = COINS[coin];
+                money -= COINS[coin];
+            } else {
+                coin++;
+            }
         }
         return Arrays.copyOf(rsl, size);
     }
