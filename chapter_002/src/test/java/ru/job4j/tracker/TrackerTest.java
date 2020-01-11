@@ -5,6 +5,8 @@ import org.junit.Test;
 
 import javax.swing.plaf.SplitPaneUI;
 
+import java.util.List;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -29,11 +31,11 @@ public class TrackerTest {
             tracker.add(itemCh[i]);
             itemCh[i].setId(tracker.getItemByIndex(i).getId());
         }
-        Item[] items = tracker.findAll();
-        assertThat(items.length, is(3));
-        assertThat(items[0], is(itemCh[0]));
-        assertThat(items[1], is(itemCh[1]));
-        assertThat(items[2], is(itemCh[2]));
+        List<Item> items = tracker.findAll();
+        assertThat(items.size(), is(3));
+        assertThat(items.get(0), is(itemCh[0]));
+        assertThat(items.get(1), is(itemCh[1]));
+        assertThat(items.get(2), is(itemCh[2]));
     }
 
     @Test
@@ -46,10 +48,10 @@ public class TrackerTest {
             tracker.add(itemCh[i]);
             itemCh[i].setId(tracker.getItemByIndex(i).getId());
         }
-        Item[] items = tracker.findByName("two");
-        assertThat(items.length, is(2));
-        assertThat(items[0], is(itemCh[1]));
-        assertThat(items[1], is(itemCh[3]));
+        List<Item> items = tracker.findByName("two");
+        assertThat(items.size(), is(2));
+        assertThat(items.get(0), is(itemCh[1]));
+        assertThat(items.get(1), is(itemCh[3]));
     }
 
     @Test

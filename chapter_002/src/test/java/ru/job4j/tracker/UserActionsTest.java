@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.StringJoiner;
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -35,9 +36,9 @@ public class UserActionsTest {
         for (int i = 0; i < answers.length; i++){
             ua.execute(input, tracker);
         }
-        Item[] items = tracker.findAll();
+        List<Item> items = tracker.findAll();
         for (int i = 0; i < answers.length; i++) {
-            assertThat(items[i].getName(), is(answers[i]));
+            assertThat(items.get(i).getName(), is(answers[i]));
         }
     }
 
@@ -49,7 +50,7 @@ public class UserActionsTest {
         String[] answers = {item.getId(), "Second"};
         UserAction ua = new EditItem();
         ua.execute(new StubInput(answers), tracker);
-        assertThat(tracker.findAll()[0].getName(), is ("Second"));
+        assertThat(tracker.findAll().get(0).getName(), is ("Second"));
     }
 
     @Test
@@ -62,7 +63,7 @@ public class UserActionsTest {
         String[] answers = {item1.getId()};
         UserAction ua = new DeleteItem();
         ua.execute(new StubInput(answers),tracker);
-        assertThat(tracker.findAll()[0].getName(), is ("Two"));
+        assertThat(tracker.findAll().get(0).getName(), is ("Two"));
     }
 
     @Test
@@ -70,7 +71,7 @@ public class UserActionsTest {
         Tracker tracker = new Tracker();
         Item item = new Item("One");
         tracker.add(item);
-        String[] answers = {tracker.findAll()[0].getId()};
+        String[] answers = {tracker.findAll().get(0).getId()};
         new FindById().execute(new StubInput(answers), tracker);
         assertThat(new String(this.out.toByteArray()),
                 is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
@@ -85,7 +86,7 @@ public class UserActionsTest {
         Tracker tracker = new Tracker();
         Item item = new Item("One");
         tracker.add(item);
-        String[] answers = {tracker.findAll()[0].getId() + "a"};
+        String[] answers = {tracker.findAll().get(0).getId() + "a"};
         new FindById().execute(new StubInput(answers), tracker);
         assertThat(new String(this.out.toByteArray()),
                 is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
@@ -108,8 +109,8 @@ public class UserActionsTest {
         new FindByName().execute(new StubInput(answers), tracker);
         assertThat(new String(this.out.toByteArray()),
                 is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
-                        .add("One id:" + tracker.findAll()[0].getId())
-                        .add("One id:" + tracker.findAll()[3].getId())
+                        .add("One id:" + tracker.findAll().get(0).getId())
+                        .add("One id:" + tracker.findAll().get(3).getId())
                         .toString()
                 )
         );
@@ -148,10 +149,10 @@ public class UserActionsTest {
         new ListItems().execute(new StubInput(answers), tracker);
         assertThat(new String(this.out.toByteArray()),
                 is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
-                        .add("#0. One id:" + tracker.findAll()[0].getId())
-                        .add("#1. Two id:" + tracker.findAll()[1].getId())
-                        .add("#2. Two id:" + tracker.findAll()[2].getId())
-                        .add("#3. One id:" + tracker.findAll()[3].getId())
+                        .add("#0. One id:" + tracker.findAll().get(0).getId())
+                        .add("#1. Two id:" + tracker.findAll().get(1).getId())
+                        .add("#2. Two id:" + tracker.findAll().get(2).getId())
+                        .add("#3. One id:" + tracker.findAll().get(3).getId())
                         .toString()
                 )
         );
