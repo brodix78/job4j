@@ -6,7 +6,7 @@ import java.util.List;
 
 public class UsageArrayList {
     public static void main(String[] args) {
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> names = new ArrayList();
         names.add("Petr");
         names.add("Ivan");
         names.add("Stepan");
