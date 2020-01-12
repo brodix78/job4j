@@ -4,8 +4,7 @@ import java.util.*;
 
 public class Tracker {
 
-    private LinkedList<Item> items = new LinkedList<>();
-    //private int position = 0;
+    private List<Item> items = new ArrayList<>();
 
     public Item getItemByIndex(int index) {
         return this.items.get(index);
