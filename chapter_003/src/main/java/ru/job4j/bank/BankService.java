@@ -6,18 +6,13 @@ public class BankService {
     private Map<User, List<Account>> users = new HashMap<>();
 
     public void addUser(User user) {
-        if (!users.containsKey(user)) {
-            List<Account> accounts= new ArrayList<>();
-            users.put(user, accounts);
-        }
+        users.putIfAbsent(user, new ArrayList<Account>());
     }
 
     public void addAccount(String passport, Account account) {
         User user = this.findByPassport(passport);
         if (user != null) {
-            List<Account> accounts = users.get(user);
-            accounts.add(account);
-            users.put(user, accounts);
+            users.get(user).add(account);
         }
     }
 
@@ -52,24 +47,18 @@ public class BankService {
         User sender = findByPassport(srcPassport);
         User recipient = findByPassport(destPassport);
         if (sender != null && recipient != null) {
-            Account srcAccount = findByRequisite(srcPassport, srcRequisite);
-            Account destAccount = findByRequisite(destPassport, destRequisite);
-            if (srcAccount != null && destAccount != null) {
-                if (srcAccount.getBalance() >= amount) {
-                    this.changeBalance(sender, srcRequisite, -amount);
-                    this.changeBalance(recipient, destRequisite, amount);
+            int srcAccount = users.get(sender).indexOf(findByRequisite(srcPassport,srcRequisite));
+            int destAccount = users.get(recipient).indexOf(findByRequisite(destPassport, destRequisite));
+            if (srcAccount != -1 && destAccount != -1) {
+                if (users.get(sender).get(srcAccount).getBalance() >= amount) {
+                    double Balance = users.get(sender).get(srcAccount).getBalance() - amount;
+                    users.get(sender).get(srcAccount).setBalance(Balance);
+                    Balance = users.get(recipient).get(destAccount).getBalance() + amount;
+                    users.get(recipient).get(destAccount).setBalance(Balance);
                     conf = true;
                 }
             }
         }
         return conf;
-    }
-
-    private void changeBalance(User user, String requisite, double amount) {
-        List<Account> accounts = users.get(user);
-        int acc = accounts.indexOf(findByRequisite(user.getPassport(), requisite));
-        double oldBalance = accounts.get(acc).getBalance();
-        accounts.set(acc, new Account(requisite, oldBalance + amount));
-        users.put(user, accounts);
     }
 }
