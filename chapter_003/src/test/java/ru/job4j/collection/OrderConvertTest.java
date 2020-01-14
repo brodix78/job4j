@@ -13,7 +13,7 @@ public class OrderConvertTest {
     @Test
     public void whenOneOrder() {
         OrderConvert conv = new OrderConvert();
-        List input = Arrays.asList(new Order("546", "Find something"));
+        List<Order> input = Arrays.asList(new Order("546", "Find something"));
         assertThat(conv.process(input).get("546"), is(new Order("546", "Find something")));
     }
 }

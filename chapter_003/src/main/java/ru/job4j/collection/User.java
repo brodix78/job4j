@@ -1,6 +1,6 @@
 package ru.job4j.collection;
 
-import org.jetbrains.annotations.NotNull;
+//import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
@@ -39,7 +39,7 @@ public class User implements Comparable<User> {
     }
 
     @Override
-    public int compareTo(@NotNull User obj) {
+    public int compareTo(User obj) {
         int rsl = this.name.compareTo(obj.name);
         if (rsl == 0) {
             rsl = Integer.compare(this.age, obj.age);

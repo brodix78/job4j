@@ -15,6 +15,6 @@ public class StringCompare implements Comparator<String> {
                 return rsl;
             }
         }
-        return Integer.compare(l1, l2);
+        return l1 - l2;
     }
 }

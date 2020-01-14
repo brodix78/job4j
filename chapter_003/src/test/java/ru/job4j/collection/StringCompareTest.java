@@ -1,6 +1,8 @@
 package ru.job4j.collection;
 import org.junit.Test;
 
+import java.awt.*;
+
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.Is.is;
@@ -95,5 +97,24 @@ public class StringCompareTest {
                 "Ivanov"
         );
         assertThat(rst, lessThan(0));
+    }
+
+    @Test
+    public void whenVsStringCompare() {
+        StringCompare compare = new StringCompare();
+        String[] testWords = {"aa", "aaaaaaaa",
+                " ZZZ", "ZZZZ",
+                "Test", "TesT",
+                "guesttttt", "guest",
+        };
+        int rst = compare.compare(
+                "  Ivanov",
+                "Ivanov"
+        );
+        int i = 0;
+        do {
+            assertThat(compare.compare(testWords[i], testWords[i + 1]), is(testWords[i].compareTo(testWords[++i])));
+            i++;
+        } while (i <testWords.length);
     }
 }
