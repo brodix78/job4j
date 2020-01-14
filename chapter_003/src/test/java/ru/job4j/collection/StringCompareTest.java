@@ -115,6 +115,6 @@ public class StringCompareTest {
         do {
             assertThat(compare.compare(testWords[i], testWords[i + 1]), is(testWords[i].compareTo(testWords[++i])));
             i++;
-        } while (i <testWords.length);
+        } while (i < testWords.length);
     }
 }
