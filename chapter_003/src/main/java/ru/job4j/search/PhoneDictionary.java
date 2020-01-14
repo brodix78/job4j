@@ -20,7 +20,7 @@ public class PhoneDictionary {
     }
 
     private boolean checkContain(Person person, String key) {
-        return person.getName().contains(key) || person.getSurname().contains(key) ||
-                person.getPhone().contains(key) || person.getAddress().contains(key);
+        return person.getName().contains(key) || person.getSurname().contains(key)
+                || person.getPhone().contains(key) || person.getAddress().contains(key);
     }
 }

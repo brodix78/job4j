@@ -11,7 +11,7 @@ import static org.junit.Assert.assertThat;
 
 public class FullSearchTest {
     @Test
-    public void extractNumbersTest(){
+    public void extractNumbersTest() {
         List<Task> tasks = Arrays.asList(
                 new Task("1", "One"),
                 new Task("2", "Two"),

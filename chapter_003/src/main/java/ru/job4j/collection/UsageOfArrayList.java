@@ -2,9 +2,9 @@ package ru.job4j.collection;
 
 import java.util.ArrayList;
 
-public class UsageArrayList {
+public class UsageOfArrayList {
     public static void main(String[] args) {
-        ArrayList<String> names = new ArrayList();
+        ArrayList<String> names = new ArrayList<>();
         names.add("Petr");
         names.add("Ivan");
         names.add("Stepan");

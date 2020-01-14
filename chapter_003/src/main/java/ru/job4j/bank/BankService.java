@@ -30,7 +30,7 @@ public class BankService {
     public Account findByRequisite(String passport, String requisite) {
         Account account = null;
         User user = this.findByPassport(passport);
-        if (user != null){
+        if (user != null) {
             for (Account accountInBank : users.get(user)) {
                 if (accountInBank.getRequisite().equals(requisite)) {
                     account = accountInBank;
@@ -47,14 +47,14 @@ public class BankService {
         User sender = findByPassport(srcPassport);
         User recipient = findByPassport(destPassport);
         if (sender != null && recipient != null) {
-            int srcAccount = users.get(sender).indexOf(findByRequisite(srcPassport,srcRequisite));
+            int srcAccount = users.get(sender).indexOf(findByRequisite(srcPassport, srcRequisite));
             int destAccount = users.get(recipient).indexOf(findByRequisite(destPassport, destRequisite));
             if (srcAccount != -1 && destAccount != -1) {
                 if (users.get(sender).get(srcAccount).getBalance() >= amount) {
-                    double Balance = users.get(sender).get(srcAccount).getBalance() - amount;
-                    users.get(sender).get(srcAccount).setBalance(Balance);
-                    Balance = users.get(recipient).get(destAccount).getBalance() + amount;
-                    users.get(recipient).get(destAccount).setBalance(Balance);
+                    double balance = users.get(sender).get(srcAccount).getBalance() - amount;
+                    users.get(sender).get(srcAccount).setBalance(balance);
+                    balance = users.get(recipient).get(destAccount).getBalance() + amount;
+                    users.get(recipient).get(destAccount).setBalance(balance);
                     conf = true;
                 }
             }

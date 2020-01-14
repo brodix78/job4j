@@ -31,7 +31,7 @@ public class ValidateInputTest {
 
     @Test
     public void whenMoreThanMax() {
-        String[] answers = {"5","2"};
+        String[] answers = {"5", "2"};
         System.out.println(new ValidateInput(new StubInput(answers)).askInt("ss", 4));
         assertThat(this.out.toString(),
                 is(String.format("Please select key from menu: 0 - 4" + System.lineSeparator() + "2" + System.lineSeparator()))
@@ -40,10 +40,10 @@ public class ValidateInputTest {
 
     @Test
     public void whenInvalidData() {
-        String[] answers = {"anything","2"};
+        String[] answers = {"anything", "2"};
         System.out.println(new ValidateInput(new StubInput(answers)).askInt("ss", 4));
         assertThat(this.out.toString(),
-                is(String.format("Please enter validate data: 0 - 4"+ System.lineSeparator() + "2" +System.lineSeparator()))
+                is(String.format("Please enter validate data: 0 - 4" + System.lineSeparator() + "2" + System.lineSeparator()))
         );
     }
 }

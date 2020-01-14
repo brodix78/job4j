@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ConvertList {
-    public static List<Integer> toList (List<int[]> list) {
+    public static List<Integer> toList(List<int[]> list) {
         List<Integer> toList = new ArrayList<>();
         for (int[] row : list) {
             for (int val : row) {

@@ -21,11 +21,15 @@ public class Order {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
         Order order = (Order) o;
-        return Objects.equals(this.name, order.name) &&
-                Objects.equals(this.number, order.number);
+        return Objects.equals(this.name, order.name)
+                && Objects.equals(this.number, order.number);
     }
 
     @Override

@@ -18,7 +18,7 @@ public class ValidateInput extends ConsoleInput {
             } catch (NumberFormatException nfe) {
                 System.out.println("Please enter validate data");
             }
-        } while (valid == false);
+        } while (!valid);
         return value;
     }
 
@@ -35,7 +35,7 @@ public class ValidateInput extends ConsoleInput {
             } catch (NumberFormatException nfe) {
                 System.out.println("Please enter validate data: 0 - " + max);
             }
-        } while (valid == false);
+        } while (!valid);
         return value;
     }
 }

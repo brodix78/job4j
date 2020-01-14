@@ -28,12 +28,12 @@ public class UserActionsTest {
 
     @Test
     public void createItemTest0() {
-        Tracker tracker =new Tracker();
+        Tracker tracker = new Tracker();
         String[] answers = {"0", "Save me", "0", "System fault", "System not responding"};
         StubInput input = new StubInput(answers);
         StartUI startUI = new StartUI();
         UserAction ua = new CreateItem();
-        for (int i = 0; i < answers.length; i++){
+        for (int i = 0; i < answers.length; i++) {
             ua.execute(input, tracker);
         }
         List<Item> items = tracker.findAll();
@@ -50,7 +50,8 @@ public class UserActionsTest {
         String[] answers = {item.getId(), "Second"};
         UserAction ua = new EditItem();
         ua.execute(new StubInput(answers), tracker);
-        assertThat(tracker.findAll().get(0).getName(), is ("Second"));
+        assertThat(tracker.findAll().get(0).getName(),
+                is("Second"));
     }
 
     @Test
@@ -62,8 +63,8 @@ public class UserActionsTest {
         tracker.add(item2);
         String[] answers = {item1.getId()};
         UserAction ua = new DeleteItem();
-        ua.execute(new StubInput(answers),tracker);
-        assertThat(tracker.findAll().get(0).getName(), is ("Two"));
+        ua.execute(new StubInput(answers), tracker);
+        assertThat(tracker.findAll().get(0).getName(), is("Two"));
     }
 
     @Test

@@ -14,8 +14,12 @@ public class Account {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
         Account account = (Account) o;
         return Objects.equals(this.passport, account.passport);
     }
@@ -27,8 +31,8 @@ public class Account {
 
     @Override
     public String toString() {
-        return "Account{" + "passport='" + this.passport + '\'' +
-                ", username='" + this.username + '\'' +
-                ", deposit='" + this.deposit + '\'' + '}';
+        return "Account{" + "passport='" + this.passport + '\''
+                + ", username='" + this.username + '\''
+                + ", deposit='" + this.deposit + '\'' + '}';
     }
 }

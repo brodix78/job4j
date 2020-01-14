@@ -13,7 +13,7 @@ public class UniqueText {
         }
         for (String origWord : originWords) {
             equal = testText.contains(origWord);
-            if (equal == false) {
+            if (!equal) {
                 break;
             }
         }

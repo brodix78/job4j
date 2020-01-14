@@ -11,7 +11,9 @@ public class StringCompare implements Comparator<String> {
         int rsl = 0;
         for (int i = 0; i < min; i++) {
             rsl = Character.compare(string1.charAt(i), string2.charAt(i));
-            if (rsl != 0) return rsl;
+            if (rsl != 0) {
+                return rsl;
+            }
         }
         return Integer.compare(l1, l2);
     }
