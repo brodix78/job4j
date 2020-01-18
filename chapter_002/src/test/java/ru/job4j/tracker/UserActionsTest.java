@@ -8,23 +8,27 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.StringJoiner;
 import java.util.List;
+import java.util.function.Consumer;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class UserActionsTest {
-    private PrintStream stdout = System.out;
-    private ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-    @Before
-    public void loadOut() {
-        System.setOut(new PrintStream(out));
-    }
+    private final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    private final Consumer<String> output = new Consumer<String>() {
+        private final PrintStream newout = new PrintStream(out);
 
-    @After
-    public void returnOut() {
-        System.setOut(stdout);
-    }
+        @Override
+        public void accept(String s) {
+            newout.println(s);
+        }
+
+        @Override
+        public String toString() {
+            return new String(out.toByteArray());
+        }
+    };
 
     @Test
     public void createItemTest0() {
@@ -34,7 +38,7 @@ public class UserActionsTest {
         StartUI startUI = new StartUI();
         UserAction ua = new CreateItem();
         for (int i = 0; i < answers.length; i++) {
-            ua.execute(input, tracker);
+            ua.execute(input, this.output, tracker);
         }
         List<Item> items = tracker.findAll();
         for (int i = 0; i < answers.length; i++) {
@@ -49,7 +53,7 @@ public class UserActionsTest {
         tracker.add(item);
         String[] answers = {item.getId(), "Second"};
         UserAction ua = new EditItem();
-        ua.execute(new StubInput(answers), tracker);
+        ua.execute(new StubInput(answers), this.output, tracker);
         assertThat(tracker.findAll().get(0).getName(),
                 is("Second"));
     }
@@ -63,7 +67,7 @@ public class UserActionsTest {
         tracker.add(item2);
         String[] answers = {item1.getId()};
         UserAction ua = new DeleteItem();
-        ua.execute(new StubInput(answers), tracker);
+        ua.execute(new StubInput(answers), this.output, tracker);
         assertThat(tracker.findAll().get(0).getName(), is("Two"));
     }
 
@@ -73,8 +77,8 @@ public class UserActionsTest {
         Item item = new Item("One");
         tracker.add(item);
         String[] answers = {tracker.findAll().get(0).getId()};
-        new FindById().execute(new StubInput(answers), tracker);
-        assertThat(new String(this.out.toByteArray()),
+        new FindById().execute(new StubInput(answers), this.output, tracker);
+        assertThat(this.out.toString(),
                 is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                         .add("One id:" + answers[0])
                         .toString()
@@ -88,8 +92,8 @@ public class UserActionsTest {
         Item item = new Item("One");
         tracker.add(item);
         String[] answers = {tracker.findAll().get(0).getId() + "a"};
-        new FindById().execute(new StubInput(answers), tracker);
-        assertThat(new String(this.out.toByteArray()),
+        new FindById().execute(new StubInput(answers), this.output, tracker);
+        assertThat(this.output.toString(),
                 is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                         .add("No item")
                         .toString()
@@ -107,8 +111,8 @@ public class UserActionsTest {
         tracker.add(item2);
         tracker.add(item1);
         String[] answers = {"One"};
-        new FindByName().execute(new StubInput(answers), tracker);
-        assertThat(new String(this.out.toByteArray()),
+        new FindByName().execute(new StubInput(answers), this.output, tracker);
+        assertThat(this.output.toString(),
                 is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                         .add("One id:" + tracker.findAll().get(0).getId())
                         .add("One id:" + tracker.findAll().get(3).getId())
@@ -128,8 +132,8 @@ public class UserActionsTest {
         tracker.add(item2);
         tracker.add(item1);
         String[] answers = {"Three"};
-        new FindByName().execute(new StubInput(answers), tracker);
-        assertThat(new String(this.out.toByteArray()),
+        new FindByName().execute(new StubInput(answers), this.output, tracker);
+        assertThat(this.output.toString(),
                 is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                         .add("No item")
                         .toString()
@@ -147,8 +151,8 @@ public class UserActionsTest {
         tracker.add(item2);
         tracker.add(item1);
         String[] answers = {""};
-        new ListItems().execute(new StubInput(answers), tracker);
-        assertThat(new String(this.out.toByteArray()),
+        new ListItems().execute(new StubInput(answers), this.output, tracker);
+        assertThat(this.output.toString(),
                 is(new StringJoiner(System.lineSeparator(), "", System.lineSeparator())
                         .add("#0. One id:" + tracker.findAll().get(0).getId())
                         .add("#1. Two id:" + tracker.findAll().get(1).getId())

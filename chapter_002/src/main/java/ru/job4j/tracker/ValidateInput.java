@@ -1,10 +1,15 @@
 package ru.job4j.tracker;
 
+import java.util.function.Consumer;
+
 public class ValidateInput extends ConsoleInput {
     private final Input input;
+    private Consumer<String> output;
 
-    public ValidateInput(Input input) {
+    public ValidateInput(Input input, Consumer<String> output) {
+        super(output);
         this.input = input;
+        this.output = output;
     }
 
     @Override
@@ -16,7 +21,7 @@ public class ValidateInput extends ConsoleInput {
                 value = this.input.askInt(question);
                 valid = true;
             } catch (NumberFormatException nfe) {
-                System.out.println("Please enter validate data");
+                output.accept("Please enter validate data");
             }
         } while (!valid);
         return value;
@@ -31,9 +36,9 @@ public class ValidateInput extends ConsoleInput {
                 value = this.input.askInt(question, max);
                 valid = true;
             } catch (IllegalStateException moe) {
-                System.out.println("Please select key from menu: 0 - " + max);
+                output.accept("Please select key from menu: 0 - " + max);
             } catch (NumberFormatException nfe) {
-                System.out.println("Please enter validate data: 0 - " + max);
+                output.accept("Please enter validate data: 0 - " + max);
             }
         } while (!valid);
         return value;

@@ -1,8 +1,11 @@
 package ru.job4j.tracker;
 
+import java.util.function.Consumer;
+
 public class StubInput implements Input {
     private String[] answers;
     private int position = 0;
+    public Consumer<String> output;
 
     public StubInput(String[] answers) {
         this.answers = answers;
