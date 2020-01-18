@@ -6,7 +6,7 @@ public class Calculator {
     public void multiple(int start, int finish, int value,
                          BiFunction<Integer, Integer, Double> oper,
                          Consumer<Double> media) {
-        for (int i = start; i < finish; i++) {
+        for (int i = start; i != finish; i++) {
             media.accept(oper.apply(value, i));
         }
     }
