@@ -9,7 +9,7 @@ import static org.junit.Assert.*;
 
 public class SchoolTest {
     @Test
-    public void whenAClass(){
+    public void whenAClass() {
         Student alex = new Student(45);
         Student alena = new Student(65);
         Student vova = new Student(75);
@@ -22,7 +22,7 @@ public class SchoolTest {
     }
 
     @Test
-    public void whenBClass(){
+    public void whenBClass() {
         Student alex = new Student(45);
         Student alena = new Student(65);
         Student vova = new Student(75);
@@ -35,7 +35,7 @@ public class SchoolTest {
     }
 
     @Test
-    public void whenCClass(){
+    public void whenCClass() {
         Student alex = new Student(45);
         Student alena = new Student(65);
         Student vova = new Student(75);
