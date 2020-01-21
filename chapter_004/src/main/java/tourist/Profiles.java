@@ -5,8 +5,10 @@ import java.util.stream.Collectors;
 
 public class Profiles {
     public List<Address> addresses(List<Profile> profiles) {
-        return profiles.stream().map(profile -> profile.getAddress()).collect(Collectors.toList()).
-               stream().sorted((a1, a2) -> a1.getCity().compareTo(a2.getCity())).collect(Collectors.toList()).
-               stream().distinct().collect(Collectors.toList());
+        return profiles.stream().
+                map(profile -> profile.getAddress()).
+                distinct().
+                sorted((a1, a2) -> a1.getCity().compareTo(a2.getCity())).
+                collect(Collectors.toList());
     }
 }
