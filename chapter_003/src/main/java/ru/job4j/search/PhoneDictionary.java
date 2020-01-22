@@ -10,7 +10,7 @@ public class PhoneDictionary {
     }
 
     public ArrayList<Person> find(String key) {
-        ArrayList<Person> find = new ArrayList<>();
+        var find = new ArrayList<Person>();
         for (Person someone : this.persons) {
             if (checkContain(someone, key)) {
                 find.add(someone);
