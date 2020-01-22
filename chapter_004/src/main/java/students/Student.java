@@ -27,8 +27,8 @@ public class Student implements Comparable<Student> {
 
     public List<Student> levelOf(List<Student> students, int bound) {
         return students.stream().
-                sorted(new SortByScore().reversed()).
                 flatMap(Stream::ofNullable).
+                sorted(Comparator.reverseOrder()).
                 takeWhile(s -> s.getScope() > bound).
                 collect(Collectors.toList());
     }
