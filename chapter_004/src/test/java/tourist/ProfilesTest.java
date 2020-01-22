@@ -11,7 +11,8 @@ public class ProfilesTest {
 
     @Test
     public void whenNotContainEquals() {
-        List<Profile> profiles = Arrays.asList(new Profile(new Address("Ozy", "Crazy", 1, 1)),
+        List<Profile> profiles = List.of(
+                new Profile(new Address("Ozy", "Crazy", 1, 1)),
                 new Profile(new Address("Gotham", "Amazing", 1, 1)),
                 new Profile(new Address("Mordor", "Dirty", 1, 1)),
                 new Profile(new Address("Gotham", "Amazing", 1, 1))
@@ -23,11 +24,12 @@ public class ProfilesTest {
 
     @Test
     public void whenContainEquals() {
-        List<Profile> profiles = Arrays.asList(new Profile(new Address("Ozy", "Crazy", 1, 1)),
+        List<Profile> profiles = List.of(
+                new Profile(new Address("Ozy", "Crazy", 1, 1)),
                 new Profile(new Address("Gotham", "Amazing", 1, 1)),
                 new Profile(new Address("Mordor", "Dirty", 1, 1)),
                 new Profile(new Address("Gotham", "Amazing", 2, 1))
-                );
+        );
         assertThat(new Profiles().addresses(profiles).toString(), is(
                 "[Gotham Amazing 1 1, Gotham Amazing 2 1, Mordor Dirty 1 1, Ozy Crazy 1 1]"
         ));

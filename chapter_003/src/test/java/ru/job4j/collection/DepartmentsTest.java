@@ -12,22 +12,25 @@ public class DepartmentsTest {
 
     @Test
     public void whenMissed() {
-        List<String> dataIn = Arrays.asList("k1/s1");
-        List<String> excpect = Arrays.asList("k1", "k1/s1");
+        List<String> dataIn = List.of("k1/s1");
+        List<String> excpect = List.of("k1", "k1/s1");
         assertThat(new Departments().filGaps(dataIn), is(excpect));
     }
 
     @Test
     public void whenNoChanges() {
-        List<String> dataIn = Arrays.asList("k1", "k1/s1");
-        List<String> expect = Arrays.asList("k1", "k1/s1");
+        List<String> dataIn = List.of("k1", "k1/s1");
+        List<String> expect = List.of("k1", "k1/s1");
         assertThat(new Departments().filGaps(dataIn), is(expect));
     }
 
     @Test
     public void testAscSort() {
-        List<String> dataIn = Arrays.asList("k1/s1/ss3", "k2/s2/ss2");
-        List<String> expect = Arrays.asList("k1", "k1/s1", "k1/s1/ss3", "k2", "k2/s2", "k2/s2/ss2");
+        List<String> dataIn = List.of("k1/s1/ss3", "k2/s2/ss2");
+        List<String> expect = List.of(
+                "k1", "k1/s1", "k1/s1/ss3",
+                "k2", "k2/s2", "k2/s2/ss2"
+        );
         Departments dep = new Departments();
         List<String> rsl = dep.filGaps(dataIn);
         dep.ascSort(rsl);
@@ -36,8 +39,11 @@ public class DepartmentsTest {
 
     @Test
     public void testDescSort() {
-        List<String> dataIn = Arrays.asList("k1/s1/ss3", "k2/s2/ss2");
-        List<String> excpect = Arrays.asList("k2/s2/ss2", "k2/s2", "k2", "k1/s1/ss3", "k1/s1", "k1");
+        List<String> dataIn = List.of("k1/s1/ss3", "k2/s2/ss2");
+        List<String> excpect = List.of(
+                "k2/s2/ss2", "k2/s2", "k2",
+                "k1/s1/ss3", "k1/s1", "k1"
+        );
         Departments dep = new Departments();
         List<String> rsl = dep.filGaps(dataIn);
         dep.descSort(rsl);

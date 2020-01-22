@@ -14,6 +14,6 @@ public class ConvertListTest {
     public void when2List() {
         ConvertList convList =  new ConvertList();
         List<int[]> list = Arrays.asList(new int[] {1, 2}, new int[] {3, 4, 5});
-        assertThat(convList.toList(list), is(Arrays.asList(1, 2, 3, 4, 5)));
+        assertThat(convList.toList(list), is(List.of(1, 2, 3, 4, 5)));
     }
 }

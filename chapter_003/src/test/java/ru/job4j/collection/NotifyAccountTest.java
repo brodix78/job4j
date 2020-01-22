@@ -13,18 +13,26 @@ import static org.junit.Assert.assertThat;
 public class NotifyAccountTest {
     @Test
     public void sentWhenSame() {
-        List<Account> dataIn = Arrays.asList(new Account("123 12", "Ivan Petrov", "AS123456"),
-                new Account("123 12", "Petrov Ivan", "QW123456"));
-        Set<Account> expect = new HashSet<>(Arrays.asList(new Account("123 12", "Petrov Ivan", "QW123456")));
+        List<Account> dataIn = List.of(
+                new Account("123 12", "Ivan Petrov", "AS123456"),
+                new Account("123 12", "Petrov Ivan", "QW123456")
+        );
+        Set<Account> expect = Set.of(
+                new Account("123 12", "Petrov Ivan", "QW123456")
+        );
         assertThat(new NotifyAccount().sent(dataIn), is(expect));
     }
 
     @Test
     public void sentWhenDiffrent() {
-        List<Account> dataIn = Arrays.asList(new Account("123 12", "Ivan Petrov", "AS123456"),
-                new Account("231 12", "Ivan Petrov", "QW123456"));
-        Set<Account> expect = new HashSet<>(Arrays.asList(new Account("123 12", "Petrov Ivan", "QW123456"),
-                new Account("231 12", "Ivan Petrov", "QW123456")));
+        List<Account> dataIn = List.of(
+                new Account("123 12", "Ivan Petrov", "AS123456"),
+                new Account("231 12", "Ivan Petrov", "QW123456")
+        );
+        Set<Account> expect = Set.of(
+                new Account("123 12", "Petrov Ivan", "QW123456"),
+                new Account("231 12", "Ivan Petrov", "QW123456")
+        );
         assertThat(new NotifyAccount().sent(dataIn), is(expect));
     }
 }

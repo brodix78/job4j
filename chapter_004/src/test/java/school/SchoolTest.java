@@ -11,10 +11,15 @@ public class SchoolTest {
         Student alena = new Student(65);
         Student vova = new Student(75);
         Student masha = new Student(85);
-        List<Student> students = Arrays.asList(alex, alena, vova, masha);
+        List<Student> students = List.of(
+                alex,
+                alena,
+                vova,
+                masha
+        );
         School school = new School();
         assertThat(school.collect(students, student -> school.goToA(student)), is(
-                Arrays.asList(vova, masha)
+                List.of(vova, masha)
         ));
     }
     @Test
@@ -23,10 +28,15 @@ public class SchoolTest {
         Student alena = new Student(65);
         Student vova = new Student(75);
         Student masha = new Student(85);
-        List<Student> students = Arrays.asList(alex, alena, vova, masha);
+        List<Student> students = List.of(
+                alex,
+                alena,
+                vova,
+                masha
+        );
         School school = new School();
         assertThat(school.collect(students, student -> school.goToB(student)), is(
-                Arrays.asList(alena)
+                List.of(alena)
         ));
     }
     @Test
@@ -35,10 +45,14 @@ public class SchoolTest {
         Student alena = new Student(65);
         Student vova = new Student(75);
         Student masha = new Student(85);
-        List<Student> students = Arrays.asList(alex, alena, vova, masha);
+        List<Student> students = List.of(
+                alex,
+                alena,
+                vova,
+                masha);
         School school = new School();
         assertThat(school.collect(students, student -> school.goToC(student)), is(
-                Arrays.asList(alex)
+                List.of(alex)
         ));
     }
     @Test

@@ -2,10 +2,8 @@ package ru.job4j.collection;
 
 import org.junit.Test;
 
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.lessThan;
@@ -15,9 +13,11 @@ import static org.junit.Assert.*;
 public class UserTest {
     @Test
     public void whenAsc() {
-        Set<User> users = new TreeSet<>();
-        users.add(new User("Petr", 32));
-        users.add(new User("Ivan", 31));
+        List<User> users = Arrays.asList(
+                new User("Petr", 32),
+                new User("Ivan", 31)
+        );
+        Collections.sort(users);
         Iterator<User> it = users.iterator();
         assertThat(it.next(), is(new User("Ivan", 31)));
         assertThat(it.next(), is(new User("Petr", 32)));
