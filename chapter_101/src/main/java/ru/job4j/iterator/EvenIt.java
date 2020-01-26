@@ -28,7 +28,7 @@ public class EvenIt<Integer> implements Iterator {
     private int nextEvenIndex() {
         int next = index + 1;
         while (next < array.length
-                && ((float) array[next]) % 2 != 0) {
+                && array[next] % 2 != 0) {
             next++;
         }
         return next;
