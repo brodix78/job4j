@@ -2,12 +2,12 @@ package ru.job4j.iterator;
 
 import java.util.Iterator;
 
-public class Iterator2D<Integer> implements Iterator {
+public class IteratorTwoD<Integer> implements Iterator {
     private int f = 0;
     private int s = 0;
     private final int[][] array;
 
-    public Iterator2D(final int[][] array) {
+    public IteratorTwoD(final int[][] array) {
         this.array = array;
     }
 
@@ -25,5 +25,10 @@ public class Iterator2D<Integer> implements Iterator {
             f++;
         }
         return rsl;
+    }
+
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Invalid operation for current method");
     }
 }

@@ -9,12 +9,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 
-public class Iterator2DTest {
+public class IteratorTwoDTest {
     private Iterator<Integer> it;
 
     @Before
     public void setUp() {
-        it = new Iterator2D(new int[][] {{1}, {3, 4}, {7}});
+        it = new IteratorTwoD(new int[][] {{1}, {3, 4}, {7}});
     }
 
     @Test
