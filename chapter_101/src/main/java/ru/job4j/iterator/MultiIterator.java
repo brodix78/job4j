@@ -10,7 +10,7 @@ public class MultiIterator<Integer> implements Iterator {
     public Iterator<Integer> convert(Iterator<Iterator<Integer>> it) {
         this.in = it;
         nextOut();
-        return this.out;
+        return this;
     }
 
     private void nextOut() {
