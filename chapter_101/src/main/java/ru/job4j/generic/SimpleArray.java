@@ -1,5 +1,6 @@
 package ru.job4j.generic;
 
+import java.lang.reflect.ParameterizedType;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public class SimpleArray<T> {
         objects[size - 1] = null;
     }
 
-    public Object get(int pos) {
+    public T get(int pos) {
         if (pos < 0 || pos >= size) {
             this.throwOut(pos);
         }
