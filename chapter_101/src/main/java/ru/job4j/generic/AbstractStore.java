@@ -3,15 +3,15 @@ package ru.job4j.generic;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public abstract class AbstractStore<E> {
-
+public abstract class AbstractStore<E> implements Store {
     private SimpleArray<E> abStore;
 
-    protected void newStore(int size) {
+    public AbstractStore(int size) {
         this.abStore = new SimpleArray<E>(size);
     }
 
-    protected void add(Base model) {
+    @Override
+    public void add(Base model) {
         try {
             abStore.add((E) model);
         } catch (NoSuchElementException ex) {
@@ -19,7 +19,8 @@ public abstract class AbstractStore<E> {
         }
     }
 
-    protected boolean replace(String id, Base model) {
+    @Override
+    public boolean replace(String id, Base model) {
         boolean rsl = false;
         Iterator<Base> it = new IteratorSimpleArray(this.abStore);
         int index = 0;
@@ -33,7 +34,8 @@ public abstract class AbstractStore<E> {
         return rsl;
     }
 
-    protected boolean delete(String id) {
+    @Override
+    public boolean delete(String id) {
         boolean rsl = false;
         Iterator<Base> it = new IteratorSimpleArray(this.abStore);
         int index = 0;
@@ -47,7 +49,8 @@ public abstract class AbstractStore<E> {
         return rsl;
     }
 
-    protected Base findById(String id) {
+    @Override
+    public Base findById(String id) {
         Base rsl = null;
         Iterator<Base> it = new IteratorSimpleArray(this.abStore);
         int index = 0;

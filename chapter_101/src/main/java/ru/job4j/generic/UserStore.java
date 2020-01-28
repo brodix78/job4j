@@ -1,34 +1,7 @@
 package ru.job4j.generic;
 
-public class UserStore<User> implements Store {
-
+public class UserStore<User> extends AbstractStore {
     public UserStore(int size) {
-        func.newStore(size);
-    }
-
-    private class Func extends AbstractStore<User> {
-
-    }
-
-    private Func func = new Func();
-
-    @Override
-    public void add(Base model) {
-        func.add(model);
-    }
-
-    @Override
-    public boolean replace(String id, Base model) {
-        return func.replace(id, model);
-    }
-
-    @Override
-    public boolean delete(String id) {
-        return func.delete(id);
-    }
-
-    @Override
-    public Base findById(String id) {
-        return func.findById(id);
+        super(size);
     }
 }

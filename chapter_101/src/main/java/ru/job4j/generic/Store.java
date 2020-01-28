@@ -1,6 +1,10 @@
 package ru.job4j.generic;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 public interface Store<T extends Base> {
+
     void add(T model);
 
     boolean replace(String id, T model);
