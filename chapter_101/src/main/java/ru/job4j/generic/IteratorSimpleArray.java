@@ -4,7 +4,6 @@ import java.util.Iterator;
 
 public class IteratorSimpleArray<T> implements Iterator {
     private int index = 0;
-    private int size;
     private SimpleArray<T> simple;
 
     public IteratorSimpleArray(SimpleArray simple) {

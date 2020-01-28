@@ -1,6 +1,7 @@
 package ru.job4j.generic;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public abstract class AbstractStore<E> {
 
@@ -11,7 +12,11 @@ public abstract class AbstractStore<E> {
     }
 
     protected void add(Base model) {
-        abStore.add((E) model);
+        try {
+            abStore.add((E) model);
+        } catch (NoSuchElementException ex) {
+            throw new NoSuchElementException("Storage is full");
+        }
     }
 
     protected boolean replace(String id, Base model) {
