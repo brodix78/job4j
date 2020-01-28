@@ -6,11 +6,11 @@ public class RoleStore<Role> implements Store {
         func.newStore(size);
     }
 
-    public class Func extends AbstractStore<Role> {
+    private class Func extends AbstractStore<Role> {
 
     }
 
-    Func func = new Func();
+    private Func func = new Func();
 
     @Override
     public void add(Base model) {

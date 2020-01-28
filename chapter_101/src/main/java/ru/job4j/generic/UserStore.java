@@ -6,11 +6,11 @@ public class UserStore<User> implements Store {
         func.newStore(size);
     }
 
-    public class Func extends AbstractStore<User> {
+    private class Func extends AbstractStore<User> {
 
     }
 
-    Func func = new Func();
+    private Func func = new Func();
 
     @Override
     public void add(Base model) {
