@@ -18,10 +18,10 @@ public class EvenIt<Integer> implements Iterator {
 
     @Override
     public Object next() {
-        index = nextEvenIndex();
-        if (index == array.length) {
+        if (!hasNext()) {
             throw new NoSuchElementException("Array passed");
         }
+        index = nextEvenIndex();
         return array[index];
     }
 
@@ -32,10 +32,5 @@ public class EvenIt<Integer> implements Iterator {
             next++;
         }
         return next;
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException("Invalid operation for current method");
     }
 }
