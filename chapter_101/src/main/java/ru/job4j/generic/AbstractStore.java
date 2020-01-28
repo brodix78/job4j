@@ -51,7 +51,7 @@ public abstract class AbstractStore<E> {
         Base rsl = null;
         Iterator<Base> it = new IteratorSimpleArray(this.abStore);
         int index = 0;
-        while (it.hasNext()) {
+        while (it.hasNext() && rsl == null) {
             if (it.next().getId().equals(id)) {
                 rsl = (Base) this.abStore.get(index);
             }
