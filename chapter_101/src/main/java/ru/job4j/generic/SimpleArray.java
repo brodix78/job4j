@@ -22,14 +22,14 @@ public class SimpleArray<T> {
 
     public void set(int pos, T element) {
         if (pos < 0 || pos >= size) {
-            this.throwOut(pos);
+            throw new NoSuchElementException(String.format("%s is out of bounds", pos));
         }
         objects[pos] = element;
     }
 
     public void remove(int pos) {
         if (pos < 0 || pos >= size) {
-            this.throwOut(pos);
+            throw new NoSuchElementException(String.format("%s is out of bounds", pos));
         }
         while (++pos < size) {
             objects[pos - 1] = objects[pos];
@@ -39,16 +39,12 @@ public class SimpleArray<T> {
 
     public T get(int pos) {
         if (pos < 0 || pos >= size) {
-            this.throwOut(pos);
+            throw new NoSuchElementException(String.format("%s is out of bounds", pos));
         }
         return objects[pos];
     }
 
     public int size() {
         return this.size;
-    }
-
-    private void throwOut(int pos) {
-        throw new NoSuchElementException(String.format("%s is out of bounds", pos));
     }
 }
