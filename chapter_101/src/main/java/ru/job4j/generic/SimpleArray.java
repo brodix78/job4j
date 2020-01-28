@@ -1,4 +1,4 @@
-package generic;
+package ru.job4j.generic;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;

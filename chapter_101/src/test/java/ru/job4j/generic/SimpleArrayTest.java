@@ -1,6 +1,6 @@
-package ru.job4j.iterator.generic;
+package ru.job4j.generic;
 
-import generic.SimpleArray;
+import ru.job4j.generic.SimpleArray;
 import org.junit.Assert;
 import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;

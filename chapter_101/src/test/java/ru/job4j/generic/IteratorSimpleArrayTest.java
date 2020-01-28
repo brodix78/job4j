@@ -1,7 +1,7 @@
-package ru.job4j.iterator.generic;
+package ru.job4j.generic;
 
-import generic.IteratorSimpleArray;
-import generic.SimpleArray;
+import ru.job4j.generic.IteratorSimpleArray;
+import ru.job4j.generic.SimpleArray;
 import org.junit.Before;
 import org.junit.Test;
 
