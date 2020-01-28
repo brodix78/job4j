@@ -1,17 +1,16 @@
 package ru.job4j.generic;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 public class SimpleArray<T> {
-    private Object[] objects;
+    private T[] objects;
     private int index = 0;
     private int size;
 
     public SimpleArray(int size) {
         this.size = size;
-        this.objects = new Object[size];
+        Object[] timely = new Object[size];
+        this.objects = (T[]) timely;
     }
 
     public void add(T element) {
@@ -42,7 +41,7 @@ public class SimpleArray<T> {
         if (pos < 0 || pos >= size) {
             this.throwOut(pos);
         }
-        return (T) objects[pos];
+        return objects[pos];
     }
 
     public int size() {
