@@ -1,5 +1,7 @@
 package ru.job4j.list;
 
+import java.util.NoSuchElementException;
+
 public class SimpleArrayList<E> {
     private int size;
     private Node<E> first;
@@ -20,6 +22,9 @@ public class SimpleArrayList<E> {
     }
 
     public E deleteFirst() {
+        if (this.size == 0) {
+            throw new NullPointerException("No elements in List");
+        }
         E rsl = this.first.data;
         this.first = this.first.next;
         if (this.size > 0) {
@@ -29,6 +34,9 @@ public class SimpleArrayList<E> {
     }
 
     public E deleteByIndex(int index) {
+        if (index < 0 || index >= this.size) {
+            throw new NoSuchElementException("Out of List's bounds");
+        }
         Node<E> node = this.first;
         E rsl;
         if (index == 0) {
@@ -47,6 +55,9 @@ public class SimpleArrayList<E> {
     }
 
     public E get(int index) {
+        if (index < 0 || index >= this.size) {
+            throw new NoSuchElementException("Out of List's bounds");
+        }
         Node<E> rsl = this.first;
         for (int i = 0; i < index; i++) {
             rsl = rsl.next;
