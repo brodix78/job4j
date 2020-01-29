@@ -11,7 +11,7 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class MultiIteratorTest {
+public class ConverterTest {
     Iterator<Integer> it;
     @Before
     public void setUp() {
@@ -19,7 +19,7 @@ public class MultiIteratorTest {
         Iterator<Integer> it2 = Arrays.asList(4, 5, 6).iterator();
         Iterator<Integer> it3 = Arrays.asList(7, 8, 9).iterator();
         Iterator<Iterator<Integer>> its = Arrays.asList(it1, it2, it3).iterator();
-        it = new MultiIterator<Integer>().convert(its);
+        it = new Converter(its);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class MultiIteratorTest {
         Iterator<Integer> it2 = (new ArrayList<Integer>()).iterator();
         Iterator<Integer> it3 = (new ArrayList<Integer>()).iterator();
         Iterator<Iterator<Integer>> its = Arrays.asList(it1, it2, it3).iterator();
-        it = new MultiIterator<Integer>().convert(its);
+        it = new Converter(its);
         assertThat(it.hasNext(), is(false));
     }
 
@@ -87,10 +87,11 @@ public class MultiIteratorTest {
     public void invocationOfNextMethodShouldThrowNoSuchElementException() {
         Iterator<Integer> it1 = Arrays.asList(1, 2, 3).iterator();
         Iterator<Iterator<Integer>> its = Arrays.asList(it1).iterator();
-        it = new MultiIterator<Integer>().convert(its);
+        it = new Converter(its);
         assertThat(it.next(), is(1));
         assertThat(it.next(), is(2));
         assertThat(it.next(), is(3));
         it.next();
     }
+
 }
