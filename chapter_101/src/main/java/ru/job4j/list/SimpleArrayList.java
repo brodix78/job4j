@@ -27,9 +27,7 @@ public class SimpleArrayList<E> {
         }
         E rsl = this.first.data;
         this.first = this.first.next;
-        if (this.size > 0) {
-            size--;
-        }
+        size--;
         return rsl;
     }
 
@@ -48,9 +46,7 @@ public class SimpleArrayList<E> {
             rsl = node.next.data;
             node.next = node.next.next;
         }
-        if (this.size > 0) {
-            size--;
-        }
+        size--;
         return rsl;
     }
 
