@@ -3,8 +3,8 @@ package ru.job4j.iterator;
 import java.util.Iterator;
 
 public class IteratorTwoD<Integer> implements Iterator {
-    private int f = 0;
-    private int s = 0;
+    private int row = 0;
+    private int column = 0;
     private final int[][] array;
 
     public IteratorTwoD(final int[][] array) {
@@ -13,16 +13,16 @@ public class IteratorTwoD<Integer> implements Iterator {
 
     @Override
     public boolean hasNext() {
-        return f < array.length;
+        return row < array.length;
     }
 
     @Override
     public Object next() {
-        int rsl = array[f][s];
-        s++;
-        if (s == array[f].length) {
-            s = 0;
-            f++;
+        int rsl = array[row][column];
+        column++;
+        if (column == array[row].length) {
+            column = 0;
+            row++;
         }
         return rsl;
     }
