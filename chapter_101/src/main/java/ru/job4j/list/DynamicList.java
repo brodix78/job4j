@@ -4,7 +4,7 @@ import java.util.NoSuchElementException;
 
 public class DynamicList<E> {
     E[] container;
-    private int modCount = 0;
+    private int modCount;
     private int capacity = 100;
     private int size;
 
