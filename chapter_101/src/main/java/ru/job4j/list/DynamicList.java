@@ -35,7 +35,7 @@ public class DynamicList<E> {
 
     public E get(int index) {
         E rsl;
-        if (index < this.size) {
+        if (index < this.size && index >= 0) {
             rsl = this.container[index];
         } else {
             throw new NoSuchElementException("No such index in List");
@@ -44,7 +44,6 @@ public class DynamicList<E> {
     }
 
     private void changeSize(int newSize) {
-        this.modCount++;
         E[] newContainer = (E[]) new Object[newSize];
         System.arraycopy(this.container, 0, newContainer, 0, size);
         this.container = newContainer;
