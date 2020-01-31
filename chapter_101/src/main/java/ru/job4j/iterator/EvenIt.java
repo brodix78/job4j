@@ -14,7 +14,11 @@ public class EvenIt<Integer> implements Iterator {
 
     @Override
     public boolean hasNext() {
-        nextEvenIndex();
+        this.nextIndex = this.index + 1;
+        while (this.nextIndex < array.length
+                && array[this.nextIndex] % 2 != 0) {
+            this.nextIndex++;
+        }
         return nextIndex < array.length;
     }
 
@@ -25,13 +29,5 @@ public class EvenIt<Integer> implements Iterator {
         }
         this.index = this.nextIndex;
         return array[this.index];
-    }
-
-    private void nextEvenIndex() {
-        this.nextIndex = this.index + 1;
-        while (this.nextIndex < array.length
-                && array[this.nextIndex] % 2 != 0) {
-            this.nextIndex++;
-        }
     }
 }
