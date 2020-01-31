@@ -1,12 +1,10 @@
 package ru.job4j.list;
 
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 public class ReferenceList<E> {
     private Node<E> first;
     private Node<E> last;
-    private int modCount;
     private int length;
 
     private static class Node<E> {
@@ -31,7 +29,6 @@ public class ReferenceList<E> {
             }
             this.last = node;
             length++;
-            modCount++;
         }
         return rsl;
     }
@@ -57,10 +54,5 @@ public class ReferenceList<E> {
 
     public int getLength() {
         return length;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(modCount);
     }
 }
