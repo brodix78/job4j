@@ -34,7 +34,7 @@ public class DynamicList<E> {
 
     public E get(int index) {
         E rsl;
-        if (index > this.size || index < 0) {
+        if (index >= this.size || index < 0) {
             throw new NoSuchElementException("No such index in List");
         }
         rsl = this.container[index];

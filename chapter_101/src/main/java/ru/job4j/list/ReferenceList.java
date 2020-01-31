@@ -1,12 +1,13 @@
 package ru.job4j.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class ReferenceList<E> {
     private Node<E> first;
     private Node<E> last;
     private int modCount;
-    private int size;
+    private int length;
 
     private static class Node<E> {
         E data;
@@ -19,47 +20,47 @@ public class ReferenceList<E> {
 
     public boolean add(E data) {
         boolean rsl = false;
-        Node<E> node = new Node(data);
         if (data != null) {
+            Node<E> node = new Node<>(data);
             rsl = true;
-            if (size > 0) {
+            if (length > 0) {
                 this.last.next = node;
                 node.previous = this.last;
             } else {
                 this.first = node;
             }
             this.last = node;
-            size++;
+            length++;
             modCount++;
         }
         return rsl;
     }
 
     public E get(int index) {
-        Node<E> rsl = null;
-        if (index < size && index >= 0) {
-            if (index > size / 2) {
-                rsl = this.last;
-                for (int i = size - 1; i > index; i--) {
-                    rsl = rsl.previous;
-                }
-            } else {
-                rsl = this.first;
-                for (int i = 0; i < index; i++) {
-                    rsl = rsl.next;
-                }
+        Node<E> rsl;
+        if (index >= length || index < 0)  {
+            throw new NoSuchElementException(String.format("%s no such index in List", index));
+        }
+        if (index > length / 2) {
+            rsl = this.last;
+            for (int i = length - 1; i > index; i--) {
+                rsl = rsl.previous;
             }
         } else {
-            throw new NoSuchElementException(String.format("%s no such index in List", index));
+            rsl = this.first;
+            for (int i = 0; i < index; i++) {
+                rsl = rsl.next;
+            }
         }
         return rsl.data;
     }
 
-    public int getModCount() {
-        return modCount;
+    public int getLength() {
+        return length;
     }
 
-    public int getSize() {
-        return size;
+    @Override
+    public int hashCode() {
+        return Objects.hash(modCount);
     }
 }

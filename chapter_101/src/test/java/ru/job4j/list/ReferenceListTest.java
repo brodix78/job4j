@@ -29,7 +29,7 @@ public class ReferenceListTest {
 
     @Test
     public void whenAddThreeElementsThenUseGetSizeResultThree() {
-        assertThat(list.getSize(), is(3));
+        assertThat(list.getLength(), is(3));
     }
 
     @Test
@@ -37,7 +37,7 @@ public class ReferenceListTest {
         for (int i = 0; i < 120; i++) {
             list.add(i);
         }
-        assertThat(list.getSize(), is(123));
+        assertThat(list.getLength(), is(123));
         assertThat(list.get(122), is(119));
         assertThat(list.get(120), is(117));
     }
