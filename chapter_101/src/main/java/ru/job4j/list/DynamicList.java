@@ -1,6 +1,7 @@
 package ru.job4j.list;
 
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class DynamicList<E> {
     E[] container;
@@ -12,10 +13,6 @@ public class DynamicList<E> {
         this.container = (E[]) new Object[this.capacity];
     }
 
-    public int getModCount() {
-        return this.modCount;
-    }
-
     public int getSize() {
         return this.size;
     }
@@ -25,7 +22,9 @@ public class DynamicList<E> {
         if (value != null) {
             this.modCount++;
             if (++this.size == this.capacity) {
-                changeSize(this.capacity * 2);
+                E[] newContainer = (E[]) new Object[this.capacity * 2];
+                System.arraycopy(this.container, 0, newContainer, 0, size);
+                this.container = newContainer;
             }
             this.container[this.size - 1] = value;
             rsl = true;
@@ -35,17 +34,15 @@ public class DynamicList<E> {
 
     public E get(int index) {
         E rsl;
-        if (index < this.size && index >= 0) {
-            rsl = this.container[index];
-        } else {
+        if (index > this.size || index < 0) {
             throw new NoSuchElementException("No such index in List");
         }
+        rsl = this.container[index];
         return rsl;
     }
 
-    private void changeSize(int newSize) {
-        E[] newContainer = (E[]) new Object[newSize];
-        System.arraycopy(this.container, 0, newContainer, 0, size);
-        this.container = newContainer;
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.modCount);
     }
 }

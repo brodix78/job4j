@@ -12,13 +12,13 @@ public class DynamicListIterator<E> implements Iterator {
 
     public DynamicListIterator(DynamicList<E> list) {
         this.list = list;
-        this.expectedModCount = list.getModCount();
+        this.expectedModCount = list.hashCode();
         this.size = list.getSize();
     }
 
     @Override
     public boolean hasNext() {
-        if (this.expectedModCount != this.list.getModCount()) {
+        if (this.expectedModCount != this.list.hashCode()) {
             throw new ConcurrentModificationException("List is changed");
         }
         return this.index < this.size;
