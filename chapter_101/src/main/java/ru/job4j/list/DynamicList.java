@@ -5,7 +5,6 @@ import java.util.Objects;
 
 public class DynamicList<E> {
     E[] container;
-    private int modCount;
     private int capacity = 100;
     private int size;
 
@@ -20,7 +19,6 @@ public class DynamicList<E> {
     public boolean add(E value) {
         boolean rsl = false;
         if (value != null) {
-            this.modCount++;
             if (++this.size == this.capacity) {
                 E[] newContainer = (E[]) new Object[this.capacity * 2];
                 System.arraycopy(this.container, 0, newContainer, 0, size);
@@ -39,10 +37,5 @@ public class DynamicList<E> {
         }
         rsl = this.container[index];
         return rsl;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.modCount);
     }
 }
