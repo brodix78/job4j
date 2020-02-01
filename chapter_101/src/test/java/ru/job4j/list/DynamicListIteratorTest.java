@@ -22,7 +22,7 @@ public class DynamicListIteratorTest {
         list.add(2);
         list.add(3);
         list.add(4);
-        it = new DynamicListIterator(list);
+        it = new DynamicListIterator<>(list);
     }
 
     @Test

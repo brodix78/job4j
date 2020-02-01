@@ -9,8 +9,7 @@ public class SimpleArray<T> {
 
     public SimpleArray(int size) {
         this.size = size;
-        Object[] timely = new Object[size];
-        this.objects = (T[]) timely;
+        this.objects = (T[]) new Object[size];
     }
 
     public void add(T element) {
