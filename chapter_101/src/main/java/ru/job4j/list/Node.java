@@ -8,30 +8,18 @@ public class Node<T> {
     }
 
     boolean hasCycle(Node<T> first) {
-        class Label {
-            Node<T> data;
-            Label nextLabel;
-            Label(Node<T> reference) {
-                this.data = reference;
-            }
-        }
         boolean rsl = false;
-        Label firstLabel = new Label(first.next);
         Node<T> node = first;
         while (node.next != null && !rsl) {
+            Node<T> label = first;
             node = node.next;
-            Label label = firstLabel;
-            Label lastLabel = new Label(node);
             do {
-                if (label.data == node.next) {
+                if (label.next == node.next) {
                     rsl = true;
                     break;
                 }
-                if (label.nextLabel != null) {
-                    label = label.nextLabel;
-                }
-            } while (label.nextLabel != null);
-            label.nextLabel = lastLabel;
+                label = label.next;
+            } while (label != node);
         }
         return rsl;
     }
