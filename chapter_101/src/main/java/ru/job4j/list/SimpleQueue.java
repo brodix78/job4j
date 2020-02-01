@@ -26,7 +26,7 @@ public class SimpleQueue<E> {
 
     public E poll() {
         Node<E> node = this.last;
-        Node<E> rsl;
+        E rsl;
         if (this.last == null)  {
             throw new NoSuchElementException("Stack is empty");
         }
@@ -34,12 +34,12 @@ public class SimpleQueue<E> {
             while (node.previous.previous != null) {
                 node = node.previous;
             }
-            rsl = node.previous;
+            rsl = node.previous.data;
             node.previous = null;
         } else {
-            rsl = node;
+            rsl = node.data;
             this.last = null;
         }
-        return rsl.data;
+        return rsl;
     }
 }
