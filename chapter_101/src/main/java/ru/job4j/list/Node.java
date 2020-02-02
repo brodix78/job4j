@@ -13,8 +13,9 @@ public class Node<T> {
         while (node.next != null && !rsl) {
             Node<T> label = first;
             node = node.next;
+            System.out.println(node.value);
             do {
-                if (label.next == node.next) {
+                if (label == node.next) {
                     rsl = true;
                     break;
                 }
