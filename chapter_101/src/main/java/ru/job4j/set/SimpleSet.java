@@ -2,7 +2,6 @@ package ru.job4j.set;
 
 import org.jetbrains.annotations.NotNull;
 import ru.job4j.list.DynamicList;
-import ru.job4j.list.DynamicListIterator;
 import java.util.Iterator;
 
 public class SimpleSet<E> implements Iterable<E> {
@@ -16,7 +15,7 @@ public class SimpleSet<E> implements Iterable<E> {
             if (value != null && value.equals(array.get(i))) {
                 rsl = false;
                 break;
-            } else if (value == null && array.get(i)==null) {
+            } else if (value == null && array.get(i) == null) {
                 rsl = false;
                 break;
             }
@@ -30,6 +29,6 @@ public class SimpleSet<E> implements Iterable<E> {
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new DynamicListIterator<>(array);
+        return array.iterator();
     }
 }

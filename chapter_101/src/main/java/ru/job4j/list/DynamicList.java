@@ -2,9 +2,9 @@ package ru.job4j.list;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Objects;
 
 public class DynamicList<E> implements Iterable<E> {
     E[] container;
@@ -46,14 +46,34 @@ public class DynamicList<E> implements Iterable<E> {
         this.container = newContainer;
     }
 
+    private class DynamicListIterator<E> implements Iterator<E> {
+        private int index;
+        private int expectedModCount;
+
+        private DynamicListIterator() {
+            this.expectedModCount = modCount;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (this.expectedModCount != modCount) {
+                throw new ConcurrentModificationException("List is changed");
+            }
+            return this.index < size;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException("End of List is reached");
+            }
+            return (E) get(index++);
+        }
+    }
+
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new DynamicListIterator<>(this);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(this.container, this.modCount);
+        return new DynamicListIterator<>();
     }
 }
