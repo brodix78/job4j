@@ -4,9 +4,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class EvenIt<Integer> implements Iterator {
-    private int index = -1;
+    private int index = 0;
     private final int[] array;
-    private int nextIndex;
 
     public EvenIt(int[] array) {
         this.array = array;
@@ -14,12 +13,11 @@ public class EvenIt<Integer> implements Iterator {
 
     @Override
     public boolean hasNext() {
-        this.nextIndex = this.index + 1;
-        while (this.nextIndex < array.length
-                && array[this.nextIndex] % 2 != 0) {
-            this.nextIndex++;
+        while (this.index < array.length
+                && array[this.index] % 2 != 0) {
+            this.index++;
         }
-        return nextIndex < array.length;
+        return this.index < array.length;
     }
 
     @Override
@@ -27,7 +25,6 @@ public class EvenIt<Integer> implements Iterator {
         if (!hasNext()) {
             throw new NoSuchElementException("Array passed");
         }
-        this.index = this.nextIndex;
-        return array[this.index];
+        return array[this.index++];
     }
 }
