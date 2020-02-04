@@ -55,4 +55,14 @@ public class EveItTest {
         assertThat(it.hasNext(), is(true));
         assertThat(it.next(), is(8));
     }
+
+    @Test
+    public void firstNumberIsEvenOthersAreOdd() {
+        it = new EvenIt(new int[] {2, 3, 5});
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.hasNext(), is(true));
+        assertThat(it.next(), is(2));
+        assertThat(it.hasNext(), is(false));
+    }
 }
