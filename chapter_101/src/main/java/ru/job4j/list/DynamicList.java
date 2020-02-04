@@ -4,11 +4,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 public class DynamicList<E> implements Iterable<E> {
     E[] container;
     private int capacity = 100;
     private int size;
+    private int modCount;
 
     public DynamicList() {
         this.container = (E[]) new Object[this.capacity];
@@ -19,14 +21,13 @@ public class DynamicList<E> implements Iterable<E> {
     }
 
     public boolean add(E value) {
-        boolean rsl = false;
-        if (value != null) {
-            if (++this.size == this.capacity) {
+        boolean rsl;
+        if (++this.size == this.capacity) {
                 changeSize(this.capacity * 2);
             }
-            this.container[this.size - 1] = value;
-            rsl = true;
-        }
+        this.container[this.size - 1] = value;
+        this.modCount++;
+        rsl = true;
         return rsl;
     }
 
@@ -49,5 +50,10 @@ public class DynamicList<E> implements Iterable<E> {
     @Override
     public Iterator<E> iterator() {
         return new DynamicListIterator<>(this);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.container, this.modCount);
     }
 }
