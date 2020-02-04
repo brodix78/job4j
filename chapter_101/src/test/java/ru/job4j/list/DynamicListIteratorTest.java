@@ -12,7 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class DynamicListIteratorTest {
-    private DynamicListIterator<Integer> it;
+    private Iterator<Integer> it;
     DynamicList<Integer> list;
 
     @Before
@@ -22,7 +22,7 @@ public class DynamicListIteratorTest {
         list.add(2);
         list.add(3);
         list.add(4);
-        it = new DynamicListIterator<>(list);
+        it = list.iterator();
     }
 
     @Test

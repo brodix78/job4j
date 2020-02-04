@@ -1,9 +1,11 @@
 package ru.job4j.list;
 
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import org.jetbrains.annotations.NotNull;
 
-public class DynamicList<E> {
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+public class DynamicList<E> implements Iterable<E> {
     E[] container;
     private int capacity = 100;
     private int size;
@@ -41,5 +43,11 @@ public class DynamicList<E> {
         E[] newContainer = (E[]) new Object[newSize];
         System.arraycopy(this.container, 0, newContainer, 0, size);
         this.container = newContainer;
+    }
+
+    @NotNull
+    @Override
+    public Iterator<E> iterator() {
+        return new DynamicListIterator<>(this);
     }
 }
