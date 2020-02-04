@@ -1,8 +1,11 @@
 package ru.job4j.list;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class ReferenceList<E> {
+public class ReferenceList<E> implements Iterable<E> {
     private Node<E> first;
     private Node<E> last;
     private int length;
@@ -54,5 +57,11 @@ public class ReferenceList<E> {
 
     public int getLength() {
         return length;
+    }
+
+    @NotNull
+    @Override
+    public Iterator<E> iterator() {
+        return new ReferenceListIterator<>(this);
     }
 }
