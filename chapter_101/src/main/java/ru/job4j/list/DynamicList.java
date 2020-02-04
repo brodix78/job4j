@@ -20,9 +20,7 @@ public class DynamicList<E> {
         boolean rsl = false;
         if (value != null) {
             if (++this.size == this.capacity) {
-                E[] newContainer = (E[]) new Object[this.capacity * 2];
-                System.arraycopy(this.container, 0, newContainer, 0, size);
-                this.container = newContainer;
+                changeSize(this.capacity * 2);
             }
             this.container[this.size - 1] = value;
             rsl = true;
@@ -37,5 +35,11 @@ public class DynamicList<E> {
         }
         rsl = this.container[index];
         return rsl;
+    }
+
+    private void changeSize(int newSize) {
+        E[] newContainer = (E[]) new Object[newSize];
+        System.arraycopy(this.container, 0, newContainer, 0, size);
+        this.container = newContainer;
     }
 }
