@@ -6,36 +6,30 @@ public class SimpleQueue<E> {
 
     private SimpleStack<E> in = new SimpleStack<>();
     private SimpleStack<E> out = new SimpleStack<>();
+    private int inSize;
+    private int outSize;
 
 
     public boolean push(E data) {
         boolean rsl = false;
         if (data != null) {
             rsl = in.push(data);
+            inSize++;
         }
         return rsl;
     }
 
     public E poll() {
-        E rsl;
-        try {
-            rsl = out.poll();
-        } catch (NoSuchElementException ex) {
-            boolean inEmpty = true;
+        if (inSize > 0) {
+            inSize--;
+        } else if (outSize > 0) {
             do {
-                try {
-                    out.push(in.poll());
-                    inEmpty = false;
-                } catch (NoSuchElementException e) {
-                    if (inEmpty) {
-                        throw new NoSuchElementException("Queue is empty");
-                    } else {
-                        inEmpty = true;
-                    }
-                }
-            } while (!inEmpty);
-            rsl = out.poll();
+                out.push(in.poll());
+                inSize++;
+            } while (--outSize > 0);
+        } else if (outSize == 0) {
+            throw new NoSuchElementException("Queue is empty");
         }
-        return rsl;
+        return out.poll();
     }
 }
