@@ -5,20 +5,18 @@ public class Node<T> {
     Node(T value) {
         this.value = value;
     }
+
     boolean hasCycle(Node<T> first) {
-        boolean rsl = false;
-        Node<T> node = first;
-        while (node.next != null && !rsl) {
-            Node<T> label = first;
-            node = node.next;
-            do {
-                if (label == node.next) {
-                    rsl = true;
-                    break;
-                }
-                label = label.next;
-            } while (label != node);
+        Node<T> turtle = first;
+        Node<T> rabbit = first;
+        boolean turtleGo = false;
+        while (rabbit.next != null && rabbit.next != turtle) {
+            rabbit = rabbit.next;
+            if (turtleGo) {
+                turtle = turtle.next;
+            }
+            turtleGo = !turtleGo;
         }
-        return rsl;
+        return rabbit.next == turtle;
     }
 }
