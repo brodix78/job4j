@@ -10,14 +10,15 @@ public class SimpleSet<E> implements Iterable<E> {
     private DynamicList<E> array = new DynamicList<>();
 
     public boolean add(E value) {
-        boolean rsl = false;
-        if (value != null) {
-            rsl = true;
-            for (int i = 0; i < array.getSize(); i++) {
-                if (value.equals(array.get(i))) {
-                    rsl = false;
-                    break;
-                }
+        boolean rsl;
+        rsl = true;
+        for (int i = 0; i < array.getSize(); i++) {
+            if (value != null && value.equals(array.get(i))) {
+                rsl = false;
+                break;
+            } else if (value == null && array.get(i)==null) {
+                rsl = false;
+                break;
             }
         }
         if (rsl) {
