@@ -3,6 +3,7 @@ package ru.job4j.map;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.function.BiPredicate;
 
 public class OwnHashMap<K, V> implements Iterable{
 
@@ -22,13 +23,11 @@ public class OwnHashMap<K, V> implements Iterable{
 
     public boolean insert(K key, V value) {
         boolean rsl;
-        int index = index(key);
-        Cell cell;
-        if (table[index] == null) {
-            table[index] = new Cell(key, value);
+        Cell cell = preCellByKey(key);
+        if (cell.next == null) {
+            cell.next = new Cell(key, value);
         } else {
-            cell = cellByKey(key, 0);
-            cell.value = value;
+            cell.next.value = value;
         }
         this.size++;
         rsl = true;
@@ -39,50 +38,36 @@ public class OwnHashMap<K, V> implements Iterable{
     }
 
     public V get(K key) {
-        Cell cell = cellByKey(key, 1);
+        Cell cell = preCellByKey(key).next;
         return (cell == null) ? null : (V) cell.value;
     }
 
     public boolean delete(K key) {
         boolean rsl = false;
-        Cell cell = cellByKey(key, 1);
-        if (cell != null) {
-            if (cell.next == null) {
-                cell = null;
-            } else {
-                cell.value = cell.next.value;
-                cell.key = cell.next.value;
-                cell.next = cell.next.next;
-            }
+        Cell cell = preCellByKey(key);
+        if (cell.next != null) {
+            cell.next = cell.next.next;
             rsl = true;
         }
         return rsl;
     }
 
-    private Cell cellByKey(K key, int function) {
-        boolean rsl;
+    private Cell preCellByKey(K key) {
         int index = index(key);
-        Cell cell;
-        int chain = 0;
-        cell = table[index];
-        boolean exist = false;
-        while (cell.next != null) {
-
-            if ((key != null && key.equals(cell.key))
-                    || (key == null && cell.key == null)) {
-                exist = true;
+        Cell cell = new Cell(null, null);
+        cell.next = table[index];
+        BiPredicate<K, Cell> equal;
+        if (key != null) {
+            equal = (k, c) -> k.equals(c.next.key);
+        } else {
+            equal = (k, c) -> c.next.key == null;
+        }
+        do {
+            if (equal.test(key, cell)) {
                 break;
             }
             cell = cell.next;
-        }
-        if (!exist) {
-            if (function == 0) {
-                cell.next = new Cell(key, null);
-                cell = cell.next;
-            } else {
-                cell = null;
-            }
-        }
+        } while (cell.next != null);
         return cell;
     }
 
@@ -92,6 +77,7 @@ public class OwnHashMap<K, V> implements Iterable{
     }
 
     private void changeTable(int newSize) {
+        Cell[] newTable = new Cell[newSize];
 
     }
 
