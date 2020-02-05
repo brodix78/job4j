@@ -9,13 +9,9 @@ public class Node<T> {
     boolean hasCycle(Node<T> first) {
         Node<T> turtle = first;
         Node<T> rabbit = first;
-        boolean turtleGo = false;
-        while (rabbit.next != null && rabbit.next != turtle) {
-            rabbit = rabbit.next;
-            if (turtleGo) {
-                turtle = turtle.next;
-            }
-            turtleGo = !turtleGo;
+        while (rabbit.next.next != null && rabbit.next != turtle) {
+            rabbit = rabbit.next.next;
+            turtle = turtle.next;
         }
         return rabbit.next == turtle;
     }
