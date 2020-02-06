@@ -42,8 +42,8 @@ public class OwnHashMapTest {
         map.insert("Two", "B");
         map.insert("Three", "C");
         map.insert("Four", "D");
-        map.delete("Two");
-        Assert.assertNull(map.get("Two"));
+        map.delete("Four");
+        Assert.assertNull(map.get("Four"));
     }
 
 
@@ -54,11 +54,10 @@ public class OwnHashMapTest {
         map.insert("Two", "B");
         map.insert("Three", "C");
         map.insert("Four", "D");
-        System.out.println("");
         Iterator<String> it = map.iterator();
         assertThat(it.hasNext(), is(true));
         System.out.println(it.next());
-       // assertThat(it.hasNext(), is(true));
+        assertThat(it.hasNext(), is(true));
         System.out.println(it.next());
         assertThat(it.hasNext(), is(true));
         System.out.println(it.next());
@@ -69,17 +68,32 @@ public class OwnHashMapTest {
     }
 
     @Test
-    public void expandTest() {
+    public void bigValueTest() {
         OwnHashMap<Integer, Integer> map = new OwnHashMap<>();
         for (int i = 0; i < 10000; i++) {
             map.insert(i, i);
         }
-        Iterator<Integer> it = map.iterator();
-        for (int i = 0; i < 10000; i++) {
-            assertThat(it.hasNext(), is(true));
-            System.out.println(it.next());
+        for (int i = 0; i < 5000; i++) {
+            assertThat(map.get(i), is(i));
+            assertThat(map.delete(i), is(true));
+            Assert.assertNull(map.get(i));
         }
-        //assertThat(it.hasNext(), is(false));
+        Iterator<Integer> it = map.iterator();
+        for (int i = 0; i < 5000; i++) {
+            assertThat(it.hasNext(), is(true));
+            it.next();
+        }
+        assertThat(it.hasNext(), is(false));
     }
 
+    @Test(expected = ConcurrentModificationException.class)
+    public void modCountTest() {
+        OwnHashMap<Integer, Integer> map = new OwnHashMap<>();
+        for (int i = 0; i < 10; i++) {
+            map.insert(i, i);
+        }
+        Iterator<Integer> it = map.iterator();
+        map.insert(20, 1);
+        it.hasNext();
+    }
 }
