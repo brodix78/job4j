@@ -27,56 +27,76 @@ public class OwnHashMap<K, V> implements Iterable{
     public boolean insert(K key, V value) {
         boolean rsl = false;
         int index = index(key);
+        System.out.println(index);
         if (table[index] == null) {
             table[index] = new Cell(key, value);
             rsl = true;
+            size++;
+            modCount++;
         } else {
-            Cell<K, V> cell = new Cell<>(null, null);
-            cell.next = table[index];
-            BiPredicate<K, Cell> equal;
-            if (key != null) {
-                equal = (k, c) -> k.equals(c.key);
-            } else {
-                equal = (k, c) -> c.key == null;
-            }
-            do {
-                cell = cell.next;
-                if (equal.test(key, cell)) {
-                    cell.value = value;
-                    rsl = true;
-                    break;
-                }
-            } while (cell.next != null);
-            if (!rsl) {
-                cell.next = new Cell(key, value);
+            if ((key != null && key.equals(table[index].key))
+                    || (key == null && table[index].key == null)) {
+                table[index].value = value;
                 rsl = true;
+                modCount++;
+            } else {
+                Cell<K, V> cell = preCellByKey(key, table[index]);
+                if (cell.next == null) {
+                    cell.next = new Cell(key, value);
+                    rsl = true;
+                    modCount++;
+                } else {
+                    cell.next.value = value;
+                    rsl = true;
+                    modCount++;
+                }
             }
+        }
+        if (size > 0.75 * tableSize) {
+            changeTable(tableSize * 2);
         }
         return rsl;
     }
 
     public V get(K key) {
-        Cell<V, K> cell = preCellByKey(key).next;
-        return (cell == null) ? null : (V) cell.value;
+        V val = null;
+        int index = index(key);
+        if (table[index] != null) {
+            if ((key != null && key.equals(table[index].key))
+                    || (key == null && table[index].key == null)) {
+                val = table[index].value;
+            } else {
+                Cell cell = preCellByKey(key, table[index]);
+                if (cell.next != null) {
+                    val = (V) cell.next.value;
+                }
+            }
+        }
+        return val;
     }
 
     public boolean delete(K key) {
+        int index = index(key);
         boolean rsl = false;
-        Cell cell = preCellByKey(key);
-        System.out.println(cell.next.value);
-        cell = cell.next;
-        if (cell != null) {
-            cell = cell.next;
-            rsl = true;
-            modCount++;
+        if (table[index] != null) {
+            if ((key != null && key.equals(table[index].key))
+                    || (key == null && table[index].key == null)) {
+                table[index] = table[index].next;
+                rsl = true;
+                modCount++;
+            } else {
+                Cell cell = preCellByKey(key, table[index]);
+                cell.next = cell.next.next;
+                rsl = true;
+                modCount++;
+            }
         }
         return rsl;
     }
 
-    private Cell preCellByKey(K key) {
-        int index = index(key);
+    private Cell preCellByKey(K key, Cell startCell) {
         Cell<K, V> cell = new Cell(null, null);
-        cell.next = table[index];
+        cell.next = startCell;
         if (cell.next != null) {
             BiPredicate<K, Cell> equal;
             if (key != null) {
@@ -116,8 +136,8 @@ public class OwnHashMap<K, V> implements Iterable{
 
     private class OwnHashMapIterator<K> implements Iterator<K> {
         private OwnHashMap.Cell cell = new Cell<K, V>(null, null);
-        private OwnHashMap.Cell cellNext = new Cell<K, V>(null, null);
-        private int index = -1;
+        private OwnHashMap.Cell cellNext = null;
+        private int index = 0;
         private int expModCount;
 
         private OwnHashMapIterator() {
@@ -129,15 +149,17 @@ public class OwnHashMap<K, V> implements Iterable{
             if (this.expModCount != modCount) {
                 throw new ConcurrentModificationException("Map is changed");
             }
-            if (cell.next == null) {
-                while(index < tableSize - 1 && table[++index] == null) {}
-                if (index != tableSize) {
-                    cellNext = table[index];
+            if (cell.next == null || cellNext == null) {
+                while(index < tableSize && table[index] == null) {
+                    index++;
                 }
-            } else {
-                cellNext = cell.next;
+                if (index < tableSize) {
+                    System.out.println("index" + index);
+                    cellNext = table[index++];
+                    System.out.println("key" + cellNext.key);
+                }
             }
-            return cellNext != null;
+            return cellNext != null || cell.next != null;
         }
 
         @Override
@@ -145,7 +167,8 @@ public class OwnHashMap<K, V> implements Iterable{
             if (!hasNext()) {
                 throw new NoSuchElementException("End of Map is reached");
             }
-            cell = cellNext;
+            cell = (cell.next != null) ? cell.next : cellNext;
+            cellNext = null;
             return (K) cell.key;
         }
     }

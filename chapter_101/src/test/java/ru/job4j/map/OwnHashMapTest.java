@@ -13,19 +13,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 public class OwnHashMapTest {
-    //Iterator<String> it = map.iterator();
 
     @Test
-    public void addGet() {
+    public void addGetAndNullKey() {
         OwnHashMap<String, String> map = new OwnHashMap<>();
         map.insert("One", "A");
         map.insert("Two", "B");
         map.insert("Three", "C");
-        map.insert("Four", "D");
+        map.insert(null, "D");
         assertThat(map.get("One"), is("A"));
         assertThat(map.get("Two"), is("B"));
         assertThat(map.get("Three"), is("C"));
-        assertThat(map.get("Four"), is("D"));
+        assertThat(map.get(null), is("D"));
     }
 
     @Test
@@ -55,13 +54,32 @@ public class OwnHashMapTest {
         map.insert("Two", "B");
         map.insert("Three", "C");
         map.insert("Four", "D");
+        System.out.println("");
         Iterator<String> it = map.iterator();
+        assertThat(it.hasNext(), is(true));
         System.out.println(it.next());
+        assertThat(it.hasNext(), is(true));
         System.out.println(it.next());
+        assertThat(it.hasNext(), is(true));
         System.out.println(it.next());
+        assertThat(it.hasNext(), is(true));
         System.out.println(it.next());
         assertThat(it.hasNext(), is(false));
         it.next();
+    }
+
+    @Test
+    public void expandTest() {
+        OwnHashMap<Integer, Integer> map = new OwnHashMap<>();
+        for (int i = 0; i < 10000; i++) {
+            map.insert(i, i);
+        }
+        Iterator<Integer> it = map.iterator();
+        for (int i = 0; i < 10000; i++) {
+            assertThat(it.hasNext(), is(true));
+            System.out.println(it.next());
+        }
+        //assertThat(it.hasNext(), is(false));
     }
 
 }
