@@ -62,13 +62,14 @@ public class ReferenceList<E> implements Iterable<E> {
         return length;
     }
 
-    private class ReferenceListIterator<E> implements Iterator<E> {
+    private class ReferenceListIterator implements Iterator<E> {
         private int expectedModCount;
-        private Node<E> node = new Node<>(null);
+        private Node<E> node;
+        private int counter;
 
         public ReferenceListIterator() {
             this.expectedModCount = modCount;
-            this.node.next = (Node<E>) first;
+            this.node = first;
         }
 
         @Override
@@ -76,7 +77,7 @@ public class ReferenceList<E> implements Iterable<E> {
             if (this.expectedModCount != modCount) {
                 throw new ConcurrentModificationException("List is changed");
             }
-            return node != null && node.next != null;
+            return this.counter < length;
         }
 
         @Override
@@ -84,13 +85,16 @@ public class ReferenceList<E> implements Iterable<E> {
             if (!hasNext()) {
                 throw new NoSuchElementException("End of List is reached");
             }
+            counter++;
+            E rsl = node.data;
             this.node = this.node.next;
-            return this.node.data;
+            return rsl;
         }
     }
+
     @NotNull
     @Override
     public Iterator<E> iterator() {
-        return new ReferenceListIterator<>();
+        return new ReferenceListIterator();
     }
 }
