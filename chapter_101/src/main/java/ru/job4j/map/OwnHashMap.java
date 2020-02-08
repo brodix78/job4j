@@ -83,9 +83,11 @@ public class OwnHashMap<K, V> implements Iterable<K> {
                 modCount++;
             } else {
                 Cell<K, V> cell = preCellByKey(key, table[index]);
-                cell.next = cell.next.next;
-                rsl = true;
-                modCount++;
+                if (cell.next != null) {
+                    cell.next = cell.next.next;
+                    rsl = true;
+                    modCount++;
+                }
             }
         }
         return rsl;
