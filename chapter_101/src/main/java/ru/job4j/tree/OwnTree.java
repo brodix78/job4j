@@ -58,6 +58,23 @@ public class OwnTree<E extends Comparable<E>> implements SimpleTree<E> {
         return rsl;
     }
 
+    public boolean isBinary() {
+        boolean rsl = true;
+        Queue<Node<E>> tree = new LinkedList<>();
+        tree.offer(this.root);
+        while (!tree.isEmpty()) {
+            Node<E> leaf = tree.poll();
+            if (leaf.leaves().size() > 2) {
+                rsl = false;
+                break;
+            }
+            for (Node<E> kid : leaf.leaves()) {
+                tree.offer(kid);
+            }
+        }
+        return rsl;
+    }
+
     private class OwnTreeIterator implements Iterator<E> {
         private int expectedMdCount;
         private int counter;
