@@ -18,22 +18,13 @@ public class OwnTree<E extends Comparable<E>> implements SimpleTree<E> {
     public boolean add(E parent, E child) {
         boolean rsl = false;
         if (parent != null && child != null) {
-            Node<E> branch;
-            Queue<Node<E>> tree = new LinkedList<>();
-            tree.offer(this.root);
-            while (!tree.isEmpty()) {
-                branch = tree.poll();
-                if (branch.eqValue(parent)) {
-                    if (!branch.leaves().contains(child)) {
-                        branch.add(new Node<>(child));
-                        rsl = true;
-                        modCount++;
-                        size++;
-                    }
-                    break;
-                }
-                for (Node<E> kid : branch.leaves()) {
-                    tree.offer(kid);
+            Optional<Node<E>> branch = findBy(parent);
+            if (branch.isPresent()) {
+                if (!findBy(child).isPresent()) {
+                    branch.get().add(new Node<>(child));
+                    rsl = true;
+                    modCount++;
+                    size++;
                 }
             }
         }

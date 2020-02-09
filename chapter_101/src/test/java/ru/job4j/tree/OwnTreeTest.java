@@ -19,6 +19,8 @@ public void when6ElFindLastThen6() {
     tree.add(1, 4);
     tree.add(4, 5);
     tree.add(5, 6);
+    assertThat(tree.add(7, 8), is(false));
+    assertThat(tree.add(1, 5), is(false));
     assertThat(
             tree.findBy(2).isPresent(),
             is(true)
