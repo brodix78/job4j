@@ -5,7 +5,7 @@ import java.util.*;
 public class Connections {
     private int size;
 
-    private class Row{
+    private class Row {
         public String[] values;
 
         public Row(String[] row) {
@@ -27,7 +27,7 @@ public class Connections {
 
         public boolean changeLast(Row row) {
             boolean rsl = false;
-            for (int i = 0; i< size; i++) {
+            for (int i = 0; i < size; i++) {
                 if (!row.values[i].isEmpty() && row.values[i].equals(last.values[i])) {
                     rsl = true;
                     last = row;
@@ -56,7 +56,7 @@ public class Connections {
             char ch = data.charAt(index++);
             if (ch == ';' || ch == '\n') {
                 cells[cell++] = row;
-                row ="";
+                row = "";
             } else {
                 row = row + ch;
             }
@@ -78,18 +78,19 @@ public class Connections {
         boolean groupClosed = true;
         while (it.hasNext()) {
             tmp = it.next();
-            if (!groupClosed)
+            if (!groupClosed) {
                 if (last.changeLast(tmp)) {
                     group.add(tmp);
                 } else {
                     groups.add(group);
-                    groupClosed =true;
+                    groupClosed = true;
                 }
-            if (groupClosed) {
-                groupClosed = false;
-                last = new LastInGroup(tmp);
-                group = new ArrayList<>();
-                group.add(tmp);
+                if (groupClosed) {
+                    groupClosed = false;
+                    last = new LastInGroup(tmp);
+                    group = new ArrayList<>();
+                    group.add(tmp);
+                }
             }
         }
         if (!groupClosed) {
@@ -99,9 +100,9 @@ public class Connections {
         int groupNumber = 1;
         while (!groups.isEmpty()) {
             ArrayList<Row> rowGroup = groups.poll();
-            rsl.append("Группа " + groupNumber++ +
-                    " содержит " + rowGroup.size() +
-                    " элементов" + "\n");
+            rsl.append("Группа " + groupNumber++
+                    + " содержит " + rowGroup.size()
+                    + " элементов" + "\n");
             for (Row r : rowGroup) {
                 rsl.append(r.toString() + "\n");
             }
