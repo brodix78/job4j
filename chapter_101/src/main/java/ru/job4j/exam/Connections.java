@@ -71,7 +71,8 @@ public class Connections {
             }
         }
         Iterator<Row> it = rows.iterator();
-        PriorityQueue<ArrayList<Row>> groups = new PriorityQueue<>((o1, o2) -> o2.size() - o1.size());
+        PriorityQueue<ArrayList<Row>> groups =
+                new PriorityQueue<>((o1, o2) -> o2.size() - o1.size());
         LastInGroup last = null;
         ArrayList<Row> group = null;
         Row tmp;
@@ -85,12 +86,12 @@ public class Connections {
                     groups.add(group);
                     groupClosed = true;
                 }
-                if (groupClosed) {
-                    groupClosed = false;
-                    last = new LastInGroup(tmp);
-                    group = new ArrayList<>();
-                    group.add(tmp);
-                }
+            }
+            if (groupClosed) {
+                groupClosed = false;
+                last = new LastInGroup(tmp);
+                group = new ArrayList<>();
+                group.add(tmp);
             }
         }
         if (!groupClosed) {
