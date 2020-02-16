@@ -2,7 +2,7 @@ package ru.job4j.exam;
 
 import org.junit.Test;
 
-public class ConnectionsTest {
+public class ConnTest {
 
     @Test
     public void taramparam() {
@@ -29,7 +29,7 @@ public class ConnectionsTest {
                 + "24;689;20;12;13\n"
                 + "33;;300;415;100";
         String stEmpty = "";
-        Connections con = new Connections();
+        Conn con = new Conn();
         System.out.println("st в строке 3 элемента" + "\n" + con.groups(st));
         System.out.println("st5 в строке 5 элементов" + "\n" + con.groups(st5));
         System.out.println("stEmpty" + "\n" + con.groups(stEmpty));
