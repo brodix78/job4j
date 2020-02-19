@@ -9,21 +9,22 @@ public class Search {
     public List<File> files(String parent, List<String> exts) {
         File path = new File(parent);
         HashSet<String> filesExt = new HashSet<>(exts);
-        LinkedList<File> files = new LinkedList<>(List.of(path));
+        LinkedList<File> directories = new LinkedList<>(List.of(path));
         List<File> output = new ArrayList<>();
         do {
-            File file = files.pop();
-            if (file.isFile()) {
-                output.add(file);
-            } else {
-                files.addAll(Arrays.asList(Objects.requireNonNull(file.listFiles(pathname -> {
-                    if (pathname.isDirectory()) {
-                        return true;
-                    } else return filesExt.contains(pathname.getName()
-                            .substring(1 + pathname.getName().lastIndexOf(".")));
-                }))));
-            }
-        } while (!files.isEmpty());
+            File directory = directories.pop();
+            directories.addAll(Arrays.asList(Objects.requireNonNull(directory.listFiles(pathname -> {
+                if (pathname.isDirectory()) {
+                    return true;
+                } else {
+                    if (filesExt.contains(pathname.getName()
+                            .substring(1 + pathname.getName().lastIndexOf(".")))) {
+                            output.add(pathname);
+                    }
+                }
+                return false;
+            }))));
+        } while (!directories.isEmpty());
         return output;
     }
 }
