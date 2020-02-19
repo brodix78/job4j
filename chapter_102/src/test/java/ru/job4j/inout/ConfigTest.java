@@ -10,7 +10,7 @@ public class ConfigTest {
 
     @Test
     public void whenPairWithoutComment() {
-        String path = "./src/main/java/ru/job4j/inout/app.properties";
+        String path = "./src/main/java/ru/job4j/inout/app.prop";
         Config config = new Config(path);
         config.load();
         assertThat(config.value("hibernate.dialect"),
@@ -19,7 +19,7 @@ public class ConfigTest {
 
     @Test
     public void whenPairWithComment() {
-        String path = "./src/main/java/ru/job4j/inout/app.properties";
+        String path = "./src/main/java/ru/job4j/inout/app.prop";
         Config config = new Config(path);
         config.load();
         assertNull(config.value("few"));
