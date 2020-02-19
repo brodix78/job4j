@@ -4,49 +4,32 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 
 public class Connections {
-    private int size;
+    private int size = 3;
     private String[] lastInGroup;
     private boolean groupClosed = true;
-    ArrayList<String> group;
-
+    private ArrayList<String> group;
     private PriorityQueue<ArrayList<String>> groups =
             new PriorityQueue<>((o1, o2) -> o2.size() - o1.size());
 
-
     public String groups(String data) {
-        int index = 0;
-        int length = data.length();
-        size = 1;
-        while (index < length && data.charAt(index) != '\n') {
-            if (data.charAt(index++) == ';') {
-                size++;
+        data.lines().forEach(line -> {
+            if (!groupClosed) {
+                if (inOpenGroup(line.split(";"))) {
+                    group.add(line);
+                } else {
+                    groupClosed = true;
+                    groups.add(group);
+                }
             }
-        }
-        index = 0;
-        int cell = 0;
-        String[] row = new String[size];
-        String element = "";
-        while (index < length) {
-            char ch = data.charAt(index++);
-            if (ch == ';' || ch == '\n') {
-                row[cell++] = element;
-                element = "";
-            } else {
-                element = element + ch;
+            if (groupClosed) {
+                groupClosed = false;
+                lastInGroup = line.split(";");
+                group = new ArrayList<>();
+                group.add(line);
             }
-            if (cell == size) {
-                genGroups(row);
-                element = "";
-                row = new String[size];
-                cell = 0;
-            }
-        }
-        if (!element.isEmpty()) {
-            row[cell] = element;
-            genGroups(row);
-            groups.add(group);
-            groupClosed = true;
-        }
+        });
+        groups.add(group);
+        groupClosed = true;
         StringBuilder rsl = new StringBuilder();
         int groupNumber = 1;
         while (!groups.isEmpty()) {
@@ -56,39 +39,21 @@ public class Connections {
             rsl.append(" содержит ");
             rsl.append(group.size());
             rsl.append(" элементов");
-            rsl.append("\n");
-            for (String r : group) {
-                rsl.append(r);
-                rsl.append("\n");
+            rsl.append(System.lineSeparator());
+            for (String line : group) {
+                rsl.append(line);
+                rsl.append(System.lineSeparator());
             }
-            rsl.append("\n");
         }
         return rsl.toString();
     }
 
-    private void genGroups(String[] row) {
-        if (!groupClosed) {
-            if (inGroup(row)) {
-                group.add(String.join(";", row));
-            } else {
-                groups.add(group);
-                groupClosed = true;
-            }
-        }
-        if (groupClosed) {
-            lastInGroup = row;
-            groupClosed = false;
-            group = new ArrayList<>();
-            group.add(String.join(";", row));
-        }
-    }
-
-    public boolean inGroup(String[] row) {
+    public boolean inOpenGroup(String[] line) {
         boolean rsl = false;
         for (int i = 0; i < size; i++) {
-            if (!row[i].isEmpty() && row[i].equals(lastInGroup[i])) {
+            if (!line[i].isEmpty() && line[i].equals(lastInGroup[i])) {
                 rsl = true;
-                lastInGroup = row;
+                lastInGroup = line;
                 break;
             }
         }

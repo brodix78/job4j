@@ -1,37 +1,35 @@
 package ru.job4j.exam;
 
 import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 public class ConnectionsTest {
 
     @Test
-    public void taramparam() {
-        String st = ";;1\n"
-                + "65;15;92\n"
-                + "80;48;92\n"
-                + "111;123;222\n"
+    public void thenAll() {
+        String st = "111;123;222\n"
                 + "200;123;100\n"
-                + "300;;100\n"
-                + "50;;80\n"
-                + "100;123;80\n"
-                + "400;45;66\n"
-                + "20;12;13\n"
-                + "300;415;100";
-        String st5 = ";;;;1\n"
-                + "12;34;65;15;92\n"
-                + "18;88;80;48;92\n"
-                + "698;68;111;123;222\n"
-                + "656;56;200;123;100\n"
-                + "656;80;300;;100\n"
-                + ";;50;;80\n"
-                + "88;46;100;123;80\n"
-                + ";689;400;45;66\n"
-                + "24;689;20;12;13\n"
-                + "33;;300;415;100";
-        String stEmpty = "";
+                + "300;;100";
         Connections con = new Connections();
-        System.out.println("st в строке 3 элемента" + "\n" + con.groups(st));
-        System.out.println("st5 в строке 5 элементов" + "\n" + con.groups(st5));
-        System.out.println("stEmpty" + "\n" + con.groups(stEmpty));
+        String exp = "Группа 1 содержит 3 элементов\n" +
+                "111;123;222\n" +
+                "200;123;100\n" +
+                "300;;100\n";
+        assertThat(con.groups(st), is(exp));
+    }
+
+    @Test
+    public void thenTwoOfThree() {
+        String st = "111;123;222\n"
+                + "200;123;100\n"
+                + "300;;200";
+        Connections con = new Connections();
+        String exp = "Группа 1 содержит 2 элементов\n" +
+                "111;123;222\n" +
+                "200;123;100\n" +
+                "Группа 2 содержит 1 элементов\n" +
+                "300;;200\n";
+        assertThat(con.groups(st), is(exp));
     }
 }
