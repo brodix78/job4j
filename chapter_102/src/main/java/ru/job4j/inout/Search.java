@@ -1,7 +1,6 @@
 package ru.job4j.inout;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.*;
 
 public class Search {
@@ -13,7 +12,7 @@ public class Search {
         List<File> output = new ArrayList<>();
         do {
             File directory = directories.pop();
-            directories.addAll(Arrays.asList(Objects.requireNonNull(directory.listFiles(pathname -> {
+            directories.addAll(Arrays.asList(directory.listFiles(pathname -> {
                 if (pathname.isDirectory()) {
                     return true;
                 } else {
@@ -23,7 +22,7 @@ public class Search {
                     }
                 }
                 return false;
-            }))));
+            })));
         } while (!directories.isEmpty());
         return output;
     }
