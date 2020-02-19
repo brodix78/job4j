@@ -16,37 +16,13 @@ public class Config {
         ArrayList<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(this.path))) {
             reader.lines().map(e -> e.replaceAll("\\s+", ""))
-                    .filter(e -> e.length() > 2)
-                    .forEach(e -> mapFill(e.toCharArray()));
+                    .filter(e -> e.length() > 2 && !e.startsWith("#") && !e.startsWith("!"))
+                    .forEach(e -> {
+                        String[] pair = e.split("=");
+                        values.put(pair[0], pair[1]);
+                    });
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    private void mapFill(char[] line) {
-        StringBuilder key = new StringBuilder();
-        StringBuilder value = new StringBuilder();
-        boolean first = true;
-        for (char c : line) {
-            if (c == '#' || c == '!') {
-                break;
-            }
-            if (c != '=') {
-                if (first) {
-                    key.append(c);
-                } else {
-                    value.append(c);
-                }
-            } else {
-                if (first) {
-                    first = false;
-                } else {
-                    break;
-                }
-            }
-        }
-        if (!first && value.length() > 0) {
-            values.put(key.toString(), value.toString());
         }
     }
 
