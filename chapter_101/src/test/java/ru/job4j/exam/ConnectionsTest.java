@@ -12,10 +12,10 @@ public class ConnectionsTest {
                 + "200;123;100\n"
                 + "300;;100";
         Connections con = new Connections();
-        String exp = "Группа 1 содержит 3 элементов\n" +
-                "111;123;222\n" +
-                "200;123;100\n" +
-                "300;;100\n";
+        String exp = "Группа 1 содержит 3 элементов\n"
+                + "111;123;222\n"
+                + "200;123;100\n"
+                + "300;;100\n";
         assertThat(con.groups(st), is(exp));
     }
 
@@ -25,11 +25,11 @@ public class ConnectionsTest {
                 + "200;123;100\n"
                 + "300;;200";
         Connections con = new Connections();
-        String exp = "Группа 1 содержит 2 элементов\n" +
-                "111;123;222\n" +
-                "200;123;100\n" +
-                "Группа 2 содержит 1 элементов\n" +
-                "300;;200\n";
+        String exp = "Группа 1 содержит 2 элементов\n"
+                + "111;123;222\n"
+                + "200;123;100\n"
+                + "Группа 2 содержит 1 элементов\n"
+                + "300;;200\n";
         assertThat(con.groups(st), is(exp));
     }
 }
