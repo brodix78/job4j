@@ -15,8 +15,13 @@ public class Search {
                     .forEach(file -> {
                         if (file.isDirectory()) {
                             directories.push(file);
+                    /*  Ниже оставил как было, иначе при использовании endsWith мне
+                    /   пришлось бы сравнивать с каждым элементом коллеции exts,
+                    /   а так я лишь один раз обращаюсь по сути с поиском к filesExt (HashSet,
+                    /   в чем она, собственно, и хороша.
+                     */
                         } else if (filesExt.contains(file.getName()
-                                .substring(file.getName().lastIndexOf(".")))) {
+                                .substring(file.getName().lastIndexOf(".") + 1))) {
                             output.add(file);
                         }
                     });
