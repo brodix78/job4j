@@ -4,7 +4,11 @@ import java.io.File;
 
 public class Args {
     public File directory(String dir) {
-        return new File(dir);
+        File rsl = new File(dir);
+        if (!rsl.isDirectory()) {
+            rsl = null;
+        }
+        return rsl;
     }
 
     public String exclude(String exc) {
