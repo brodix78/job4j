@@ -43,7 +43,7 @@ public class AnalizyTest {
                 "400 10:58:01", "200 10:59:01", "500 11:01:02", "200 11:02:02"});
         assertThat(rsl.get(0), is("10:57:01;10:59:01"));
         assertThat(rsl.get(1), is("11:01:02;11:02:02"));
-        assertThat(rsl.size(), is (2));
+        assertThat(rsl.size(), is(2));
     }
 }
 
