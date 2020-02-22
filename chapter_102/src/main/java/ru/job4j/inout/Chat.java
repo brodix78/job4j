@@ -13,7 +13,7 @@ public class Chat {
         long start;
         int length;
 
-        public PhraseIndex(int start, int length) {
+        public PhraseIndex(long start, int length) {
             this.start = start;
             this.length = length;
         }
@@ -74,8 +74,8 @@ public class Chat {
         try (BufferedReader reader = new BufferedReader(new FileReader(this.book))) {
             int sign;
             boolean findNew = false;
-            int start = 0;
-            int index = 0;
+            long start = 0;
+            long index = 0;
             while ((sign = reader.read()) != -1) {
                 if (!findNew && sign != ' ' && sign != '\n') {
                     start = index;
@@ -83,7 +83,7 @@ public class Chat {
                 }
                 if (findNew && endSymbols.contains(Character.toString((char) sign))) {
                     if (index - start > 2) {
-                        this.phrasesIndex.add(new PhraseIndex(start, index - start + 1));
+                        this.phrasesIndex.add(new PhraseIndex(start, (int) (index - start + 1)));
                     }
                     findNew = false;
                 }
