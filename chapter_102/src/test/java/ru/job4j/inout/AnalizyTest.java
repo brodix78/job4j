@@ -25,7 +25,6 @@ public class AnalizyTest {
             for (String line:inData) {
                 out.println(line);
             }
-            out.close();
             analizy.unavailable(logFile.getPath(), unvFile.getPath());
             String line;
             while ((line = in.readLine()) != null) {
