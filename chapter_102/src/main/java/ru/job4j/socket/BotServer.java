@@ -8,12 +8,31 @@ import java.util.HashMap;
 
 public class BotServer {
 
+    private Socket socket;
+    private HashMap<String, String> answers;
+
     public BotServer(Socket socket) {
         this.socket = socket;
     }
 
-    private Socket socket;
-    HashMap<String, String> answers;
+    public static void main(String[] args) {
+        int port = -1;
+        if (args.length == 1) {
+            try {
+                port = Integer.parseInt(args[0]);
+                try (final Socket socket = new ServerSocket(port).accept()) {
+                    BotServer server = new BotServer(socket);
+                } catch (NumberFormatException | IOException nfe) {
+                    System.out.println("Usage is: botserver.jar #port");
+                }
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        if (port == -1) {
+            System.out.println("Usage is: botserver.jar #port");
+        }
+    }
 
     public void botStart() throws IOException {
         answersBase();
@@ -70,25 +89,6 @@ public class BotServer {
             });
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        int port = -1;
-        if (args.length == 1) {
-            try {
-                port = Integer.parseInt(args[0]);
-                try (final Socket socket = new ServerSocket(port).accept()) {
-                    BotServer server = new BotServer(socket);
-                } catch (NumberFormatException | IOException nfe) {
-                    System.out.println("Usage is: botserver.jar #port");
-                }
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-        if (port == -1) {
-            System.out.println("Usage is: botserver.jar #port");
         }
     }
 }

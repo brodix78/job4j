@@ -8,27 +8,9 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class BotClient {
-    public BotClient(Socket socket, Scanner scanner) {
-        this.socket = socket;
-        this.console = scanner;
-    }
 
-    Socket socket;
-    Scanner console;
-
-    public void clientStart() throws IOException {
-        PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-        String str;
-        String ask;
-        do {
-            ask = console.nextLine();
-            out.println(ask);
-            while (!(str = in.readLine()).isEmpty()) {
-                System.out.println(str);
-            }
-        } while (ask != null && !"exit".equals(ask.toLowerCase()));
-    }
+    private Socket socket;
+    private Scanner console;
 
     public static void main(String[] args) {
         int port = -1;
@@ -49,4 +31,24 @@ public class BotClient {
             System.out.println("Usage is: botclient.jar hostName #port");
         }
     }
+
+    public BotClient(Socket socket, Scanner scanner) {
+        this.socket = socket;
+        this.console = scanner;
+    }
+
+    public void clientStart() throws IOException {
+        PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
+        BufferedReader in = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+        String str;
+        String ask;
+        do {
+            ask = console.nextLine();
+            out.println(ask);
+            while (!(str = in.readLine()).isEmpty()) {
+                System.out.println(str);
+            }
+        } while (ask != null && !"exit".equals(ask.toLowerCase()));
+    }
+
 }
