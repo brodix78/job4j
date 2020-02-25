@@ -7,16 +7,24 @@ import java.util.Random;
 public class ChatBot {
 
     private File book;
-    private ArrayList<PhraseIndex> phrasesIndex;
+    private ArrayList<String> phrases;
 
-    private static class PhraseIndex {
-        long start;
-        int length;
-
-        public PhraseIndex(long start, int length) {
-            this.start = start;
-            this.length = length;
+    public static void main(String[] args) {
+        if (args.length == 1 && args[0].endsWith(".txt")) {
+            File txt = new File(args[0]);
+            ChatBot chat = new ChatBot();
+            chat.book = txt;
+            PrintWriter output = new PrintWriter(System.out, true);
+            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+            chat.botLife(input, output);
+        } else {
+            System.out.println("Usage is: char.jar textFile.txt");
         }
+    }
+
+    public void botLife(BufferedReader input, PrintWriter output, File book) {
+        this.book = book;
+        botLife(input, output);
     }
 
     private void botLife(BufferedReader input, PrintWriter output) {
@@ -56,21 +64,13 @@ public class ChatBot {
 
     private String botAnswer() {
         Random random = new Random();
-        PhraseIndex phrase = phrasesIndex.get(random.nextInt(phrasesIndex.size()));
-        char[] answer = new char[phrase.length];
-        try (BufferedReader reader = new BufferedReader(new FileReader(this.book))) {
-            reader.skip(phrase.start);
-            reader.read(answer, 0, phrase.length);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String rsl = new String(answer);
-        return rsl.replaceAll("\n", " ");
+        return this.phrases.get(random.nextInt(this.phrases.size())).replaceAll("\n", " ");
     }
 
     private void phrasesCollect() {
-        this.phrasesIndex = new ArrayList<>();
+        this.phrases = new ArrayList<>();
         String endSymbols = ".;!?";
+        StringBuilder phrase = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(this.book))) {
             int sign;
             boolean findNew = false;
@@ -78,12 +78,14 @@ public class ChatBot {
             long index = 0;
             while ((sign = reader.read()) != -1) {
                 if (!findNew && sign != ' ' && sign != '\n') {
+                    phrase.setLength(0);
                     start = index;
                     findNew = true;
                 }
+                phrase.append((char)sign);
                 if (findNew && endSymbols.contains(Character.toString((char) sign))) {
                     if (index - start > 2) {
-                        this.phrasesIndex.add(new PhraseIndex(start, (int) (index - start + 1)));
+                        this.phrases.add(phrase.toString());
                     }
                     findNew = false;
                 }
@@ -91,19 +93,6 @@ public class ChatBot {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        if (args.length == 1 && args[0].endsWith(".txt")) {
-            File txt = new File(args[0]);
-            ChatBot chat = new ChatBot();
-            chat.book = txt;
-            PrintWriter output = new PrintWriter(System.out, true);
-            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-            chat.botLife(input, output);
-        } else {
-            System.out.println("Usage is: char.jar textFile.txt");
         }
     }
 }
