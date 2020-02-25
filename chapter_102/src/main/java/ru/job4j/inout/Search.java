@@ -8,18 +8,14 @@ public class Search {
     public List<File> files(String parent, List<String> exts) {
         File path = new File(parent);
         HashSet<String> filesExt = new HashSet<>(exts);
-        LinkedList<File> directories = new LinkedList<>(List.of(path));
         List<File> output = new ArrayList<>();
-        while (!directories.isEmpty()) {
-            Arrays.stream(directories.pop().listFiles())
-                    .forEach(file -> {
-                        if (file.isDirectory()) {
-                            directories.push(file);
-                        } else if (filesExt.contains(file.getName()
-                                .substring(file.getName().lastIndexOf(".") + 1))) {
-                            output.add(file);
-                        }
-                    });
+        for (File file : path.listFiles()) {
+            if (file.isDirectory()) {
+                output.addAll(files(file.toString(), exts));
+            } else if (filesExt.contains(file.getName()
+                    .substring(file.getName().lastIndexOf(".") + 1))) {
+                output.add(file);
+            }
         }
         return output;
     }
