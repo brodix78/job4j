@@ -25,7 +25,11 @@ public class AnalizyTest {
             for (String line:inData) {
                 out.println(line);
             }
-            analizy.unavailable(logFile.getPath(), unvFile.getPath());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        analizy.unavailable(logFile.getPath(), unvFile.getPath());
+        try (BufferedReader in = new BufferedReader(new FileReader(unvFile))) {
             String line;
             while ((line = in.readLine()) != null) {
                 outData.add(line);
