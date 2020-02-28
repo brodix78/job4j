@@ -59,14 +59,23 @@ public class Find {
             StringBuilder rsl = new StringBuilder();
             if (option.equals("r")) {
                 walk.filter(file -> Files.isDirectory(file) && regular(file.getFileName().toString()))
-                        .forEach(file -> rsl.append(file.toString()));
+                        .forEach(file -> {
+                            rsl.append(file.toString());
+                            rsl.append(System.lineSeparator());
+                        });
             } else if (option.equals("m")) {
                 walk.filter(file -> Files.isDirectory(file) && mask(file.getFileName().toString()))
-                        .forEach(file -> rsl.append(file.toString()));
+                        .forEach(file -> {
+                            rsl.append(file.toString());
+                            rsl.append(System.lineSeparator());
+                        });
             } else {
-                walk.filter(file -> Files.isDirectory(file) && file.getFileName().toString().equals(toFind))
-                        .forEach(file -> rsl.append(file.toString()));
+                File file = new File(toFind);
+                if (file.exists()) {
+                    rsl.append(file);
+                    rsl.append(System.lineSeparator());
                 }
+            }
         out.write(rsl.toString());
         } catch (IOException e) {
             e.printStackTrace();
