@@ -6,29 +6,20 @@ import java.util.Random;
 
 public class ChatBot {
 
-    private File book;
-    private ArrayList<String> phrases;
-
     public static void main(String[] args) {
-        if (args.length == 1 && args[0].endsWith(".txt")) {
+        if (args.length != 1 || !args[0].endsWith(".txt")) {
+            System.out.println("Usage is: char.jar textFile.txt");
+            return;
+        }
             File txt = new File(args[0]);
             ChatBot chat = new ChatBot();
-            chat.book = txt;
             PrintWriter output = new PrintWriter(System.out, true);
             BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-            chat.botLife(input, output);
-        } else {
-            System.out.println("Usage is: char.jar textFile.txt");
-        }
+            chat.botLife(input, output, txt);
     }
 
     public void botLife(BufferedReader input, PrintWriter output, File book) {
-        this.book = book;
-        botLife(input, output);
-    }
-
-    private void botLife(BufferedReader input, PrintWriter output) {
-        phrasesCollect();
+        ArrayList<String> phrases = phrasesCollect(book);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File(book.getParent() + "/bot.log")))) {
             boolean botAlive = true;
             boolean botSleeps = false;
@@ -51,7 +42,10 @@ public class ChatBot {
                     if (userSaid.toLowerCase().equals("стоп")) {
                         botSleeps = true;
                     } else {
-                        String answer = "Bot: " + botAnswer() + "\n";
+                        Random random = new Random();
+                        String answer = String.format("Bot: %s%s",
+                                phrases.get(random.nextInt(phrases.size())).replaceAll("\n", " "),
+                                System.lineSeparator());
                         output.print(answer);
                         writer.write(answer);
                     }
@@ -62,16 +56,11 @@ public class ChatBot {
         }
     }
 
-    private String botAnswer() {
-        Random random = new Random();
-        return this.phrases.get(random.nextInt(this.phrases.size())).replaceAll("\n", " ");
-    }
-
-    private void phrasesCollect() {
-        this.phrases = new ArrayList<>();
+    private ArrayList<String> phrasesCollect(File book) {
+        ArrayList<String> phrases = new ArrayList<>();
         String endSymbols = ".;!?";
         StringBuilder phrase = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(this.book))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(book))) {
             int sign;
             boolean findNew = false;
             long start = 0;
@@ -82,10 +71,10 @@ public class ChatBot {
                     start = index;
                     findNew = true;
                 }
-                phrase.append((char)sign);
+                phrase.append((char) sign);
                 if (findNew && endSymbols.contains(Character.toString((char) sign))) {
                     if (index - start > 2) {
-                        this.phrases.add(phrase.toString());
+                        phrases.add(phrase.toString());
                     }
                     findNew = false;
                 }
@@ -94,5 +83,6 @@ public class ChatBot {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return phrases;
     }
 }
