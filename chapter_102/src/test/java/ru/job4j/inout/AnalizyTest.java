@@ -20,13 +20,10 @@ public class AnalizyTest {
         File unvFile = folder.newFile("unavailable.csv");
         Analizy analizy = new Analizy();
         ArrayList<String> outData = new ArrayList<>();
-        try (PrintWriter out = new PrintWriter(logFile);
-             BufferedReader in = new BufferedReader(new FileReader(unvFile))) {
+        try (PrintWriter out = new PrintWriter(logFile)) {
             for (String line:inData) {
                 out.println(line);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         analizy.unavailable(logFile.getPath(), unvFile.getPath());
         try (BufferedReader in = new BufferedReader(new FileReader(unvFile))) {
@@ -34,8 +31,6 @@ public class AnalizyTest {
             while ((line = in.readLine()) != null) {
                 outData.add(line);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return outData;
     }
