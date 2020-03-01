@@ -4,22 +4,21 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.file.*;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class Find {
-    String root;
+    Path root;
     String toFind;
-    String option;
+    Predicate<String> rule;
     String logTxt;
 
 
     public static void main(String[] args) {
-        boolean allOk;
+        boolean allOk = false;
         if (args.length == 7) {
             Find find = new Find();
             allOk = true;
@@ -28,10 +27,10 @@ public class Find {
             while (index < argsLen && allOk) {
                 if (args[index].startsWith("-")) {
                     if (args[index].equals("-m") || args[index].equals("-f") || args[index].equals("-r")) {
-                        find.option = args[index].substring(1);
+                        find.setRule(args[index]);
                     } else if (index + 1 < argsLen) {
                         if (args[index].equals("-d")) {
-                            find.root = args[++index];
+                            find.root = Paths.get(args[++index]);
                         } else if (args[index].equals("-n")) {
                             find.toFind = args[++index];
                         } else if (args[index].equals("-o")) {
@@ -47,52 +46,60 @@ public class Find {
             }
             if (allOk) {
                 find.search();
-            } else {
-                System.out.println("Usage is: -jar find.jar -d c:/ -n *.txt -m -o log.txt");
             }
+
+        }
+        if (!allOk) {
+            System.out.println("Usage is: -jar find.jar -d c:/ -n *.txt -m -o log.txt");
         }
     }
 
     private void search() {
-        try (Stream<Path> walk = Files.walk(Paths.get(root));
-             BufferedWriter out = new BufferedWriter(new FileWriter(new File(root + "/" + "txt.log")))) {
+        try (Stream<Path> walk = Files.walk(root);
+             BufferedWriter out = new BufferedWriter(new FileWriter(new File("./" + logTxt)))) {
             StringBuilder rsl = new StringBuilder();
-            if (option.equals("r")) {
-                walk.filter(file -> Files.isDirectory(file) && regular(file.getFileName().toString()))
+            walk.filter(file -> Files.isRegularFile(file) && rule.test(file.getFileName().toString()))
                         .forEach(file -> {
                             rsl.append(file.toString());
                             rsl.append(System.lineSeparator());
                         });
-            } else if (option.equals("m")) {
-                walk.filter(file -> Files.isDirectory(file) && mask(file.getFileName().toString()))
-                        .forEach(file -> {
-                            rsl.append(file.toString());
-                            rsl.append(System.lineSeparator());
-                        });
-            } else {
-                File file = new File(toFind);
-                if (file.exists()) {
-                    rsl.append(file);
-                    rsl.append(System.lineSeparator());
-                }
-            }
         out.write(rsl.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private boolean regular(String file) {
-        Pattern pattern = Pattern.compile(toFind);
-        Matcher matcher = pattern.matcher(file);
-        matcher.find();
-        return matcher.start() == 0 && matcher.end() == file.length();
+    private void setRule(String option) {
+        if ("-r".equals(option)) {
+            rule = new Regular();
+        } else if ("-m".equals(option)) {
+            rule = new Mask();
+        } else {
+            rule = new Fully();
+        }
     }
 
-    private boolean mask(String file) {
-        Pattern pattern = Pattern.compile(toFind);
-        Matcher matcher = pattern.matcher(file);
-        matcher.find();
-        return matcher.start() == 0 && matcher.end() == file.length();
+    private class Regular implements Predicate<String> {
+        @Override
+        public boolean test(String file) {
+            Pattern pattern = Pattern.compile(toFind);
+            Matcher matcher = pattern.matcher(file);
+            return matcher.find();
+        }
+    }
+
+    private class Mask implements Predicate<String> {
+        @Override
+        public boolean test(String file) {
+            PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + toFind);
+            return matcher.matches(Paths.get(file));
+        }
+    }
+
+    private class Fully implements Predicate<String> {
+        @Override
+        public boolean test(String file) {
+            return file.equals(toFind);
+        }
     }
 }
