@@ -1,34 +1,21 @@
 package ru.job4j.graver;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 
 
 public class BookCreate {
 
-    public class Point {
-        double x;
-        double y;
-
-        public Point(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    public HashMap<String, Point[]> letters = new HashMap<String, Point[]>();
+    public HashMap<String, Float[]> letters = new HashMap<>();
 
     public static void main(String[] args) {
         BookCreate book = new BookCreate();
-        book.blockGenerator(new File("/home/ilya/projects/job4j/cncfour/src/main/java/0_9.NC"));
+        book.blockGenerator(new File("./graver/in/0_9.NC"));
         book.arcCreate();
     }
 
     private void blockGenerator(File dataNC) {
-        try (BufferedReader data = new BufferedReader(new FileReader(dataNC));
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("/home/ilya/projects/job4j/cncfour/src/main/java/book.ar"))) {
+        try (BufferedReader data = new BufferedReader(new FileReader(dataNC))) {
             String let = null;
             ArrayList<String> letter = new ArrayList<>();
             String line;
@@ -49,64 +36,67 @@ public class BookCreate {
     }
 
     private void arcCreate() {
-        for(String key:letters.keySet()) {
-            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(String.format("/home/ilya/bookArc/%s.ar", key)))) {
-                for (Point point : letters.get(key)) {
-                    out.writeDouble(point.x);
-                    out.writeDouble(point.x);
-                }
+        for(String ch:letters.keySet()) {
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(String.format("./graver/book/%s.ar", ch)))) {
+                out.writeObject(letters.get(ch));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private Point[] signConverter(ArrayList<String> letter) {
-        Point previous = null;
-        LinkedList<Point> sign = new LinkedList<>();
+    private Float[] signConverter(ArrayList<String> letter) {
+        float previousX = 0;
+        float previousY = 0;
+        LinkedList<Float> sign = new LinkedList<>();
         for (String pointStr : letter) {
             pointStr = pointStr.replace("X.", "X0.");
             pointStr = pointStr.replace("Y.", "Y0.");
             String[] p = pointStr.split(" ");
-            double x;
-            double y;
+            float x;
+            float y;
             if (p[0].startsWith("X")) {
-                x = Double.parseDouble(p[0].substring(1));
+                x = Float.parseFloat(p[0].substring(1));
                 if (p.length == 2) {
-                    y = Double.parseDouble(p[1].substring(1));
+                    y = Float.parseFloat(p[1].substring(1));
                 } else {
-                    y =previous.y;
+                    y = previousY;
                 }
             } else {
-                y = Double.parseDouble(p[0].substring(1));
-                x = previous.x;
+                y = Float.parseFloat(p[0].substring(1));
+                x = previousX;
             }
-            sign.add(new Point(x, y));
-            previous = new Point(x, y);
+            sign.add(x);
+            sign.add(y);
+            previousX = x;
+            previousY = y;
         }
-        double xmin = sign.get(0).x;
-        double ymin = sign.get(0).y;
-        double xmax = xmin;
-        double ymax = ymin;
-        for (Point point:sign) {
-            if (xmin > point.x) {
-                xmin = point.x;
+        float xmin = sign.get(0);
+        float ymin = sign.get(1);
+        float xmax = xmin;
+        float ymax = ymin;
+        int i = 0;
+        while (i < sign.size()) {
+            if (xmin > sign.get(i)) {
+                xmin = sign.get(i);
+            } else if (xmax < sign.get(i)) {
+                xmax = sign.get(i);
             }
-            if (ymin > point.y) {
-                ymin = point.y;
+
+            if (ymin > sign.get(++i)) {
+                ymin = sign.get(i);
+            } else if (ymax < sign.get(i)) {
+                ymax = sign.get(i);
             }
-            if (xmax < point.x) {
-                xmax = point.x;
-            }
-            if (ymax < point.y) {
-                ymax = point.y;
-            }
+            i++;
         }
-        for (Point point:sign) {
-            point.x -= xmin;
-            point.y -= ymin;
+        i = 0;
+        while (i < sign.size()) {
+            sign.set(i, sign.get(i++) - xmin);
+            sign.set(i, sign.get(i++) - ymin);
         }
-        sign.addFirst(new Point(xmax - xmin, ymax - ymin));
-        return sign.toArray(Point[]::new);
+        sign.addFirst(ymax - ymin);
+        sign.addFirst(xmax - xmin);
+        return sign.toArray(Float[]::new);
     }
 }
