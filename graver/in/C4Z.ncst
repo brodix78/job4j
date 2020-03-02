@@ -1,0 +1,20 @@
+MSG ("Gravirovka")
+ G19 M814
+ L710(1)
+ L707
+ N15 DIAMON
+ N20 G54
+ N25 G59 X=0 Z=RG720+9
+;****Freza gravirovalnaya 0.4-0.5mm
+ T6            ;Freza
+ TC(1)
+ SETMS(2)
+ G90 G0 G95 S2=4000 M2=3 M208 M450
+End
+ N185 M2=5 M209 M451
+ G18 G54
+ L708
+ L710(1)
+NN9999: M17
+____
+End
