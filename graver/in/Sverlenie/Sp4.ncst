@@ -1,0 +1,19 @@
+MSG ("Sverlenie SP4")
+ G18 M814
+ L710(1)
+ DIAMON
+ G54
+ G59 X=0 Z=RG720
+ T8            ;Sverlo
+ TC(1)
+ SETMS(4)
+ G90 G0 G95 M208 M450
+End
+
+
+ M209 M451
+ G54
+ L710(1)
+NN9999: M17
+____
+End
