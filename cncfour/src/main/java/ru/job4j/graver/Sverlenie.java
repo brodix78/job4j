@@ -2,8 +2,6 @@ package ru.job4j.graver;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 
 public class Sverlenie extends Operation{
 
@@ -25,7 +23,7 @@ public class Sverlenie extends Operation{
     /     4. Подача мм/оборт;
     /     5. Подача мм на один заход;
     /   Нечетные элементы:
-    /     координата 1, координата 2, координата 3 (если используется):
+    /     координата 1, координата 2, координата 3 (значение 0 если используется):
     /       Для шпинделя 3,4 не указывается в массиве торчит один 0;
     /       Для шпинделя 1g пара X, Y, C3 (горизонтальный приводной инструмент в верхней башке)
     /       Для шпинделя 2g пара X, C4 (горизонтальный приводной инструмент в нижней башке)
@@ -51,61 +49,62 @@ public class Sverlenie extends Operation{
         workDeep = points.get(index)[5];
     }
 
-    private HashMap<String, ArrayList<String>> libSp() {
+    private ArrayList<String> rulesRead() {
         /*  0. Обороты шпинделя
         /   1. Подача
         /   2. Безопасный первый подход
         /   3. Последующий подход
         /   4. Сверление
          */
-        HashMap<String, ArrayList<String>> lib = new HashMap<>();
-        try(BufferedReader in = new BufferedReader(new FileReader(new File("./in/Sverlenie/data.rul")))) {
+        ArrayList<String> rules = new ArrayList<>();
+        int blockFind = 0;
+        try(BufferedReader in = new BufferedReader(new FileReader(new File("./graver/in/Sverlenie/data.rul")))) {
             String line;
-            while ((line = in.readLine()) != null){
-                ArrayList<String> data = new ArrayList(Arrays.asList(line.split("@@")));
-                String key = data.get(0);
-                data.remove(0);
-                lib.put(key, data);
+            while ((line = in.readLine()) != null && blockFind != 2) {
+                if (!line.isEmpty() && !line.startsWith("*"))
+                    if (line.startsWith("spindle" + spindle)) {
+                        blockFind = blockFind == 0 ? 1 : 2;
+                    } else {
+                        if (blockFind == 1) {
+                            rules.add(line);
+                        }
+                    }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return lib;
+        return rules;
     }
 
-    protected void proG() {
+    protected String proG() {
         spindle = spindle.toLowerCase();
-        try (BufferedWriter nc = new BufferedWriter(new FileWriter(new File(fileOutput)))){
-            setWorkValues(0);
-            StringBuilder rsl = new StringBuilder();
-            rsl.append(generator());
-            String[] fill = fillFromFile("/Sverlenie/Sp" + spindle +".ncst");
-            nc.write(fill[0]);
-            nc.write(rsl.toString());
-            nc.write(fill[1]);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        setWorkValues(0);
+        StringBuilder rsl = new StringBuilder();
+        String[] fill = fillFromFile("./graver/Sverlenie/Sp" + spindle +".ncst");
+        rsl.append(fill[0]);
+        rsl.append(generator());
+        rsl.append(fill[1]);
+        return rsl.toString();
     }
 
     private String generator() {
         StringBuilder rsl = new StringBuilder();
-        HashMap<String, ArrayList<String>> lib = libSp();
+        ArrayList<String> rules = rulesRead();
         int index = 0;
         while (index < points.size()) {
-            Float[] line = points.get(index);
-            if (line[3] != turns) {
-                rsl.append(String.format(lines(lib.get(spindle).get(0), new float[]{line[3]})));
+            Float[] coordinate = points.get(index);
+            if (coordinate[3] != turns) {
+                rsl.append(String.format(lines(rules.get(0), new float[]{coordinate[3]})));
             }
-            if (line[4] != feed) {
-                rsl.append(String.format(lines(lib.get(spindle).get(1), new float[]{line[4]})));
+            if (coordinate[4] != feed) {
+                rsl.append(String.format(lines(rules.get(1), new float[]{coordinate[4]})));
             }
             setWorkValues(index++);
             int type = index == 1 ? 2 : 3;
-            line = points.get(index++);
-            rsl.append(String.format(lines(lib.get(spindle).get(type), new float[]{
-                        safeStart, line[0], line[1], line[2]})));
-            rsl.append(String.format(lines(lib.get(spindle).get(3), new float[]{
+            coordinate = points.get(index++);
+            rsl.append(String.format(lines(rules.get(type), new float[]{
+                        safeStart, coordinate[0], coordinate[1], coordinate[2]})));
+            rsl.append(String.format(lines(rules.get(3), new float[]{
                     safeStart, start, deep, workDeep * 2, workDeep })));
         }
         return rsl.toString();
