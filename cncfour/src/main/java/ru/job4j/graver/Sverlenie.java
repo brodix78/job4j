@@ -2,6 +2,9 @@ package ru.job4j.graver;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Sverlenie extends Operation{
 
@@ -13,23 +16,14 @@ public class Sverlenie extends Operation{
     private float start;
     private float deep;
     private float safeStart;
-    private ArrayList<Float[]> points;
-    /*  Последовательно значения в массиве:
-    /   Четные элементы (начиная с 0)
-    /     0. Координата безопасного подхода-отхода по оси сверления;
-    /     1. Координата начала сверления;
-    /     2. Координата начала сверления;
-    /     3. Обороты шпинделя;
-    /     4. Подача мм/оборт;
-    /     5. Подача мм на один заход;
-    /   Нечетные элементы:
-    /     координата 1, координата 2, координата 3 (значение 0 если используется):
-    /       Для шпинделя 3,4 не указывается в массиве торчит один 0;
-    /       Для шпинделя 1g пара X, Y, C3 (горизонтальный приводной инструмент в верхней башке)
-    /       Для шпинделя 2g пара X, C4 (горизонтальный приводной инструмент в нижней башке)
-    /       Для шпинделя 1v пара Y, Z, C3 (вертикальный приводной инструмент в верхней башке)
-    /       Для шпинделя 2v пара Z, C4 (вертикальный приводной инструмент в нижней башке)
-   */
+    ArrayList<String> data;
+    private ArrayList<Float[]> points = new ArrayList<>();
+
+    public Sverlenie(String spindle, ArrayList<String> data){
+        this.spindle = spindle;
+        this.data = data;
+    }
+
     String[] values = new String[]{"one", "two", "three", "four", "five", "six", "seven", "eight"};
 
     private String lines(String in, float[] attr) {
@@ -50,12 +44,6 @@ public class Sverlenie extends Operation{
     }
 
     private ArrayList<String> rulesRead() {
-        /*  0. Обороты шпинделя
-        /   1. Подача
-        /   2. Безопасный первый подход
-        /   3. Последующий подход
-        /   4. Сверление
-         */
         ArrayList<String> rules = new ArrayList<>();
         int blockFind = 0;
         try(BufferedReader in = new BufferedReader(new FileReader(new File("./graver/in/Sverlenie/data.rul")))) {
@@ -76,6 +64,35 @@ public class Sverlenie extends Operation{
         return rules;
     }
 
+    private void pointsGen(String[] rules) {
+        ArrayList<LinkedHashMap<String, Float>> pointRules = new ArrayList<>();
+        for (String ruleLine:rules) {
+            LinkedHashMap<String, Float> rl = new LinkedHashMap<String, Float>();
+            Arrays.stream(ruleLine.split(" "))
+                    .forEach(line -> {
+                        String[] pair = line.split("=");
+                        rl.put(pair[0], Float.parseFloat(pair[1].replace(",", ".")));
+                    });
+            pointRules.add(rl);
+        }
+        for (String dataLine:data) {
+            HashMap<String, Float> lineToMap = new HashMap<>();
+            Arrays.stream(dataLine.split(" "))
+                    .forEach(line -> {
+                        String[] pair = line.split("=");
+                        lineToMap.put(pair[0], Float.parseFloat(pair[1].replace(",", ".")));
+                    });
+            for (LinkedHashMap<String, Float> dataForLine:pointRules) {
+                Float[] point = new Float[dataForLine.size()];
+                int index = 0;
+                for (String key:dataForLine.keySet()){
+                    point[index++] = lineToMap.containsKey(key) ? lineToMap.get(key) : dataForLine.get(key);
+                }
+                points.add(point);
+            }
+        }
+    }
+
     protected String proG() {
         spindle = spindle.toLowerCase();
         setWorkValues(0);
@@ -90,6 +107,7 @@ public class Sverlenie extends Operation{
     private String generator() {
         StringBuilder rsl = new StringBuilder();
         ArrayList<String> rules = rulesRead();
+        pointsGen(new String[]{rules.get(5), rules.get(6)});
         int index = 0;
         while (index < points.size()) {
             Float[] coordinate = points.get(index);
@@ -104,7 +122,7 @@ public class Sverlenie extends Operation{
             coordinate = points.get(index++);
             rsl.append(String.format(lines(rules.get(type), new float[]{
                         safeStart, coordinate[0], coordinate[1], coordinate[2]})));
-            rsl.append(String.format(lines(rules.get(3), new float[]{
+            rsl.append(String.format(lines(rules.get(4), new float[]{
                     safeStart, start, deep, workDeep * 2, workDeep })));
         }
         return rsl.toString();
