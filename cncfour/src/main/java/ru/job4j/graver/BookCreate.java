@@ -23,6 +23,12 @@ public class BookCreate {
             while ((line = data.readLine()) != null) {
                 System.out.println(index++);
                 line = line.replace(". ", " ");
+                line = line.replace("  ", " ");
+                line = line.replace("..", ".");
+                line = line.replace(",", ".");
+                if (line.endsWith(".")) {
+                    line = line.substring(0, line.length() - 1);
+                }
                 if (line.startsWith("(")) {
                     if (let != null) {
                         letters.put(let, signConverter(letter));
