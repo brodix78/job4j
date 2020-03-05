@@ -19,7 +19,10 @@ public class BookCreate {
             String let = null;
             ArrayList<String> letter = new ArrayList<>();
             String line;
+            int index = 0;
             while ((line = data.readLine()) != null) {
+                System.out.println(index++);
+                line = line.replace(". ", " ");
                 if (line.startsWith("(")) {
                     if (let != null) {
                         letters.put(let, signConverter(letter));
@@ -52,6 +55,8 @@ public class BookCreate {
         for (String pointStr : letter) {
             pointStr = pointStr.replace("X.", "X0.");
             pointStr = pointStr.replace("Y.", "Y0.");
+            pointStr = pointStr.replace("X-.", "X-0.");
+            pointStr = pointStr.replace("Y-.", "Y-0.");
             String[] p = pointStr.split(" ");
             float x;
             float y;
