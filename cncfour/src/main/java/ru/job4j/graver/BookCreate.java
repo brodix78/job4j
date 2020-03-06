@@ -6,6 +6,9 @@ import java.util.*;
 
 public class BookCreate {
 
+    private float ymin;
+    private float ymax;;
+    private boolean firstdone = false;
     public HashMap<String, Float[]> letters = new HashMap<>();
 
     public static void main(String[] args) {
@@ -83,9 +86,11 @@ public class BookCreate {
             previousY = y;
         }
         float xmin = sign.get(0);
-        float ymin = sign.get(1);
         float xmax = xmin;
-        float ymax = ymin;
+        if (!firstdone) {
+            ymin = sign.get(1);
+            ymax = ymin;
+        }
         int i = 0;
         while (i < sign.size()) {
             if (xmin > sign.get(i)) {
@@ -93,14 +98,18 @@ public class BookCreate {
             } else if (xmax < sign.get(i)) {
                 xmax = sign.get(i);
             }
-
-            if (ymin > sign.get(++i)) {
-                ymin = sign.get(i);
-            } else if (ymax < sign.get(i)) {
-                ymax = sign.get(i);
+            if (!firstdone) {
+                if (ymin > sign.get(++i)) {
+                    ymin = sign.get(i);
+                } else if (ymax < sign.get(i)) {
+                    ymax = sign.get(i);
+                }
+            } else {
+                i++;
             }
             i++;
         }
+        firstdone = true;
         i = 0;
         while (i < sign.size()) {
             sign.set(i, sign.get(i++) - xmin);

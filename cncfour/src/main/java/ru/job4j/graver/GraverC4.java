@@ -49,12 +49,22 @@ public class GraverC4 extends Operation {
             if (" ".equals(sign)) {
                 lenFromStart += height * 0.60 * koef ;
             } else {
-                try (ObjectInputStream dataIn = new ObjectInputStream(new FileInputStream(String.format("./graver/book/%s.ar", sign)))){
+                String fileName = sign;
+                Float broadKoef = (float) 1;
+                if (fileName.equals(",")) {
+                    broadKoef = broadKoef * (float) 2.5;
+                    fileName = "comma";
+                } else if (fileName.equals(".")) {
+                    fileName = "point";
+                    broadKoef = broadKoef * (float) 2.5;
+                }
+                try (ObjectInputStream dataIn = new ObjectInputStream(new FileInputStream(String.format("./graver/book/%s.ar", fileName)))){
                     if (!book.containsKey(sign)) {
                         data = (Float[]) dataIn.readObject();
                         for (int i = 0; i < data.length; i++) {
                             data[i] = data[i] / (float) 8.5 * height;
                         }
+                        data[0] = data[0] * broadKoef;
                         book.put(sign, data);
                     } else data = book.get(sign);
                     int index = 4;
@@ -73,7 +83,7 @@ public class GraverC4 extends Operation {
         try (FileWriter out = new FileWriter(new File(fileOutput))) {
             String[] fill = fillFromFile("C4Z.ncst");
             out.write(fill[0]);
-            out.write(String.format("   G0 Z%.3f C4=0%n   G0 X%.3f%n", z, dia + 2));
+            out.write(String.format("   G0 Z%.3f C4=0%n   G0 X%.3f%n", z, dia + 2).replace(",", "."));
             out.write(prg.toString().replace(",", "."));
             out.write(fill[1]);
         } catch (Exception e) {

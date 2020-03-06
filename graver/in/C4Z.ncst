@@ -4,7 +4,7 @@ MSG ("Gravirovka")
  L707
  N15 DIAMON
  N20 G54
- N25 G59 X=0 Z=RG720+9
+ N25 G59 X=0 Z=RG720
 ;****Freza gravirovalnaya 0.4-0.5mm
  T6            ;Freza
  TC(1)
