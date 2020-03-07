@@ -1,24 +1,15 @@
 package ru.job4j.graver;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.*;
 
 public class Sverlenie extends Operation{
 
     private String fileOutput;
     private String spindle;
-    private float turns;
-    private float feed;
-    private float workDeep;
-    private float start;
-    private float deep;
-    private float safeStart;
     private ArrayList<String> data;
-    private ArrayList<Float[]> workSets = new ArrayList<>();
-    LinkedHashMap<String, Float> workVariables = new LinkedHashMap<>();
+    private ArrayList<HashMap<String, Float>> workSets = new ArrayList<>();
+    HashMap<String, Float> workVariables = new HashMap<>();
 
 
     public Sverlenie(String spindle, ArrayList<String> data){
@@ -36,11 +27,9 @@ public class Sverlenie extends Operation{
         }
     }
 
-    private String lines(String in, Float[] workSet) {
-        int index = 0;
-        for (String variable:workVariables.keySet()) {
-            in = in.replace(workVariables.get(variable), String.format("%.3f", workSet[index]));
-            index++;
+    private String lines(String in, HashMap<String, Float> workSet) {
+        for (String variable:workSet.keySet()) {
+            in = in.replace(variable, String.format("%.3f", workSet.get(variable)));
         }
         return in;
     }
@@ -85,15 +74,17 @@ public class Sverlenie extends Operation{
                         String[] pair = line.split("=");
                         lineToMap.put(pair[0], Float.parseFloat(pair[1].replace(",", ".")));
                     });
-            Float[] oneSet = new Float[workVariables.size()];
-            int index = 0;
+            HashMap<String, Float> oneSet = new HashMap<>();
             for (String key:workVariables.keySet()){
-                oneSet[index++] = lineToMap.containsKey(key) ? lineToMap.get(key) : workVariables.get(key);
+                if (lineToMap.containsKey(key)) {
+                    oneSet.put(key, lineToMap.get(key));
+                } else {
+                    oneSet.put(key, workVariables.get(key));
+                }
             }
             workSets.add(oneSet);
         }
     }
-
 
     protected String proG() {
         spindle = spindle.toLowerCase();
@@ -109,8 +100,8 @@ public class Sverlenie extends Operation{
         StringBuilder rsl = new StringBuilder();
         ArrayList<Rule> rules = rulesRead();
         int index = 0;
-        Float[] prevoius = null;
-        for (Float[] workSet : workSets) {
+        HashMap<String, Float> previous = null;
+        for (HashMap<String,Float> workSet : workSets) {
             index++;
             for (Rule rule : rules) {
                 if ("r".equals(rule.marker)) {
@@ -123,15 +114,16 @@ public class Sverlenie extends Operation{
                     if (index == 1) {
                         rsl.append(lines(rule.text, workSet));
                     } else {
-                        ArrayList<String> wV = new ArrayList(workVariables.keySet());
-                        int pos = wV.indexOf(rule.marker.substring(1));
-                        if(workSet[pos] != prevoius[pos]) {
+                        String variable = (rule.marker.substring(1));
+                        if(workSet.get(variable) != previous.get(variable)) {
                             rsl.append(lines(rule.text, workSet));
                         }
                     }
+                } else if ("l".equals(rule.marker) && index == workSets.size()) {
+                    rsl.append(lines(rule.text, workSet));
                 }
             }
-            prevoius = workSet;
+            previous = workSet;
         }
         return rsl.toString();
     }
