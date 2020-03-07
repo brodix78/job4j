@@ -1,4 +1,3 @@
-MSG ("Sverlenie SP4")
  G18 M814
  L710(1)
  DIAMON

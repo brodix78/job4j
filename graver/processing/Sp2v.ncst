@@ -1,11 +1,10 @@
-MSG ("Sverlo privod gorizont na SP4")
- G18 M814 G40
+ G19 M814 G40
  G54
  L710(1)
  DIAMON
  L707(0)
  G59 X=0 Z=RG720 C4=0
- T2   ;Sverlo privod gorizont
+ T2   ;Sverlo privod vertikal
  TC(1)
  SETMS(2)
  G95 M208 M450

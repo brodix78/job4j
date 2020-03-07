@@ -3,7 +3,7 @@ package ru.job4j.graver;
 import java.io.*;
 import java.util.HashMap;
 
-public class GraverC4 extends Operation {
+public class GraverC4 {
 
     HashMap<String, Float[]> book = new HashMap<>();
     String text;
@@ -81,7 +81,7 @@ public class GraverC4 extends Operation {
             }
         }
         try (FileWriter out = new FileWriter(new File(fileOutput))) {
-            String[] fill = fillFromFile("C4Z.ncst");
+            String[] fill = null;//fillFromPatternFile("C4Z.ncst");
             out.write(fill[0]);
             out.write(String.format("   G0 Z%.3f C4=0%n   G0 X%.3f%n", z, dia + 2).replace(",", "."));
             out.write(prg.toString().replace(",", "."));
@@ -90,4 +90,7 @@ public class GraverC4 extends Operation {
             e.printStackTrace();
         }
     }
+
+
+
 }

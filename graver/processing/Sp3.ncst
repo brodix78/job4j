@@ -1,4 +1,3 @@
-MSG ("Sverlenie SP3")
  G18 M813
  DIAMON
  G55

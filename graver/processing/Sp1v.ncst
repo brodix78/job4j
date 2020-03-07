@@ -1,4 +1,3 @@
-MSG ("Sverlo privod vertical na SP3")
  G19 M813 G40
  G55
  L712(1)
