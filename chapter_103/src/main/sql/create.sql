@@ -3,11 +3,11 @@ create database users_requests;
 
 create table roles (
   id serial primary key,
-  role varchar(2000)
+  role varchar(200)
 );
 create table users (
   id serial primary key,
-  name varchar (2000),
+  name varchar (200),
   role_id int references roles(id)
 );
 create table rules (
@@ -15,13 +15,13 @@ create table rules (
   rule text
 );
 create table rule_for_role (
-	id serial primary key,
-	rule_id int references rules(id),
+  id serial primary key,
+  rule_id int references rules(id),
   role_id int references roles(id)
 );
 create table categories (
   id serial primary key,
-  category varchar(2000)
+  category varchar(200)
 );
 create table states (
   id serial primary key,
@@ -41,7 +41,7 @@ create table comments(
 );
 create table attaches (
   id serial primary key,
-  attach text,
+  attach varchar(1000),
   item_id int references items(id)
 );
 
