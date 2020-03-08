@@ -1,5 +1,6 @@
 package ru.job4j.exam;
 
+import ru.job4j.inout.Search;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -8,14 +9,12 @@ import java.nio.file.*;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class Find {
-    Path root;
+    String root;
     String toFind;
-    Predicate<String> rule;
+    Predicate<File> rule;
     String logTxt;
-
 
     public static void main(String[] args) {
         boolean allOk = false;
@@ -30,7 +29,7 @@ public class Find {
                         find.setRule(args[index]);
                     } else if (index + 1 < argsLen) {
                         if (args[index].equals("-d")) {
-                            find.root = Paths.get(args[++index]);
+                            find.root = args[++index];
                         } else if (args[index].equals("-n")) {
                             find.toFind = args[++index];
                         } else if (args[index].equals("-o")) {
@@ -47,7 +46,6 @@ public class Find {
             if (allOk) {
                 find.search();
             }
-
         }
         if (!allOk) {
             System.out.println("Usage is: -jar find.jar -d c:/ -n *.txt -m -o log.txt");
@@ -55,14 +53,10 @@ public class Find {
     }
 
     private void search() {
-        try (Stream<Path> walk = Files.walk(root);
-             BufferedWriter out = new BufferedWriter(new FileWriter(new File("./" + logTxt)))) {
-            StringBuilder rsl = new StringBuilder();
-            walk.filter(file -> Files.isRegularFile(file) && rule.test(file.getFileName().toString()))
-                        .forEach(file -> {
-                            rsl.append(file.toString());
-                            rsl.append(System.lineSeparator());
-                        });
+        Search search =  new Search();
+        StringBuilder rsl = new StringBuilder();
+        search.files(root, rule).stream().forEach(file -> rsl.append(String.format("%s%n", file)));
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(new File("./" + logTxt)))) {
         out.write(rsl.toString());
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,27 +73,27 @@ public class Find {
         }
     }
 
-    private class Regular implements Predicate<String> {
+    private class Regular implements Predicate<File> {
         @Override
-        public boolean test(String file) {
+        public boolean test(File file) {
             Pattern pattern = Pattern.compile(toFind);
-            Matcher matcher = pattern.matcher(file);
+            Matcher matcher = pattern.matcher(file.getName());
             return matcher.find();
         }
     }
 
-    private class Mask implements Predicate<String> {
+    private class Mask implements Predicate<File> {
         @Override
-        public boolean test(String file) {
+        public boolean test(File file) {
             PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + toFind);
-            return matcher.matches(Paths.get(file));
+            return matcher.matches(Paths.get(file.getName()));
         }
     }
 
-    private class Fully implements Predicate<String> {
+    private class Fully implements Predicate<File> {
         @Override
-        public boolean test(String file) {
-            return file.equals(toFind);
+        public boolean test(File file) {
+            return file.getName().equals(toFind);
         }
     }
 }
