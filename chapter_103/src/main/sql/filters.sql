@@ -21,7 +21,7 @@ WHERE MONTH(expired_date) = MONTH(CURRENT_DATE()) + 1;
 
 4. Написать запрос, который выводит самый дорогой продукт.
 SELECT p.name, p.price FROM product
-WHERE price = (SELECT MAX(price) FROM product);
+WHERE price = SELECT MAX(price) FROM product;
 
 5. Написать запрос, который выводит количество всех продуктов определенного типа.
 
@@ -36,9 +36,10 @@ INNER JOIN type AS t ON p.type_id = t.id
 WHERE t.name IN ('СЫР', 'МОЛОКО');
 
 7. Написать запрос, который выводит тип продуктов, которых осталось меньше 10 штук.
+(Я так понимаю речь о номенклатуре, а не о количестве товара, поскольку в таблицах его нет)
 
 SELECT t.name FROM type AS t, product AS p
-WHERE (SELECT COUNT(*) FROM p WHERE p.type_id) = t.id < 10;
+WHERE SELECT COUNT(*) FROM p WHERE p.type_id = t.id < 10;
 
 8. Вывести все продукты и их тип.
 
