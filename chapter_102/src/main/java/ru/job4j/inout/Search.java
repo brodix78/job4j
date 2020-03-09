@@ -1,6 +1,8 @@
 package ru.job4j.inout;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Predicate;
 
@@ -9,14 +11,12 @@ public class Search {
     private HashSet<String> filesExl;
 
     public List<File> files(String parent, Predicate<File> search) {
-        File path = new File(parent);
         List<File> output = new ArrayList<>();
-        for (File file : Objects.requireNonNull(path.listFiles())) {
-            if (file.isDirectory()) {
-                output.addAll(files(file.toString(), search));
-            } else if (search.test(file)) {
-                output.add(file);
-            }
+        try {
+            Files.walk(Paths.get(parent)).filter(path -> search.test(path.toFile()))
+                    .forEach(path -> output.add(path.toFile()));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return output;
     }

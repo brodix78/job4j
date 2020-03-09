@@ -11,10 +11,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Find {
-    String root;
-    String toFind;
-    Predicate<File> rule;
-    String logTxt;
+    private String root;
+    private String toFind;
+    private Predicate<File> rule;
+    private String logTxt;
 
     public static void main(String[] args) {
         boolean allOk = false;
@@ -52,7 +52,7 @@ public class Find {
         }
     }
 
-    private void search() {
+    private void search()  {
         Search search =  new Search();
         StringBuilder rsl = new StringBuilder();
         search.files(root, rule).stream().forEach(file -> rsl.append(String.format("%s%n", file)));
