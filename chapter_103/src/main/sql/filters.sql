@@ -6,7 +6,7 @@ type(id, name)
 1. Написать запрос получение всех продуктов с типом "СЫР"
 
 SELECT p.name FROM product AS p
-INNER JOIN type AS t on p.type_id = t.id
+INNER JOIN type AS t ON p.type_id = t.id
 where t.name = 'СЫР';
 
 2. Написать запрос получения всех продуктов, у кого в имени есть слово "мороженное"
@@ -26,20 +26,19 @@ WHERE price = (SELECT MAX(price) FROM product);
 5. Написать запрос, который выводит количество всех продуктов определенного типа.
 
 SELECT COUNT(*) AS 'numbers of products type СЫР' FROM p.products AS p
-INNER JOIN type AS t on p.type_id = t.id
+INNER JOIN type AS t ON p.type_id = t.id
 WHERE t.name = 'СЫР';
 
 6. Написать запрос получение всех продуктов с типом "СЫР" и "МОЛОКО"
 
 SELECT p.name FROM products AS p
-INNER JOIN type AS t on p.type_id = t.id
+INNER JOIN type AS t ON p.type_id = t.id
 WHERE t.name IN ('СЫР', 'МОЛОКО');
 
 7. Написать запрос, который выводит тип продуктов, которых осталось меньше 10 штук.
 
-SELECT t.name FROM products AS p
-INNER JOIN type AS t on p.type_id = t.id
-WHERE p.некое поле с количеством продуктов которого тут нет < 10;
+SELECT t.name FROM type AS t, product AS p
+WHERE (SELECT COUNT(*) FROM p where p.type_id = t.id) < 10;
 
 8. Вывести все продукты и их тип.
 
