@@ -38,7 +38,7 @@ WHERE t.name IN ('СЫР', 'МОЛОКО');
 7. Написать запрос, который выводит тип продуктов, которых осталось меньше 10 штук.
 
 SELECT t.name FROM type AS t, product AS p
-WHERE (SELECT COUNT(*) FROM p where p.type_id = t.id) < 10;
+WHERE (SELECT COUNT(*) FROM p WHERE p.type_id) = t.id < 10;
 
 8. Вывести все продукты и их тип.
 
