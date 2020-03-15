@@ -3,7 +3,6 @@ package ru.job4j.jdbc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.tracker.*;
-
 import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
@@ -30,25 +29,50 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         return this.connection != null;
     }
 
-    public ArrayList<String[]> toSQLBase(String query, boolean needBackData) {
+    public int updateBase(String query, List<String> riddles) {
+        if (this.connection == null) {
+            if (!init()) {
+                throw new NoSuchElementException("Wrong data in app.properties or no such SQL database");
+            }
+        }
+        int rsl = 0;
+        try {
+            int index = 1;
+            PreparedStatement statement = connection.prepareStatement(query);
+            for (String riddle:riddles) {
+                statement.setString(index++, riddle);
+            }
+            rsl = statement.executeUpdate();
+        } catch (Exception e) {
+            Log.error(e.getMessage(), e);
+        }
+        return rsl;
+    }
+
+    public ArrayList<String[]> receiveFromBase(String query, List<String> riddles) {
         if (this.connection == null) {
             if (!init()) {
                 throw new NoSuchElementException("Wrong data in app.properties or no such SQL database");
             }
         }
         ArrayList<String[]> rsl = new ArrayList<>();
-        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(query)) {
-            if (needBackData) {
-                ResultSetMetaData md = rs.getMetaData();
-                int columns = md.getColumnCount();
-                while (rs.next()) {
-                    String[] row = new String[columns];
-                    for (int i = 0; i < columns; i++) {
-                        row[i] = rs.getString(i + 1);
-                    }
-                    rsl.add(row);
-                }
+        try {
+            int index = 1;
+            PreparedStatement statement = connection.prepareStatement(query);
+            for (String riddle:riddles) {
+                statement.setString(index++, riddle);
             }
+            ResultSet rs = statement.executeQuery();
+            ResultSetMetaData md = rs.getMetaData();
+            int columns = md.getColumnCount();
+            while (rs.next()) {
+                String[] row = new String[columns];
+                for (int i = 0; i < columns; i++) {
+                    row[i] = rs.getString(i + 1);
+                }
+                rsl.add(row);
+            }
+            rs.close();
         } catch (Exception e) {
             Log.error(e.getMessage(), e);
         }
@@ -68,28 +92,26 @@ public class TrackerSQL implements ITracker, AutoCloseable {
 
     @Override
     public Item add(Item item) {
-        toSQLBase(String.format("INSERT INTO items (item) VALUES ('%s')", item.getName()), false);
-        String id = toSQLBase(String.format("SELECT MAX(id) FROM items WHERE item='%s'", item.getName()), true).get(0)[0];
+        String id = generateId();
+        updateBase("INSERT INTO items VALUES (?, ?)", List.of(id, item.getName()));
         item.setId(id);
         return item;
     }
 
     @Override
     public boolean replaceById(String id, Item item) {
-        toSQLBase(String.format("UPDATE items SET item = '%s' WHERE id = '%s'", item.getName(), id), false);
-        return true;
+        return updateBase("UPDATE items SET item = ? WHERE id = ?", List.of(item.getName(), id)) == 1;
     }
 
     @Override
     public boolean deleteById(String id) {
-        toSQLBase(String.format("DELETE FROM items WHERE id = '%s'", id), false);
-        return true;
+        return updateBase("DELETE FROM items WHERE id = ?", List.of(id)) == 1;
     }
 
     @Override
     public List<Item> findAll() {
         List<Item> items = new ArrayList<>();
-        ArrayList<String[]> rsl = toSQLBase("SELECT * FROM items", true);
+        ArrayList<String[]> rsl = receiveFromBase("SELECT * FROM items", List.of());
         for (String[] row:rsl) {
             Item item = new Item(row[1]);
             item.setId(row[0]);
@@ -99,9 +121,9 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     }
 
     @Override
-    public List<Item> findByName(String key) {
+    public List<Item> findByName(String name) {
         List<Item> items = new ArrayList<>();
-        ArrayList<String[]> rsl = toSQLBase((String.format("SELECT * FROM items WHERE item = '%s';", key)), true);
+        ArrayList<String[]> rsl = receiveFromBase("SELECT * FROM items WHERE item = ?", List.of(name));
         for (String[] row : rsl) {
             Item item = new Item(row[1]);
             item.setId(row[0]);
@@ -113,12 +135,17 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     @Override
     public Item findById(String id) {
         Item item = null;
-        ArrayList<String[]> rsl = toSQLBase(String.format("SELECT item FROM items WHERE id = '%s'", id), true);
+        ArrayList<String[]> rsl = receiveFromBase("SELECT item FROM items WHERE id = ?", List.of(id));
         if (rsl.size() == 1) {
             item = new Item(rsl.get(0)[0]);
             item.setId(id);
         }
         return item;
+    }
+
+    private String generateId() {
+        Random rm = new Random();
+        return String.valueOf(rm.nextLong() + System.currentTimeMillis());
     }
 
     public static void main(String[] args) {
