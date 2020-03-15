@@ -2,7 +2,7 @@ package ru.job4j.tracker;
 
 import java.util.*;
 
-public class Tracker {
+public class Tracker implements ITracker{
 
     private List<Item> items = new ArrayList<>();
 

@@ -1,18 +1,31 @@
 package ru.job4j.tracker;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class StartUI {
-    public void init(Tracker tracker, Input input, Consumer<String> output, List<UserAction> userActions) {
+
+    private final ITracker tracker;
+    private Input input;
+    private Consumer<String> output;
+    private List<UserAction>userActions;
+
+    public StartUI(Input input, Consumer<String> output, ITracker tracker, List<UserAction> userActions) {
+        this.tracker = tracker;
+        this.input = input;
+        this.output = output;
+        this.userActions = userActions;
+    }
+
+    public void init() {
         boolean run = true;
         while (run) {
             this.showMenu(userActions, output);
             int select;
             select = input.askInt("Your choice: ", userActions.size() - 1);
             run = userActions.get(select).execute(input, output, tracker);
-            //System.lineSeparator();
             output.accept(String.format("%n"));
         }
     }
@@ -29,6 +42,6 @@ public class StartUI {
         Consumer<String> output = System.out::println;
         Input input = new ValidateInput(new ConsoleInput(output), output);
         List<UserAction> userActions = Arrays.asList(new CreateItem(), new ListItems(), new EditItem(), new DeleteItem(), new FindById(), new FindByName(), new Exit());
-        new StartUI().init(tracker, input, output, userActions);
+        new StartUI(input, output, tracker, userActions).init();
     }
 }

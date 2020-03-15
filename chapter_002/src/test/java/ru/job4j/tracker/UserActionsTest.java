@@ -1,7 +1,5 @@
 package ru.job4j.tracker;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -16,7 +14,7 @@ import static org.junit.Assert.assertThat;
 public class UserActionsTest {
 
     private final ByteArrayOutputStream out = new ByteArrayOutputStream();
-    private final Consumer<String> output = new Consumer<String>() {
+    private final Consumer<String> output = new Consumer<>() {
         private final PrintStream newout = new PrintStream(out);
 
         @Override
@@ -32,10 +30,9 @@ public class UserActionsTest {
 
     @Test
     public void createItemTest0() {
-        Tracker tracker = new Tracker();
+        ITracker tracker = new Tracker();
         String[] answers = {"0", "Save me", "0", "System fault", "System not responding"};
         StubInput input = new StubInput(answers);
-        StartUI startUI = new StartUI();
         UserAction ua = new CreateItem();
         for (int i = 0; i < answers.length; i++) {
             ua.execute(input, this.output, tracker);

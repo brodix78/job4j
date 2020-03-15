@@ -9,7 +9,7 @@ public class DeleteItem implements UserAction {
     }
 
     @Override
-    public boolean execute(Input input, Consumer<String> output, Tracker tracker) {
+    public boolean execute(Input input, Consumer<String> output, ITracker tracker) {
         if (tracker.deleteById(input.askString("Input id for delete: "))) {
             System.out.println("Done");
         } else {

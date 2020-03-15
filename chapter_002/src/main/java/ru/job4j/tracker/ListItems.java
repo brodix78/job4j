@@ -9,7 +9,7 @@ public class ListItems implements UserAction {
     }
 
     @Override
-    public boolean execute(Input input, Consumer<String> output, Tracker tracker) {
+    public boolean execute(Input input, Consumer<String> output, ITracker tracker) {
         int pos = 0;
         for (Item it: tracker.findAll()) {
             output.accept("#" + pos++ + ". " + it.getName() + " id:" + it.getId());

@@ -9,7 +9,7 @@ public class CreateItem implements UserAction {
     }
 
     @Override
-    public boolean execute(Input input, Consumer<String> output, Tracker tracker) {
+    public boolean execute(Input input, Consumer<String> output, ITracker tracker) {
         Item item = new Item(input.askString("Input new item name: "));
         tracker.add(item);
         return true;

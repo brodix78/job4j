@@ -9,7 +9,7 @@ public class EditItem implements UserAction {
     }
 
     @Override
-    public boolean execute(Input input, Consumer<String> output, Tracker tracker) {
+    public boolean execute(Input input, Consumer<String> output, ITracker tracker) {
         String editId;
         editId = input.askString("Input id for edit: ");
         Item itemCh = new Item(input.askString("Input new name: "));
