@@ -1,8 +1,9 @@
 package ru.jub4j.gamnit;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -34,10 +35,12 @@ public class StoreSQL implements AutoCloseable {
     }
 
     public List<Entry> load() {
+        config.init();
         ArrayList<Entry> rsl = new ArrayList();
-        try (Connection conn = DriverManager.getConnection(config.get("url"));
-            Statement st = conn.createStatement()) {
-            DatabaseMetaData dbm = conn.getMetaData();
+        try {
+            this.connect = DriverManager.getConnection(config.get("url"));
+            Statement st = connect.createStatement();
+            DatabaseMetaData dbm = connect.getMetaData();
             ResultSet rs = dbm.getTables(null, null, "entry", null);
             if (!rs.next()) {
                 st.executeUpdate("CREATE TABLE entry (field INTEGER)");
@@ -49,6 +52,7 @@ public class StoreSQL implements AutoCloseable {
             while (rs.next()) {
                 rsl.add(new Entry(rs.getInt(1)));
             }
+            st.close();
             rs.close();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
