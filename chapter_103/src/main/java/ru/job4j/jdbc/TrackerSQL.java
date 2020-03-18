@@ -3,6 +3,8 @@ package ru.job4j.jdbc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.tracker.*;
+
+import javax.xml.transform.Result;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
@@ -17,7 +19,6 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         try (InputStream in = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties config = new Properties();
             config.load(in);
-           // Class.forName(config.getProperty("driver-class-name")); -  А для чего нужна эта строка ?
             this.connection = DriverManager.getConnection(
                     config.getProperty("url"),
                     config.getProperty("username"),
@@ -29,19 +30,28 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         return this.connection != null;
     }
 
-    public int updateBase(String query, List<String> riddles) {
+    private PreparedStatement statement (String query, List<String> riddles){
         if (this.connection == null) {
             if (!init()) {
                 throw new NoSuchElementException("Wrong data in app.properties or no such SQL database");
             }
         }
-        int rsl = 0;
+        PreparedStatement statement = null;
         try {
+            statement = connection.prepareStatement(query);
             int index = 1;
-            PreparedStatement statement = connection.prepareStatement(query);
             for (String riddle:riddles) {
                 statement.setString(index++, riddle);
             }
+        } catch (Exception e) {
+            Log.error(e.getMessage(), e);
+        }
+        return statement;
+    }
+
+    public int updateBase(PreparedStatement statement) {
+        int rsl = 0;
+        try {
             rsl = statement.executeUpdate();
         } catch (Exception e) {
             Log.error(e.getMessage(), e);
@@ -49,20 +59,9 @@ public class TrackerSQL implements ITracker, AutoCloseable {
         return rsl;
     }
 
-    public ArrayList<String[]> receiveFromBase(String query, List<String> riddles) {
-        if (this.connection == null) {
-            if (!init()) {
-                throw new NoSuchElementException("Wrong data in app.properties or no such SQL database");
-            }
-        }
+    public ArrayList<String[]> receiveFromBase(PreparedStatement statement) {
         ArrayList<String[]> rsl = new ArrayList<>();
-        try {
-            int index = 1;
-            PreparedStatement statement = connection.prepareStatement(query);
-            for (String riddle:riddles) {
-                statement.setString(index++, riddle);
-            }
-            ResultSet rs = statement.executeQuery();
+        try (ResultSet rs = statement.executeQuery()){
             ResultSetMetaData md = rs.getMetaData();
             int columns = md.getColumnCount();
             while (rs.next()) {
@@ -72,7 +71,6 @@ public class TrackerSQL implements ITracker, AutoCloseable {
                 }
                 rsl.add(row);
             }
-            rs.close();
         } catch (Exception e) {
             Log.error(e.getMessage(), e);
         }
@@ -93,25 +91,25 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     @Override
     public Item add(Item item) {
         String id = generateId();
-        updateBase("INSERT INTO items VALUES (?, ?)", List.of(id, item.getName()));
+        updateBase(statement("INSERT INTO items VALUES (?, ?)", List.of(id, item.getName())));
         item.setId(id);
         return item;
     }
 
     @Override
     public boolean replaceById(String id, Item item) {
-        return updateBase("UPDATE items SET item = ? WHERE id = ?", List.of(item.getName(), id)) == 1;
+        return updateBase(statement("UPDATE items SET item = ? WHERE id = ?", List.of(item.getName(), id))) == 1;
     }
 
     @Override
     public boolean deleteById(String id) {
-        return updateBase("DELETE FROM items WHERE id = ?", List.of(id)) == 1;
+        return updateBase(statement("DELETE FROM items WHERE id = ?", List.of(id))) == 1;
     }
 
     @Override
     public List<Item> findAll() {
         List<Item> items = new ArrayList<>();
-        ArrayList<String[]> rsl = receiveFromBase("SELECT * FROM items", List.of());
+        ArrayList<String[]> rsl = receiveFromBase(statement("SELECT * FROM items", List.of()));
         for (String[] row:rsl) {
             Item item = new Item(row[1]);
             item.setId(row[0]);
@@ -123,7 +121,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     @Override
     public List<Item> findByName(String name) {
         List<Item> items = new ArrayList<>();
-        ArrayList<String[]> rsl = receiveFromBase("SELECT * FROM items WHERE item = ?", List.of(name));
+        ArrayList<String[]> rsl = receiveFromBase(statement("SELECT * FROM items WHERE item = ?", List.of(name)));
         for (String[] row : rsl) {
             Item item = new Item(row[1]);
             item.setId(row[0]);
@@ -135,7 +133,7 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     @Override
     public Item findById(String id) {
         Item item = null;
-        ArrayList<String[]> rsl = receiveFromBase("SELECT item FROM items WHERE id = ?", List.of(id));
+        ArrayList<String[]> rsl = receiveFromBase(statement("SELECT item FROM items WHERE id = ?", List.of(id)));
         if (rsl.size() == 1) {
             item = new Item(rsl.get(0)[0]);
             item.setId(id);
