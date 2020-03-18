@@ -41,8 +41,11 @@ public class StoreXML {
     }
 
     public static void main(String[] args) {
-        StoreSQL sql = new StoreSQL(new Config(), 100);
-        StoreXML xml =  new StoreXML(new File("/home/ilya/da.xml"));
+        StoreSQL sql = new StoreSQL(new Config(), 1000000);
+        File xmlFile = new File("/home/ilya/da.xml");
+        StoreXML xml =  new StoreXML(xmlFile);
         xml.save(sql.load());
+        ConvertXSQT xq = new ConvertXSQT();
+        xq.convert(xmlFile, new File("/home/ilya/daXS.xml"));
     }
 }
