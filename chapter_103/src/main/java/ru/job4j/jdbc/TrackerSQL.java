@@ -15,6 +15,12 @@ public class TrackerSQL implements ITracker, AutoCloseable {
     private Connection connection;
     private static final Logger Log = LoggerFactory.getLogger(SQconnect.class);
 
+    public TrackerSQL(Connection connection) {
+        this.connection = connection;
+    }
+
+    public TrackerSQL() {}
+
     public boolean init() {
         try (InputStream in = TrackerSQL.class.getClassLoader().getResourceAsStream("app.properties")) {
             Properties config = new Properties();

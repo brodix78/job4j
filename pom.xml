@@ -101,8 +101,37 @@
             <version>2.3.1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>19.0.0</version>
+        </dependency>
 
     </dependencies>
+
+    <profiles>
+    <profile>
+        <id>test</id>
+        <properties>
+            <db.url>jdbc:postgresql://127.0.0.1:5432/tracker</db.url>
+            <db.username>userone</db.username>
+            <db.password>password</db.password>
+            <db.driver>org.postgresql.Driver</db.driver>
+        </properties>
+    </profile>
+    <profile>
+        <id>production</id>
+        <properties>
+            <db.url>jdbc:postgresql://127.0.0.1:5432/tracker</db.url>
+            <db.username>userone</db.username>
+            <db.password>password</db.password>
+            <db.driver>org.postgresql.Driver</db.driver>
+        </properties>
+    </profile>
+    </profiles>
+
+
         <build>
             <plugins>
                 <plugin>
