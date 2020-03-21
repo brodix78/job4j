@@ -26,9 +26,6 @@ public class StoreSQL implements AutoCloseable {
                 ps.setInt(1, i);
                 ps.executeUpdate();
             }
-            connect.commit();
-            connect.rollback();
-            connect.setAutoCommit(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -63,6 +60,7 @@ public class StoreSQL implements AutoCloseable {
     @Override
     public void close() throws Exception {
         if (connect != null) {
+            connect.rollback();
             connect.close();
         }
     }
