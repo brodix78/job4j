@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.job4j.tracker.*;
 
-import javax.xml.transform.Result;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
@@ -30,10 +29,21 @@ public class TrackerSQL implements ITracker, AutoCloseable {
                     config.getProperty("username"),
                     config.getProperty("password")
             );
+            checkTableExist();
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
         return this.connection != null;
+    }
+
+    private void checkTableExist() {
+        try (ResultSet rs = connection.getMetaData().getTables(null, null, "items", null)) {
+            if (!rs.next()) {
+                updateBase(statement("CREATE TABLE items (id VARCHAR(50), item VARCHAR(50))", List.of()));
+            }
+        } catch (Exception e) {
+            Log.error(e.getMessage(), e);
+        }
     }
 
     private PreparedStatement statement (String query, List<String> riddles){
