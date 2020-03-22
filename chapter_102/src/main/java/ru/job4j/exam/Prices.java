@@ -4,40 +4,67 @@ import java.util.*;
 
 public class Prices {
 
-    public class Price {
-        long id;
-        String product_code;
-        int number;
-        int depart;
-        Date begin;
-        Date end;
-        long value;
-    }
+    private HashMap<String, PriorityQueue<Price>> merge = new HashMap<>();
+    private ArrayList<Price> prices;
 
-    private class priceLabel {
-        boolean current;
-        boolean periodStart;
-        Date date;
-        long value;
-    }
 
     public List<Price> prices(List<Price> currentPrices, List<Price> newPrices) {
         List<Price> rsl = new ArrayList<>();
-        HashMap<String, PriorityQueue<priceLabel>> sortLine = new HashMap<>();
-        for (Price price:currentPrices) {
-        }
-        for (Price price:newPrices) {
-        }
-        for(String key:sortLine.keySet()){
-        }
-        /*Загоняю входящие диапазоны цен в карту, где String ключ имеет вид 122-1-1 (Product_code-Number-Depart)
-        / В качестве значения PriorityQueue<priceLabel> с сортировкой по date c (начало загоняется c periodStart = true,
-        / конец c false), для обозначения currentPrices поле current = true, для новых цен false.
-        / Затем перебираю всю sortLine и все PriorityQueue обрабатываю как очередь формируя новые объекты Price, сразу помещая их в
-        / rsl.
-        */
+        this.prices = new ArrayList<>(newPrices);
+        makeMerge();
+        this.prices = new ArrayList<>(currentPrices);
+        makeMerge();
+        merge.values().forEach(prices -> prices.stream().filter(price -> price.begin.getTime() != 0)
+                .forEach(rsl::add));
         return rsl;
     }
 
-
+    private void makeMerge() {
+        int i = 0;
+        while (i < prices.size()) {
+            String key = String.format("%s-%s-%s", prices.get(i).product_code, prices.get(i).number, prices.get(i).depart);
+            if (!merge.containsKey(key)) {
+                merge.put(key, new PriorityQueue<>((p1, p2) -> {
+                if (p1.begin.getTime() >= p2.begin.getTime() && p1.end.getTime() <= p2.end.getTime()) {
+                    p1.begin = new Date(0);
+                    p1.end = new Date(0);
+                } else if (p1.begin.getTime() >= p2.begin.getTime() && p1.begin.getTime() <= p2.end.getTime()) {
+                    if (p1.value == p2.value) {
+                        p2.end = p1.end;
+                        p1.begin = new Date(0);
+                        p1.end = new Date(0);
+                    } else {
+                        p1.begin = p2.end;
+                    }
+                } else if (p1.end.getTime() >= p2.begin.getTime() && p1.end.getTime() <= p2.end.getTime()) {
+                    if (p1.value == p2.value) {
+                        p2.begin = p1.begin;
+                        p1.begin = new Date(0);
+                    } else {
+                        p1.end = p2.begin;
+                    }
+                } else if (p1.begin.getTime() < p2.begin.getTime() && p1.end.getTime() > p2.end.getTime()) {
+                    if (p1.value == p2.value) {
+                        p2.begin = p1.begin;
+                        p2.end = p1.end;
+                        p1.begin = new Date(0);
+                        p1.end = new Date(0);
+                    } else {
+                        Price pr = new Price();
+                        pr.begin = p2.end;
+                        pr.end = p1.end;
+                        pr.depart = p1.depart;
+                        pr.number = p1.number;
+                        pr.value = p1.value;
+                        pr.product_code = p1.product_code;
+                        prices.add(pr);
+                        p1.end = p2.begin;
+                    }
+                }
+                return (int) (p1.begin.getTime() - p2.begin.getTime());
+                }));
+            }
+            merge.get(key).add(prices.get(i++));
+        }
+    }
 }
