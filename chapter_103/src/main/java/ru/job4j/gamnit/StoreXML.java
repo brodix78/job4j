@@ -41,11 +41,13 @@ public class StoreXML {
     }
 
     public static void main(String[] args) {
-        StoreSQL sql = new StoreSQL(new Config(), 1000000);
+        StoreSQL sql = new StoreSQL(new Config(), 100);
         File xmlFile = new File("/home/ilya/da.xml");
         StoreXML xml =  new StoreXML(xmlFile);
         xml.save(sql.load());
         ConvertXSQT xq = new ConvertXSQT();
         xq.convert(xmlFile, new File("/home/ilya/daXS.xml"));
+        Sum sum = new Sum();
+        System.out.println(sum.sumFields("/home/ilya/daXS.xml", "<entry field=\"", "\"/>"));
     }
 }

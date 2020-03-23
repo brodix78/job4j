@@ -5,27 +5,16 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class ConvertXSQT {
 
     String ln = System.lineSeparator();
 
     public void convert(File input, File output) {
-        try (FileInputStream in = new FileInputStream(input);
-             FileOutputStream out = new FileOutputStream(output)) {
-            String xsl =
-                    "<?xml version=\"1.0\"?>\n" +
-                    "   <xsl:stylesheet version=\"1.0\"\n" +
-                    "       xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n" +
-                    "       <xsl:output method=\"xml\" indent=\"yes\"/>" +
-                    "           <xsl:template match=\"/\">\n" +
-                    "               <entries>" +
-                    "                   <xsl:for-each select=\"entries/entry\">\n" +
-                    "                       <entry> <xsl:attribute name=\"field\"> <xsl:value-of select=\"field\"/> </xsl:attribute> </entry>\n" +
-                    "               </xsl:for-each>\n" +
-                    "           </entries>\n " +
-                    "       </xsl:template>\n" +
-                    "   </xsl:stylesheet>\n";
+        try (FileInputStream in = new FileInputStream(input)) {
+            String xsl = readPattern("./diffrent/xsl.pat");
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer(new StreamSource(
                     new ByteArrayInputStream(xsl.getBytes()))
@@ -35,5 +24,15 @@ public class ConvertXSQT {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private String readPattern(String file) {
+        String rsl = null;
+        try {
+            rsl = new String(Files.readAllBytes(Paths.get(file)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return rsl;
     }
 }
