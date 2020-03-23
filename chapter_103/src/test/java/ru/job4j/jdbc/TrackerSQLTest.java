@@ -7,10 +7,10 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Iterator;
 import java.util.Properties;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.theInstance;
 import static org.junit.Assert.*;
 
 public class TrackerSQLTest {
@@ -33,8 +33,9 @@ public class TrackerSQLTest {
     @Test
     public void createItem() throws SQLException {
         try (TrackerSQL tracker = new TrackerSQL(ConnectionRollback.create(this.init()))) {
-            String id = tracker.add(new Item("desc")).getId();
-            assertThat(tracker.findByName("desc").get(0).getId(), is(id));
+            Item exp = tracker.add(new Item("desc"));
+            assertThat(tracker.findByName("desc").size(), is(1));
+            assertThat(tracker.findByName("desc").get(0), is(exp));
         }
     }
 
@@ -43,7 +44,7 @@ public class TrackerSQLTest {
         try (TrackerSQL tracker =  new TrackerSQL(ConnectionRollback.create(this.init()))){
             String id = tracker.add(new Item("desc")).getId();
             tracker.replaceById(id, new Item("star"));
-            assertThat(tracker.findByName("star").get(0).getId(), is(id));
+            assertThat(tracker.findById(id).getName(), is("star"));
         }
     }
 
@@ -68,18 +69,18 @@ public class TrackerSQLTest {
     @Test
     public void findItemByName() throws SQLException {
         try (TrackerSQL tracker =  new TrackerSQL(ConnectionRollback.create(this.init()))){
-            tracker.add(new Item("desc")).getId();
-            String id = tracker.add(new Item("star")).getId();
-            assertThat(tracker.findByName("star").get(0).getId(), is(id));
+            Item exp = tracker.add(new Item("star"));
+            assertThat(tracker.findByName("star").get(0), is(exp));
         }
     }
 
     @Test
     public void findItemById() throws SQLException {
         try (TrackerSQL tracker =  new TrackerSQL(ConnectionRollback.create(this.init()))){
-            tracker.add(new Item("desc")).getId();
-            String id = tracker.add(new Item("star")).getId();
-            assertThat(tracker.findById(id).getName(), is("star"));
+            tracker.add(new Item("desc"));
+            Item exp = tracker.add(new Item("star"));
+            String id = exp.getId();
+            assertThat(tracker.findById(id), is(exp));
         }
     }
 }
