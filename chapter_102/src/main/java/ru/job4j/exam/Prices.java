@@ -14,8 +14,24 @@ public class Prices {
         makeMerge();
         this.prices = new ArrayList<>(currentPrices);
         makeMerge();
-        merge.values().forEach(prices -> prices.stream().filter(price -> price.begin.getTime() != 0)
-                .forEach(rsl::add));
+        for (String key:merge.keySet()) {
+            ArrayList<Price> temp = new ArrayList<>();
+            Price previous = merge.get(key).poll();
+            Price price;
+            while ((price = merge.get(key).poll()) != null) {
+                if (price.begin.getTime() != 0) {
+                    if (price.value == previous.value
+                            && previous.end.getTime() == price.begin.getTime()) {
+                        previous.end = price.end;
+                    } else {
+                        temp.add(previous);
+                        previous = price;
+                    }
+                }
+            }
+            temp.add(previous);
+            rsl.addAll(temp);
+        }
         return rsl;
     }
 
@@ -25,31 +41,14 @@ public class Prices {
             String key = String.format("%s-%s-%s", prices.get(i).product_code, prices.get(i).number, prices.get(i).depart);
             if (!merge.containsKey(key)) {
                 merge.put(key, new PriorityQueue<>((p1, p2) -> {
-                if (p1.begin.getTime() >= p2.begin.getTime() && p1.end.getTime() <= p2.end.getTime()) {
-                    p1.begin = new Date(0);
-                    p1.end = new Date(0);
-                } else if (p1.begin.getTime() >= p2.begin.getTime() && p1.begin.getTime() <= p2.end.getTime()) {
-                    if (p1.value == p2.value) {
-                        p2.end = p1.end;
+                    if (p1.begin.getTime() >= p2.begin.getTime() && p1.end.getTime() <= p2.end.getTime()) {
                         p1.begin = new Date(0);
                         p1.end = new Date(0);
-                    } else {
+                    } else if (p1.begin.getTime() >= p2.begin.getTime() && p1.begin.getTime() <= p2.end.getTime()) {
                         p1.begin = p2.end;
-                    }
-                } else if (p1.end.getTime() >= p2.begin.getTime() && p1.end.getTime() <= p2.end.getTime()) {
-                    if (p1.value == p2.value) {
-                        p2.begin = p1.begin;
-                        p1.begin = new Date(0);
-                    } else {
+                    } else if (p1.end.getTime() >= p2.begin.getTime() && p1.end.getTime() <= p2.end.getTime()) {
                         p1.end = p2.begin;
-                    }
-                } else if (p1.begin.getTime() < p2.begin.getTime() && p1.end.getTime() > p2.end.getTime()) {
-                    if (p1.value == p2.value) {
-                        p2.begin = p1.begin;
-                        p2.end = p1.end;
-                        p1.begin = new Date(0);
-                        p1.end = new Date(0);
-                    } else {
+                    } else if (p1.begin.getTime() < p2.begin.getTime() && p1.end.getTime() > p2.end.getTime()) {
                         Price pr = new Price();
                         pr.begin = p2.end;
                         pr.end = p1.end;
@@ -60,8 +59,7 @@ public class Prices {
                         prices.add(pr);
                         p1.end = p2.begin;
                     }
-                }
-                return (int) (p1.begin.getTime() - p2.begin.getTime());
+                    return (int) (p1.begin.getTime() - p2.begin.getTime());
                 }));
             }
             merge.get(key).add(prices.get(i++));
