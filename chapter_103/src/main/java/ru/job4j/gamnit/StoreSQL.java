@@ -61,6 +61,7 @@ public class StoreSQL implements AutoCloseable {
                 st.addBatch(String.format("INSERT INTO entry VALUES(%s)", i));
             }
             st.executeBatch();
+            connect.setAutoCommit(true);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

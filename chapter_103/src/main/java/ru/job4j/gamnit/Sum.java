@@ -1,30 +1,31 @@
 package ru.job4j.gamnit;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import org.xml.sax.Attributes;
+import org.xml.sax.helpers.DefaultHandler;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 
 public class Sum {
 
     long rsl = 0;
 
-    public long sumFields(String file, String begin, String end) {
-        String in = readFile(file);
-        in.lines().filter(line -> line.contains(begin) && line.contains(end))
-                .forEach(line -> {
-                    line = line.substring(line.indexOf(begin) + begin.length(), line.lastIndexOf(end));
-                    rsl = rsl + Integer.parseInt(line);
-                });
-        return rsl;
-    }
+    DefaultHandler handler = new DefaultHandler() {
+        public void startElement(String uri, String localName,String qName,
+                                 Attributes attributes) {
+            if (qName.equalsIgnoreCase("entry")) {
+                rsl += Integer.parseInt(attributes.getValue("field"));
+            }
+        }
+    };
 
-    private String readFile(String file) {
-        String input = null;
+    public long sumFields(String file) {
         try {
-            input = new String(Files.readAllBytes(Paths.get(file)));
-        } catch (IOException e) {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            saxParser.parse(file, handler);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return input;
+        return rsl;
     }
 }

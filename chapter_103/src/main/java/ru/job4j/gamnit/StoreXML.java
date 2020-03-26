@@ -48,6 +48,6 @@ public class StoreXML {
         ConvertXSQT xq = new ConvertXSQT();
         xq.convert(xmlFile, new File("/home/ilya/daXS.xml"));
         Sum sum = new Sum();
-        System.out.println(sum.sumFields("/home/ilya/daXS.xml", "<entry field=\"", "\"/>"));
+        System.out.println(sum.sumFields("/home/ilya/daXS.xml"));
     }
 }
