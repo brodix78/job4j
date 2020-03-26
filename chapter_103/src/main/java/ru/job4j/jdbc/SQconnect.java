@@ -10,7 +10,7 @@ public class SQconnect {
 
     public static void main(String[] args) {
         String url = "jdbc:postgresql://localhost:5432/testbase";
-        String userName = "userone";
+        String userName = "postgres";
         String password = "password";
         Connection conn = null;
         try {
