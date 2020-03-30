@@ -108,6 +108,13 @@
             <version>19.0.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
+        </dependency>
+
     </dependencies>
 
     <profiles>
@@ -137,7 +144,7 @@
             <properties>
                 <db.url>jdbc:postgresql://127.0.0.1:5432/tracker</db.url>
                 <db.username>postgres</db.username>
-                <db.password></db.password>
+                <db.password>password</db.password>
                 <db.driver>org.postgresql.Driver</db.driver>
             </properties>
         </profile>
