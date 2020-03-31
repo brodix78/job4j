@@ -35,7 +35,7 @@ public class TrackerSQLTest {
         try (TrackerSQL tracker = new TrackerSQL(ConnectionRollback.create(this.init()))) {
             Item exp = tracker.add(new Item("desc"));
             assertThat(tracker.findByName("desc").size(), is(1));
-            assertThat(tracker.findByName("desc").get(0), is(exp));
+            assertThat(tracker.findByName("desc").contains(exp), is(true));
         }
     }
 
@@ -43,26 +43,31 @@ public class TrackerSQLTest {
     public void replaceItem() throws SQLException {
         try (TrackerSQL tracker =  new TrackerSQL(ConnectionRollback.create(this.init()))){
             String id = tracker.add(new Item("desc")).getId();
-            tracker.replaceById(id, new Item("star"));
-            assertThat(tracker.findById(id).getName(), is("star"));
+            Item star = new Item("star");
+            star.setId(id);
+            tracker.replaceById(id, star);
+            assertThat(tracker.findById(id), is(star));
         }
     }
 
     @Test
     public void deleteItem() throws SQLException {
         try (TrackerSQL tracker =  new TrackerSQL(ConnectionRollback.create(this.init()))){
-            String id = tracker.add(new Item("desc")).getId();
+            Item desc = tracker.add(new Item("desc"));
+            String id = desc.getId();
             tracker.deleteById(id);
-            assertThat(tracker.findByName("desc").size(), is(0));
+            assertThat(tracker.findByName("desc").contains(desc), is(false));
         }
     }
 
     @Test
     public void findAllItems() throws SQLException {
         try (TrackerSQL tracker =  new TrackerSQL(ConnectionRollback.create(this.init()))){
-            tracker.add(new Item("desc")).getId();
-            tracker.add(new Item("star")).getId();
+            Item desc = tracker.add(new Item("desc"));
+            Item star = tracker.add(new Item("star"));
             assertThat(tracker.findAll().size(), is(2));
+            assertThat(tracker.findAll().contains(desc), is(true));
+            assertThat(tracker.findAll().contains(star), is(true));
         }
     }
 
