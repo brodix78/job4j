@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-public class SqlTable {
+public class SqlTable implements AutoCloseable {
 
     protected Properties initData;
     protected Connection connection;
@@ -88,5 +88,16 @@ public class SqlTable {
             Log.error(e.getMessage(), e);
         }
         return rsl;
+    }
+
+    @Override
+    public void close() {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (Exception e) {
+                Log.error(e.getMessage(), e);
+            }
+        }
     }
 }
