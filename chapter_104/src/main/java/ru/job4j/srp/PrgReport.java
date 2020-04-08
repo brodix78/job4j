@@ -10,21 +10,24 @@ public class PrgReport implements Generator {
     @Override
     public String report(List<Employee> employee) {
         StringBuilder report = new StringBuilder();
-        report.append(String.format("      <tr>%n"));
-        report.append(String.format("        <td>Name</td>%n"));
-        report.append(String.format("        <td>Hired</td>%n"));
-        report.append(String.format("        <td>Fired</td>%n"));
-        report.append(String.format("        <td>Salary</td>%n"));
-        report.append(String.format("      </tr>%n"));
+        report.append(row(List.of("Name", "Hired", "Fired", "Salary")));
         for (Employee emp : employee) {
-            report.append(String.format("      <tr>%n"));
-            report.append(String.format("        <td>%s</td>%n", emp.getName()));
-            report.append(String.format("        <td>%s</td>%n", emp.getHired()));
-            report.append(String.format("        <td>%s</td>%n", emp.getFired()));
-            report.append(String.format("        <td>%s</td>%n", emp.getSalary()));
-            report.append(String.format("      </tr>%n"));
+            report.append(row(List.of(emp.getName(),
+                    emp.getHired().toString(),
+                    emp.getFired().toString(),
+                    Double.toString(emp.getSalary()))));
         }
         return table().replace("CONTENT",report.toString());
+    }
+
+    private String row(List<String> cells) {
+        StringBuilder row = new StringBuilder();
+        row.append(String.format("      <tr>%n"));
+        for (String cell : cells) {
+            row.append(String.format("        <td>%s</td>%n", cell));
+        }
+        row.append(String.format("      </tr>%n"));
+        return row.toString();
     }
 
     private String table() {
