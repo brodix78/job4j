@@ -11,6 +11,11 @@ public class ReportEngine {
         this.generator = generator;
     }
 
+    public ReportEngine(Store store) {
+        this.store = store;
+        this.generator = new StReport();
+    }
+
     public String generate(Predicate<Employee> filter) {
         return generator.report(store.findBy(filter));
     }

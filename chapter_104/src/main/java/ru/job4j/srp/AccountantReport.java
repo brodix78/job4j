@@ -16,12 +16,14 @@ public class AccountantReport implements Generator {
     @Override
     public String report(List<Employee> employee) {
         StringBuilder text = new StringBuilder();
-        text.append(String.format("Name; Hired; Fired; %s", salaryName));
+        text.append(String.format("Name; Hired; Fired; %s;", salaryName))
+                .append(System.lineSeparator());
         for (Employee emp : employee) {
             text.append(emp.getName()).append(";")
                     .append(emp.getHired()).append(";")
                     .append(emp.getFired()).append(";")
-                    .append(func.apply(emp.getSalary())).append(";");
+                    .append(func.apply(emp.getSalary())).append(";")
+                    .append(System.lineSeparator());
         }
         return text.toString();
     }
