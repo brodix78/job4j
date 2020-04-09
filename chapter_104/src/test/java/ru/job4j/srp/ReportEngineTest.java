@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThat;
 public class ReportEngineTest {
 
     MemStore store = new MemStore();
-    Calendar time = new GregorianCalendar(2020, Calendar.MARCH , 20);
+    Calendar time = new GregorianCalendar(2020, Calendar.APRIL , 20);
     Employee worker = new Employee("Ivan", time, time, 100);
 
     @Before
