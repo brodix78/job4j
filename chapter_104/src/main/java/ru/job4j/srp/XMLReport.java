@@ -10,7 +10,7 @@ import java.util.List;
 
 public class XMLReport implements Generator{
 
-    @XmlRootElement (name = "employees")
+    @XmlRootElement
     public static class Employees {
         List<Employee> employee;
 
@@ -20,6 +20,13 @@ public class XMLReport implements Generator{
 
         public Employees() {}
 
+        public void setEmployee(List<Employee> employee) {
+            this.employee = employee;
+        }
+
+        public List<Employee> getEmployee() {
+            return employee;
+        }
     }
 
     @Override
@@ -30,10 +37,6 @@ public class XMLReport implements Generator{
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
             jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             Employees en = new Employees(employee);
-            for (Employee em:en.employee) {
-                System.out.println(em.getName());
-            }
-            ArrayList<Employee> er =  new ArrayList<>(employee);
             StringWriter sw = new StringWriter();
             jaxbMarshaller.marshal(en, sw);
             report = sw.toString();
