@@ -76,4 +76,18 @@ public class ReportEngineTest {
         }
         assertThat(engine.generate(em -> true), is(expect));
     }
+
+    @Test
+    public void whenXMLGenerated() {
+        ReportEngine engine = new ReportEngine(store, new XMLReport());
+        StringBuilder expect = new StringBuilder()
+                .append("Name; Hired; Fired; Salary, USD;")
+                .append(System.lineSeparator())
+                .append(worker.getName()).append(";")
+                .append(worker.getHired()).append(";")
+                .append(worker.getFired()).append(";")
+                .append(worker.getSalary() / 50).append(";")
+                .append(System.lineSeparator());
+        assertThat(engine.generate(em -> true), is(expect.toString()));
+    }
 }

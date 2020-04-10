@@ -16,6 +16,8 @@ public class StoreXML {
 
     @XmlRootElement(name = "entries")
     public static class Entries {
+
+
         List<Entry> entry;
 
         public List<Entry> getEntry() {
