@@ -76,4 +76,28 @@ public class ReportEngineTest {
         }
         assertThat(engine.generate(em -> true), is(expect));
     }
+
+    @Test
+    public void whenXMLGenerated() {
+        ReportEngine engine = new ReportEngine(store, new XMLReport());
+        String expect = null;
+        try {
+            expect = new String(Files.readAllBytes(Paths.get("./diffrent/example.xml")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertThat(engine.generate(em -> true), is(expect));
+    }
+
+    @Test
+    public void whenJSONGenerated() {
+        ReportEngine engine = new ReportEngine(store, new JSONReport());
+        String expect = null;
+        try {
+            expect = new String(Files.readAllBytes(Paths.get("./diffrent/example.json")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertThat(engine.generate(em -> true), is(expect));
+    }
 }
