@@ -11,7 +11,7 @@ public class PrgReport implements Generator {
     @Override
     public String report(List<Employee> employee) {
         StringBuilder report = new StringBuilder();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("d.MM.yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
         report.append(row(List.of("Name", "Hired", "Fired", "Salary")));
         for (Employee emp : employee) {
             report.append(row(List.of(emp.getName(),
