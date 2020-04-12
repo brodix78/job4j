@@ -3,7 +3,7 @@ package ru.job4j.food;
 import java.util.HashMap;
 import java.util.function.Predicate;
 
-public class Storage{
+public abstract class Storage {
 
     protected HashMap<Food, Double> storage = new HashMap<>();
 
@@ -12,7 +12,6 @@ public class Storage{
         storage.keySet().stream().filter(foodPredicate).forEach(f -> food.put(f, storage.get(f)));
         return food;
     }
-
 
     public HashMap<Food, Double> foodInStorage () {
         return storage;
@@ -40,7 +39,7 @@ public class Storage{
         return rsl;
     }
 
-    public Predicate<Food> getPredicate() {
+    public Predicate<Food> storeCondition() {
         return food -> false;
     }
 }

@@ -11,7 +11,7 @@ public class ControllQuality {
     public ControllQuality(List<Storage> storage) {
         storages = new HashMap<>();
         for (Storage st : storage) {
-            storages.put(st, st.getPredicate());
+            storages.put(st, st.storeCondition());
         }
     }
 
