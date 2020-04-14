@@ -3,7 +3,7 @@ package ru.job4j.isp;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import static org.hamcrest.core.Is.is;
@@ -48,5 +48,17 @@ public class MenuTest {
             e.printStackTrace();
         }
         assertThat(menu.actionSelect("1.1"), is("first"));
+    }
+
+    @Test
+    public void mein() {
+       // PrintWriter out = new PrintWriter(System.out, true);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(System.in))) {
+            String ot = null;
+            ot = in.readLine();
+            System.out.println(ot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
