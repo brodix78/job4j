@@ -1,21 +1,17 @@
 package ru.job4j.isp;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Item {
     private Item parent;
     private String content;
     private String action;
-    private LinkedList<Item> kids;
+    private ArrayList<Item> kids = new ArrayList<>();
 
-    public Item(Item parent, String content, String action) {
-        this.parent = parent;
+    public Item(String content, String action) {
         this.content = content;
         this.action = action;
-    }
-
-    public Item(String content) {
-        this.content = content;
     }
 
     public Item getParent() {
@@ -42,13 +38,20 @@ public class Item {
         this.action = action;
     }
 
-    public LinkedList<Item> getKids() {
+    public ArrayList<Item> getKids() {
         return kids;
     }
 
     public Item addKid(String content, String action) {
-        Item kid = new Item(this, content, action);
-        kids.add(kid);
+        Item kid = new Item(content, action);
+        kid.setParent(this);
+        this.kids.add(kid);
+        return kid;
+    }
+
+    public Item addKid(Item kid) {
+        kid.setParent(this);
+        this.kids.add(kid);
         return kid;
     }
 

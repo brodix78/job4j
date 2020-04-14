@@ -1,8 +1,11 @@
 package ru.job4j.isp;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -10,44 +13,44 @@ public class Menu extends Item{
 
     private HashMap<String, String> indexMenu;
     private String menuAll;
+    private String delim;
 
-    public Menu(String content) {
-        super(content);
+    public Menu(String content, String delim) {
+        super(content, "");
+        this.delim = delim;
     }
 
-    private ByteArrayInputStream input;
-    private PrintStream output;
-
-    public String menu () throws IOException {
+    public String menu () {
         String rsl = null;
         if (indexMenu == null || menuAll == null) {
             refreshMenu();
         }
-        output.print(menuAll);
-        String in = input.readAllBytes().toString();
-        if (!Character.isDigit(in.charAt(in.length()-1))) {
-            in = in + ".";
+        return menuAll;
+    }
+
+    public String actionSelect(String itemNum) {
+        if (indexMenu == null || menuAll == null) {
+            refreshMenu();
         }
-        return indexMenu.get(in);
+        return indexMenu.get(itemNum);
     }
 
     private void refreshMenu() {
         StringBuilder menu = new StringBuilder();
         indexMenu = new HashMap<>();
-        buildMenu(menu, this.getKids(), "", "",0, "  ");
+        buildMenu(menu, this.getKids(), "", "");
         menuAll = menu.toString();
     }
 
-    private void buildMenu (StringBuilder menu, LinkedList<Item> kids,
-                            String numBegin, String lineBegin,
-                            int level, String delim) {
+    private void buildMenu (StringBuilder menu, ArrayList<Item> kids,
+                            String numBegin, String lineBegin) {
         int index = 1;
         for (Item item : kids) {
-            String number = String.format("%s%s.", numBegin, index++);
+            String number = String.format("%s%s", numBegin, index++);
             menu.append(String.format("%s%s %s%n", lineBegin, item.getContent(),number));
             indexMenu.put(number, item.getAction());
             if (item.getKids() != null) {
-                buildMenu(menu, item.getKids(), number, lineBegin + delim, level + 1, delim);
+                buildMenu(menu, item.getKids(), number + ".", lineBegin + this.delim);
             }
         }
     }
