@@ -77,7 +77,7 @@ public class ReportEngineTest {
         assertThat(engine.generate(em -> true), is(expect));
     }
 
-    @Test
+  /*  @Test
     public void whenXMLGenerated() {
         ReportEngine engine = new ReportEngine(store, new XMLReport());
         String expect = null;
@@ -99,5 +99,5 @@ public class ReportEngineTest {
             e.printStackTrace();
         }
         assertThat(engine.generate(em -> true), is(expect));
-    }
+    }*/
 }
