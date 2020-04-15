@@ -12,16 +12,18 @@ import static org.junit.Assert.assertThat;
 public class MenuTest {
 
     public Menu menu;
+    Action action = new SomeAction();
+
 
     @Before
     public void init() {
         menu = new Menu("The menu", "  ");
-        Item one = new Item("one", "");
-        one.addKid("one.one", "first");
-        Item two = new Item("two", "");
-        Item three = new Item("three", "");
-        Item threeOne = new Item("three.one", "");
-        threeOne.addKid("three.one.one", "");
+        Item one = new Item("one", null);
+        one.addKid("one.one", action);
+        Item two = new Item("two", null);
+        Item three = new Item("three", null);
+        Item threeOne = new Item("three.one", null);
+        threeOne.addKid("three.one.one", null);
         three.addKid(threeOne);
         menu.addKid(one);
         menu.addKid(two);
@@ -47,18 +49,6 @@ public class MenuTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        assertThat(menu.actionSelect("1.1"), is("first"));
-    }
-
-    @Test
-    public void mein() {
-       // PrintWriter out = new PrintWriter(System.out, true);
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(System.in))) {
-            String ot = null;
-            ot = in.readLine();
-            System.out.println(ot);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        assertThat(menu.actionSelect("1.1"), is(action));
     }
 }

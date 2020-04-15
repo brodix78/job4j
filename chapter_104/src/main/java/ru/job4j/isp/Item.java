@@ -6,10 +6,10 @@ import java.util.LinkedList;
 public class Item {
     private Item parent;
     private String content;
-    private String action;
+    private Action action;
     private ArrayList<Item> kids = new ArrayList<>();
 
-    public Item(String content, String action) {
+    public Item(String content, Action action) {
         this.content = content;
         this.action = action;
     }
@@ -30,11 +30,11 @@ public class Item {
         this.content = content;
     }
 
-    public String getAction() {
+    public Action getAction() {
         return action;
     }
 
-    public void setAction(String action) {
+    public void setAction(Action action) {
         this.action = action;
     }
 
@@ -42,7 +42,7 @@ public class Item {
         return kids;
     }
 
-    public Item addKid(String content, String action) {
+    public Item addKid(String content, Action action) {
         Item kid = new Item(content, action);
         kid.setParent(this);
         this.kids.add(kid);

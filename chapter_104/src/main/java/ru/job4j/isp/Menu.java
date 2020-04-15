@@ -1,23 +1,29 @@
 package ru.job4j.isp;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 public class Menu extends Item{
 
-    private HashMap<String, String> indexMenu;
+    private HashMap<String, Action> indexMenu;
     private String menuAll;
     private String delim;
 
     public Menu(String content, String delim) {
-        super(content, "");
+        super(content, null);
         this.delim = delim;
+    }
+
+    boolean add(String parentName, Item child) {
+        boolean rsl = false;
+        for (Item item : this.getKids()) {
+            if (item.getContent().equals(parentName)) {
+                item.addKid(child);
+                rsl = true;
+                break;
+            }
+        }
+        return rsl;
     }
 
     public String menu () {
@@ -28,7 +34,7 @@ public class Menu extends Item{
         return menuAll;
     }
 
-    public String actionSelect(String itemNum) {
+    public Action actionSelect(String itemNum) {
         if (indexMenu == null || menuAll == null) {
             refreshMenu();
         }
