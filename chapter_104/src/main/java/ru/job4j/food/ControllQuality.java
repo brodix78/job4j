@@ -32,7 +32,7 @@ public class ControllQuality {
     }
 
     public HashMap<Food, Double> resort() {
-        Storage temporary = new Unsorted();
+        Storage temporary = new Storage() {};
         for (Storage storage : storages.keySet()) {
             Predicate<Food> expired = food -> !storages.get(storage).test(food);
             HashMap<Food, Double> expiredInStorage = storage.foodInStorage(expired);
