@@ -13,7 +13,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class ActionsTest {
-
+/*
     Parking park = new Parking();
     Car car = new Car("X444XX");
     StringWriter out = new StringWriter();
@@ -48,4 +48,6 @@ public class ActionsTest {
         output.flush();
         assertThat(out.toString(), is (exp));
     }
+
+ */
 }

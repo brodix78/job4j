@@ -11,7 +11,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class ParkTest {
-
+/*
     Parking parking = new Parking();
     StringWriter out = new StringWriter();
     PrintWriter output = new PrintWriter(out);
@@ -24,4 +24,6 @@ public class ParkTest {
         output.flush();
         assertThat(out.toString(), is(exp));
     }
+
+ */
 }
