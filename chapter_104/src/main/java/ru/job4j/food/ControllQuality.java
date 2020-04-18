@@ -30,4 +30,17 @@ public class ControllQuality {
             }
         return food;
     }
+
+    public HashMap<Food, Double> resort() {
+        Storage temporary = new Unsorted();
+        for (Storage storage : storages.keySet()) {
+            Predicate<Food> expired = food -> !storages.get(storage).test(food);
+            HashMap<Food, Double> expiredInStorage = storage.foodInStorage(expired);
+            for (Food food : expiredInStorage.keySet()) {
+                storage.moveFood(food, expiredInStorage.get(food), temporary);
+            }
+        }
+        addToStorage(temporary.foodInStorage());
+        return temporary.foodInStorage();
+    }
 }
