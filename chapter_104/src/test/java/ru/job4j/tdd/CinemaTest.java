@@ -8,10 +8,9 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 public class CinemaTest {
-
+/*
     @Test
     public void buy() {
         Account account = new AccountCinema();
@@ -47,4 +46,6 @@ public class CinemaTest {
         assertThat(cinema.add(new Session3D()), is (true));
         assertThat(cinema.add(new Session3D()), is (false));
     }
+
+ */
 }
