@@ -1,4 +1,4 @@
-package ru.job4j.parking;
+package ru.job4j.lsp;
 
 public interface Action {
     boolean execute(UserInterface ui);

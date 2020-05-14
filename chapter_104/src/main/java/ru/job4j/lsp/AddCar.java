@@ -1,12 +1,12 @@
-package ru.job4j.parking;
+package ru.job4j.lsp;
 
 import java.util.List;
 
-public class ParkCar implements Action{
+public class AddCar implements Action{
 
     Parking park;
 
-    public ParkCar(Parking park) {
+    public AddCar(Parking park) {
         this.park = park;
     }
 
