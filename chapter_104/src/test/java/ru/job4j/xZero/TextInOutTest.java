@@ -10,14 +10,4 @@ public class TextInOutTest {
         TextInOut tx = new TextInOut();
         tx.showField(field);
     }
-
-
-    @Test
-    public void gama(){
-        Player Anya = new Player("Anya", "X");
-        Player Senya = new Player("Senya", "O");
-        Game game = new Game(Anya, Senya);
-        game.game();
-    }
-
 }
