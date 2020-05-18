@@ -92,33 +92,33 @@ public class Field {
         return win;
     }
 
-    public boolean canWin(String symbol) {
-        boolean win = false;
+    public int canWin(String symbol) {
+        int win = 0;
         int lX = 0;
         int rX = 0;
         for (int i = 0; i < size; i++) {
             if (cells[i][i] == null
                     || cells[i][i].equals(symbol)) {
                 lX++;
+                boolean can = true;
                 for (int n = 0; n < size; n++) {
-                    win = true;
                     if (cells[i][n] != null &&!cells[i][n].equals(symbol)) {
-                        win = false;
+                        can = false;
                         break;
                     }
                 }
-                if (win) {
-                    break;
+                if(can) {
+                    win++;
                 }
+                can = true;
                 for (int n = 0; n < size; n++) {
-                    win = true;
                     if (cells[n][i] != null && !cells[n][i].equals(symbol)) {
-                        win = false;
+                        can = false;
                         break;
                     }
                 }
-                if (win) {
-                    break;
+                if(can) {
+                    win++;
                 }
             }
             if (cells[i][size - i - 1] == null
@@ -126,8 +126,11 @@ public class Field {
                 rX++;
             }
         }
-        if (lX == size || rX == size) {
-            win = true;
+        if (rX == size) {
+            win++;
+        }
+        if (lX == size) {
+            win++;
         }
         return win;
     }

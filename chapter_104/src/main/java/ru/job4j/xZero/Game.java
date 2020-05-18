@@ -62,7 +62,7 @@ public class Game {
     public static void main(String args[]) {
         Player Anya = new Player("Anya", "X");
         Player Senya = new PCPlayer("Senya", "O");
-        Game game = new Game(Anya, Senya, 4, 1);
+        Game game = new Game(Anya, Senya, 3, 1);
         game.game();
     }
 }
