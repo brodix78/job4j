@@ -6,8 +6,8 @@ import java.util.Scanner;
 
 public class TextInOut implements InOut {
 
-    PrintWriter writer;
-    BufferedReader reader;
+    private PrintWriter writer;
+    private BufferedReader reader;
 
     public TextInOut() {
         this.writer = new PrintWriter(System.out, true);
@@ -22,13 +22,14 @@ public class TextInOut implements InOut {
     @Override
     public void showField(Field field) {
         StringBuilder table = new StringBuilder();
-        int size = field.getSize();
+        String fieldView = field.fieldView();
+        int size = (int) Math.sqrt(fieldView.length());
         String line = horLine(size);
         table.append(line);
+        int index = 0;
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                String symbol = field.getCells()[row][col] == null ? " " : field.getCells()[row][col];
-                table.append(String.format("| %s ", symbol));
+                table.append(String.format("| %s ", fieldView.charAt(index++)));
             }
             table.append(String.format("|%n"));
             table.append(line);
@@ -37,13 +38,13 @@ public class TextInOut implements InOut {
     }
 
     @Override
-    public boolean makeMove(Field field, Player player) {
+    public boolean makeMove(Field field, String name, String symbol) {
         int row;
         int col;
         do {
             row = -1;
             col = -1;
-            String move = input(String.format("%s, make your move (row column) : ", player.getName()));
+            String move = input(String.format("%s, make your move (row column) : ", name));
             ArrayList<Integer> digits = new ArrayList<>();
             try (Scanner s = new Scanner(move)) {
                 while (s.hasNextInt()) {
@@ -54,8 +55,8 @@ public class TextInOut implements InOut {
                 row = digits.get(0) - 1;
                 col = digits.get(1) - 1;
             }
-        } while (col == -1 || !field.move(row, col, player.getSymbol()));
-        return field.isWin(player.getSymbol());
+        } while (col == -1 || !field.move(row, col, symbol));
+        return field.isWin(symbol);
     }
 
     @Override

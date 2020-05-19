@@ -2,21 +2,13 @@ package ru.job4j.xZero;
 
 public class Field {
 
-    int size;
-    String[][] cells;
-    int filled;
+    private final int size;
+    private final String[][] cells;
+    private int filled;
 
     public Field(int size) {
         this.size = size;
         this.cells =  new String[size][size];
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public String[][] getCells() {
-        return cells;
     }
 
     public boolean move(int row, int column, String symbol) {
@@ -32,6 +24,20 @@ public class Field {
 
     public boolean freeCells() {
         return filled < size * size;
+    }
+
+    public String fieldView() {
+        StringBuilder view = new StringBuilder();
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                if (cells[row][col] != null) {
+                    view.append(cells[row][col]);
+                } else {
+                    view.append(" ");
+                }
+            }
+        }
+        return view.toString();
     }
 
     public boolean isWin(String symbol) {

@@ -3,28 +3,12 @@ package ru.job4j.xZero;
 import java.util.Objects;
 
 public class Player {
-    protected String name;
-    protected String symbol;
-    protected int won = 0;
+    protected final String name;
+    protected final String symbol;
 
     public String getName() {
-        return name;
-    }
-
-    public String getSymbol() {
-        return symbol;
-    }
-
-    public int getWon() {
-        return won;
-    }
-
-    public void won() {
-        won++;
-    }
-
-    public void resetWon() {
-        won = 0;
+        return (this.name == null
+                || this.name.replaceAll(" ", "").equals("")) ? "No name" : name;
     }
 
     public Player(String name, String symbol) {
@@ -33,7 +17,7 @@ public class Player {
     }
 
     public boolean makeMove(Field field, InOut inOut) {
-        return inOut.makeMove(field, this);
+        return inOut.makeMove(field, this.name, this.symbol);
     }
 
     @Override

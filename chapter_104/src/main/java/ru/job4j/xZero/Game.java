@@ -26,22 +26,24 @@ public class Game {
 
     public Player game() {
         boolean round = true;
+        int oneWins = 0;
+        int twoWins = 0;
+        Player winner;
         do {
-            Player winner = round ? oneRound(one, two) : oneRound(two, one);
+            winner = round ? oneRound(one, two) : oneRound(two, one);
             if (winner == null) {
                 inOut.output("We have no winner in the game, but we need him :)");
                 inOut.output("");
             } else if (one.equals(winner)) {
-                one.won();
-                two.resetWon();
+                oneWins++;
+                twoWins = 0;
             } else {
-                two.won();
-                one.resetWon();
+                twoWins++;
+                oneWins = 0;
             }
             round = !round;
-        } while (one.getWon() < rounds && two.getWon() < rounds);
-        Player winner = one.getWon() > two.getWon() ? one : two;
-        inOut.output(String.format("The winner is %s", winner.name));
+        } while (oneWins < rounds && twoWins < rounds);
+        inOut.output(String.format("The winner is %s", winner.getName()));
         return winner;
     }
 

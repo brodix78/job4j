@@ -4,12 +4,12 @@ import java.util.*;
 
 public class PCPlayer extends Player{
 
-    double deep;
-    double size;
-    String enemy;
-    HashMap<Integer[], Double> moves;
-    Integer[] cell;
-    int lim;
+    private double deep;
+    private double size;
+    private String enemy;
+    private HashMap<Integer[], Double> moves;
+    private Integer[] cell;
+    private int lim;
 
     public PCPlayer(String name, String symbol) {
         super(name, symbol);
@@ -18,22 +18,11 @@ public class PCPlayer extends Player{
     @Override
     public boolean makeMove(Field field, InOut inOut) {
         moves = new HashMap<>();
-        this.size = field.getSize();
+        String fieldView = field.fieldView();
+        this.size = Math.sqrt(fieldView.length());
         this.lim = 3;
-        enemy = null;
-        for (String[] cells : field.getCells()) {
-            for (String cell : cells) {
-                if (cell != null && !cell.equals(symbol)) {
-                    enemy = cell;
-                    break;
-                }
-            }
-            if (enemy != null) {
-                break;
-            }
-        }
-        if (enemy == null) {
-            enemy = symbol + "E";
+        if (enemy == null || enemy.length() > 1) {
+            whoIsEnemy(fieldView);
         }
         deep = 0;
         serialThinking(field.copy(), symbol, enemy);
@@ -47,10 +36,9 @@ public class PCPlayer extends Player{
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 deep++;
-                if (field.getCells()[row][col] == null) {
-                    Field temp = field.copy();
-                    temp.move(row, col, one);
-                    if (deep==1) {
+                Field temp = field.copy();
+                if (temp.move(row, col, one)) {
+                    if (deep == 1) {
                         cell = new Integer[]{row, col};
                         moves.put(cell, 0.0);
                     }
@@ -78,7 +66,6 @@ public class PCPlayer extends Player{
         }
     }
 
-
     private Integer[] selectBest() {
         Double bestK = null;
         Integer[] bestCell = null;
@@ -89,5 +76,17 @@ public class PCPlayer extends Player{
             }
         }
         return bestCell;
+    }
+
+    private void whoIsEnemy(String fieldView) {
+        for (char letter: fieldView.toCharArray()) {
+            if (letter != ' ' && !(letter == symbol.charAt(0))) {
+                enemy = Character.toString(letter);
+                break;
+            }
+        }
+        if (enemy == null) {
+            enemy = symbol + "E";
+        }
     }
 }
