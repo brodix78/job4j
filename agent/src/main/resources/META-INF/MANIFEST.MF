@@ -1,1 +1,2 @@
 Premain-class: InstrumentationAgent
+Main-Class: C
