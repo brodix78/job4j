@@ -1,6 +1,7 @@
 package gc;
 
 import java.util.ArrayList;
+import InstrumentationAgent;
 
 public class UserGCCall {
 
