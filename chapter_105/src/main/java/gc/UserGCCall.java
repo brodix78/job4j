@@ -34,6 +34,11 @@ public class UserGCCall {
         }
     }
 
+    public static void printObjectSize(Object object) {
+        System.out.println("Object type: " + object.getClass() +
+                ", size: " + InstrumentationAgent.getObjectSize(object) + " bytes");
+    }
+
     public static void main(String[] args) {
         UserGCCall userGCCall = new UserGCCall();
         userGCCall.memories();

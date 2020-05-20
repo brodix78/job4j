@@ -18,6 +18,7 @@
         <module>chapter_103</module>
         <module>chapter_104</module>
         <module>chapter_105</module>
+        <module>agent</module>
     </modules>
 
     <properties>
