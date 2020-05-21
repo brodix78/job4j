@@ -4,8 +4,7 @@ import java.util.HashMap;
 public class User {
 
     private String name;
-    private Double valueOne;
-    private Double valueTwo;
+
     private HashMap<Integer, Double> hardContent;
     private String sas;
 
@@ -13,36 +12,17 @@ public class User {
         this.name = name;
     }
 
-    public String getSas() {
-        return sas;
-    }
+    public User() {};
 
     public String getName() {
         return name;
     }
 
-    public Double getValueOne() {
-        return valueOne;
-    }
-
     public void init() {
         hardContent = new HashMap<>();
-        for (double i = 1; i < 1000; i++) {
+        for (double i = 1; i < 3000; i++) {
             hardContent.put((int) i, i);
         }
-    }
-
-    public Double sum() {
-        Double rsl = 0.0;
-        for (Integer key:hardContent.keySet()) {
-            rsl += hardContent.get(key);
-        }
-        return rsl;
-    }
-
-    public static void main(String[] args) throws Throwable {
-        User user = new User("Petya");
-        user.memories();
     }
 
     @Override
@@ -53,36 +33,24 @@ public class User {
 
     private void memories() throws Throwable {
         Runtime runtime = Runtime.getRuntime();
-        long mem = runtime.freeMemory();
-        long memT = runtime.totalMemory();
-        long usedMemory = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Used memory before users " + usedMemory);
-        System.out.println(runtime.totalMemory());
-        ArrayList<User> users = new ArrayList<>();
-        long usedMemory2 = runtime.totalMemory() - runtime.freeMemory() - usedMemory;
+        System.out.println("Total memory, m: " +runtime.totalMemory() / 1024 / 1024);
         User a = new User("a");
-        a.init();
-        User b = new User("a");
-        a.finalize();
-        User c = new User("c");
-
-        mem = runtime.freeMemory();
-   /*     int quantaty = 100000;
-        for (int i = 0; i < 1; i++) {
-            users.add(new User("Ivan"));
+        System.out.println("Free memory, k: " +runtime.freeMemory() / 1024);
+        a = null;
+        long mem = runtime.freeMemory();
+        double totalLimit = runtime.totalMemory() * 0.16;
+        User[] users = new User[(int ) (mem / 64 / 10)];
+        for (int i = 0; i < users.length; i++) {
+            users[i] = new User();
+            if (runtime.freeMemory() < totalLimit) {
+                break;
+            }
         }
-
-        System.out.println(mem - runtime.freeMemory());
-        for (int i = quantaty - 1; i >= 0; i--) {
-            users.remove(i);
-        }*/
-
-        System.out.println("Free memory:" + mem);
-        System.out.println(memT - runtime.totalMemory());
-        mem = runtime.freeMemory();
-        memT = runtime.totalMemory();
-        mem = runtime.freeMemory() + memT;
-        memT = mem + 10;
-
     }
+
+    public static void main(String[] args) throws Throwable {
+        User user = new User("Petya");
+        user.memories();
+    }
+
 }
