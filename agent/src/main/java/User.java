@@ -38,13 +38,16 @@ public class User {
         System.out.println("Free memory, k: " +runtime.freeMemory() / 1024);
         a = null;
         long mem = runtime.freeMemory();
-        double totalLimit = runtime.totalMemory() * 0.16;
-        User[] users = new User[(int ) (mem / 64 / 10)];
+        double totalLimit = 1500000;
+        User[] users = new User[(int ) (mem / 24 / 2)];
         for (int i = 0; i < users.length; i++) {
             users[i] = new User();
             if (runtime.freeMemory() < totalLimit) {
                 break;
             }
+        }
+        for (int i = 0; i < users.length; i++) {
+            users[i] = null;
         }
     }
 
@@ -52,5 +55,4 @@ public class User {
         User user = new User("Petya");
         user.memories();
     }
-
 }
