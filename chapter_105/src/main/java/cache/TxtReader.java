@@ -16,7 +16,7 @@ public class TxtReader implements DataReader<String, String> {
     @Override
     public String readData(String key) {
         String rsl = null;
-        Path file = Paths.get(String.format("%s/%s.txt", this.folder, key));
+        Path file = Paths.get(String.format("%s/%s", this.folder, key));
         if (Files.exists(file)) {
             try {
                 rsl = new String(Files.readAllBytes(file));
