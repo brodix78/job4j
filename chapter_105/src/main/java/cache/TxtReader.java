@@ -13,7 +13,6 @@ public class TxtReader implements DataReader<String, String> {
         this.folder = Paths.get(path);
     }
 
-    @Override
     public String readData(String key) {
         String rsl = null;
         Path file = Paths.get(String.format("%s/%s", this.folder, key));
