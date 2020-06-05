@@ -34,16 +34,12 @@ public class CacheTwoTest {
     public void readTest() {
         CacheTwo<String, String> fileCache = new CacheTwo<>(new TxtReader(folder.getRoot().getAbsolutePath()));
         assertThat(fileCache.get("one.txt"), is ("My cache test"));
+        Assert.assertNull(fileCache.get("two.txt"));
     }
 
     @Test
-    public void memoryCleanTest() {
+    public void readTestWhenNoObject() {
         CacheTwo<String, String> fileCache = new CacheTwo<>(new TxtReader(folder.getRoot().getAbsolutePath()));
-        String tmp = fileCache.get("one.txt");
-        tmp =null;
-        Assert.assertNotNull(fileCache.getMapForTest("one.txt").get());
-        GcUtils.tryToAllocateAllAvailableMemory();
-        Assert.assertNull(fileCache.getMapForTest("one.txt").get());
+        Assert.assertNull(fileCache.get("two.txt"));
     }
-
 }

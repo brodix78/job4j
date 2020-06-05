@@ -5,25 +5,21 @@ import java.util.HashMap;
 
 public class CacheTwo<K, V> {
 
-    private final DataReader<K, V> dataReader;
-    protected HashMap<K, SoftReference<V>> cacheMap = new HashMap<>();
+    private final DataReader<K, V> read;
+    private HashMap<K, SoftReference<V>> cache = new HashMap<>();
 
     public CacheTwo (DataReader<K, V> dataReader) {
-        this.dataReader = dataReader;
+        this.read = dataReader;
     }
 
     public V get(K key) {
-        if (!cacheMap.containsKey(key) || cacheMap.get(key).get() == null) {
-            V value = dataReader.readData(key);
+        if (!cache.containsKey(key) || cache.get(key).get() == null) {
+            V value = read.data(key);
             if (value != null) {
-                cacheMap.put(key, new SoftReference<>(value));
+                cache.put(key, new SoftReference<>(value));
             }
         }
-        return cacheMap.containsKey(key) ? cacheMap.get(key).get() : null;
+        return cache.getOrDefault(key, new SoftReference<>(null)).get();
     }
 
-    // Этот метод написан только для теста!!!
-    public SoftReference<V> getMapForTest(K key) {
-        return cacheMap.get(key);
-    }
 }

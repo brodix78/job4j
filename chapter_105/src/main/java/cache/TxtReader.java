@@ -13,7 +13,7 @@ public class TxtReader implements DataReader<String, String> {
         this.folder = Paths.get(path);
     }
 
-    public String readData(String key) {
+    public String data(String key) {
         String rsl = null;
         Path file = Paths.get(String.format("%s/%s", this.folder, key));
         if (Files.exists(file)) {
