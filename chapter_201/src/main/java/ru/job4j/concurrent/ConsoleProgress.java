@@ -1,17 +1,13 @@
 package ru.job4j.concurrent;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class ConsoleProgress implements Runnable{
 
     @Override
     public void run() {
-        LinkedList<Character> chars = new LinkedList<>(List.of('-', '\\', '|', '/'));
-
+        char[] chars = new char[] {'-', '\\', '|', '/'};
+        int index = 0;
         while (!Thread.currentThread().isInterrupted()) {
-            System.out.print(String.format("\r load %s", chars.getFirst()));
-            chars.add(chars.pollFirst());
+            System.out.print(String.format("\r load %s", chars[index++ % 4]));
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
