@@ -12,4 +12,15 @@
     <artifactId>chapter_201</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>ru.job4j</groupId>
+            <artifactId>chapter_101</artifactId>
+            <version>3.0</version>
+        </dependency>
+    </dependencies>
+
+
+
+
 </project>
