@@ -21,31 +21,35 @@ public class SimpleBlockingQueue<T> {
 
     public void offer(T value) {
         synchronized (monitor) {
-            while (queue.size() == limit) {
+            while (queue.size() == limit && !Thread.currentThread().isInterrupted()) {
                 try {
                     monitor.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
-            queue.offer(value);
-            monitor.notifyAll();
+            if (!Thread.currentThread().isInterrupted()) {
+                queue.offer(value);
+                monitor.notifyAll();
+            }
         }
     }
 
     public T poll() {
-        T val;
         synchronized (monitor) {
-            while (queue.isEmpty()) {
+            T val = null;
+            while (queue.isEmpty() && !Thread.currentThread().isInterrupted()) {
                 try {
                     monitor.wait();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
             }
-            val = queue.poll();
-            monitor.notifyAll();
+            if (!Thread.currentThread().isInterrupted()) {
+                val = queue.poll();
+                monitor.notifyAll();
+            }
+            return val;
         }
-        return val;
     }
 }
