@@ -19,36 +19,23 @@ public class SimpleBlockingQueue<T> {
         this.limit = limit;
     }
 
-    public void offer(T value) {
+    public void offer(T value) throws InterruptedException{
         synchronized (monitor) {
-            while (queue.size() == limit && !Thread.currentThread().isInterrupted()) {
-                try {
-                    monitor.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+            while (queue.size() == limit) {
+                monitor.wait();
             }
-            if (!Thread.currentThread().isInterrupted()) {
-                queue.offer(value);
-                monitor.notifyAll();
-            }
+            queue.offer(value);
+            monitor.notifyAll();
         }
     }
 
-    public T poll() {
+    public T poll() throws InterruptedException {
         synchronized (monitor) {
-            T val = null;
-            while (queue.isEmpty() && !Thread.currentThread().isInterrupted()) {
-                try {
-                    monitor.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+            while (queue.isEmpty()) {
+                monitor.wait();
                 }
-            }
-            if (!Thread.currentThread().isInterrupted()) {
-                val = queue.poll();
-                monitor.notifyAll();
-            }
+            T val = queue.poll();
+            monitor.notifyAll();
             return val;
         }
     }
