@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 public class BaseCacheTest {
