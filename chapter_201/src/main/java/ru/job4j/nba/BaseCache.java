@@ -18,11 +18,10 @@ public class BaseCache {
         Base copy = Base.of(model);
         return model != null
                 && cache.computeIfPresent(copy.getId(), (key, val) -> {
-            if (val.getVersion() == copy.getVersion()) {
-                return copy.updateVersion();
-            } else {
+            if (val.getVersion() != copy.getVersion()) {
                 throw new OptimisticException("Versions collision");
             }
+            return copy.updateVersion();
         }) != null;
     }
 
