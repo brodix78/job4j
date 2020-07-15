@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class ExplorerUrlJson implements Callable<List<Map<String, String>>>{
+public class ExplorerUrlJson extends Explorer implements Callable<List<Map<String, String>>>{
 
     private String source;
 
@@ -32,6 +32,11 @@ public class ExplorerUrlJson implements Callable<List<Map<String, String>>>{
             rsl.append(String.format("%s", table.text()));
 
         }
+        return null;
+    }
+
+    @Override
+    public Explorer getInstance(String source) {
         return null;
     }
 }
