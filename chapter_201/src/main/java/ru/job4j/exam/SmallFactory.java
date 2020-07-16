@@ -39,6 +39,6 @@ public class SmallFactory<T extends Child> implements Callable<T> {
                 fields.putAll(parts.get(0));
             }
         }
-        return  (T) child.getInstance(map);
+        return  (T) child.getChild(map);
     }
 }

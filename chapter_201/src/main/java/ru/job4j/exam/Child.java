@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface Child {
-
     List<String> links();
-    Child getInstance(Map<String, String> fields);
+    Child getChild(Map<String, String> fields);
 }
