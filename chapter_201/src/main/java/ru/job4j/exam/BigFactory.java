@@ -7,26 +7,26 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.FutureTask;
 
-public class BigFactory<T extends Child> implements Callable<List<FutureTask<T>>> {
+public class BigFactory implements Callable<List<FutureTask<Child>>> {
 
     private final Explorer explorer;
-    private final T child;
+    private final Child child;
     private final ExecutorService executor;
 
-    public BigFactory(Explorer explorer, T t, ExecutorService executor) {
+    public BigFactory(Explorer explorer, Child child, ExecutorService executor) {
         this.explorer = explorer;
-        this.child = t;
+        this.child = child;
         this.executor = executor;
     }
 
     @Override
-    public List<FutureTask<T>> call() throws Exception {
+    public List<FutureTask<Child>> call() throws Exception {
         List<String> checkList = child.links();
-        List<FutureTask<T>> rsl = new ArrayList<>();
+        List<FutureTask<Child>> rsl = new ArrayList<>();
         List<Map<String, String>> downloaded = explorer.call();
         for (Map<String, String> map : downloaded) {
             if (map.keySet().containsAll(checkList)) {
-                FutureTask<T> newBorn = new FutureTask<T>(new SmallFactory<T>(explorer, child, executor, map));
+                FutureTask<Child> newBorn = new FutureTask<>(new SmallFactory(explorer, child, executor, map));
                 rsl.add(newBorn);
                 executor.submit(newBorn);
             }

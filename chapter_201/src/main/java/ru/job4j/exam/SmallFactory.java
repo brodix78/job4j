@@ -8,15 +8,15 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-public class SmallFactory<T extends Child> implements Callable<T> {
+public class SmallFactory implements Callable<Child> {
 
     private final Explorer explorer;
-    private final T child;
+    private final Child child;
     private final ExecutorService executor;
     private final Map<String, String> map;
 
 
-    public SmallFactory(Explorer explorer, T child, ExecutorService executor, Map<String, String> map) {
+    public SmallFactory(Explorer explorer, Child child, ExecutorService executor, Map<String, String> map) {
         this.explorer = explorer;
         this.child = child;
         this.executor = executor;
@@ -24,7 +24,7 @@ public class SmallFactory<T extends Child> implements Callable<T> {
     }
 
     @Override
-    public T call() throws Exception {
+    public Child call() throws Exception {
         List<String> checkList = child.links();
         Map<String, String> fields = new TreeMap(map);
         List<Future<List<Map<String, String>>>> fromLinks = new LinkedList<>();
@@ -39,6 +39,6 @@ public class SmallFactory<T extends Child> implements Callable<T> {
                 fields.putAll(parts.get(0));
             }
         }
-        return  (T) child.getChild(map);
+        return  child.getChild(map);
     }
 }
