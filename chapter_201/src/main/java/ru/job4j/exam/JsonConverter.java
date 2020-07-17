@@ -16,6 +16,14 @@ public class JsonConverter<T> implements Converter<T>{
         } catch (Exception e) {
             call = null;
         }
+        if (call == null) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                call = List.of(mapper.readValue(json, Map.class));
+            } catch (Exception e) {
+                call = null;
+            }
+        }
         return call;
     }
 
