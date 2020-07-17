@@ -3,7 +3,7 @@ package ru.job4j.exam;
 import java.util.List;
 import java.util.Map;
 
-public interface Child {
+public interface Factory<T> {
     List<String> links();
-    Child getChild(Map<String, String> fields);
+    T getChild(Map<String, String> fields);
 }

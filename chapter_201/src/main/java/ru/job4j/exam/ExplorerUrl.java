@@ -5,19 +5,24 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.xml.transform.Source;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
-public class ExplorerUrlJson extends Explorer implements Callable<List<Map<String, String>>>{
+public class ExplorerUrl extends Explorer implements Callable<List<Map<String, String>>>{
 
     private String source;
     private Converter converter;
 
-    public ExplorerUrlJson(String source, Converter converter) {
-        this.source = source;
+    public ExplorerUrl(Converter converter) {
         this.converter = converter;
+    }
+
+    public ExplorerUrl(String source, Converter converter) {
+        this.converter = converter;
+        this.source = source;
     }
 
     @Override
@@ -34,17 +39,19 @@ public class ExplorerUrlJson extends Explorer implements Callable<List<Map<Strin
             rsl.append(String.format("%s", table.text()));
 
         }
+
         return converter.formatToMap(rsl.toString());
     }
 
     @Override
     public Explorer getInstance(String source) {
-        return new ExplorerUrlJson(source, converter);
+        return new ExplorerUrl(source, converter);
     }
 
     public static void main(String[] args) {
-        Explorer explorer = new ExplorerUrlJson("http://www.mocky.io/v2/5c51b9dd3400003252129fb5", new JsonConverter());
-        explorer.call();
+        Collector<Camera> collector = new Collector<>(new CameraFactory(), new JsonConverter<Camera>());
+        collector.addData(new ExplorerUrl(new JsonConverter<Camera>()), List.of("http://www.mocky.io/v2/5c51b9dd3400003252129fb5"));
+        System.out.println(collector.getDownloadedData(new JsonConverter<Camera>()));
     }
 
 }
