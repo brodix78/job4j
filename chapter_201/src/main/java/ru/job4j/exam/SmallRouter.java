@@ -32,9 +32,7 @@ public class SmallRouter<T> implements Callable<T> {
     @Override
     public T call() throws Exception {
         downloading.incrementAndGet();
-        System.out.println("!");
         List<String> checkList = factory.links();
-
         Map<String, String> fields = new TreeMap(map);
         List<Future<List<Map<String, String>>>> fromLinks = new LinkedList<>();
         for (String link : checkList) {
@@ -44,9 +42,7 @@ public class SmallRouter<T> implements Callable<T> {
         for (Future<List<Map<String, String>>> fromLink : fromLinks) {
             List<Map<String, String>> elements = fromLink.get();
             fields.putAll(elements.get(0));
-            System.out.println(elements);
         }
-
         downloading.decrementAndGet();
         downloaded.incrementAndGet();
         downloaded.notifyAll();

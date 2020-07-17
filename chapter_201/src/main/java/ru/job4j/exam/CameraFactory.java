@@ -7,7 +7,7 @@ public class CameraFactory implements Factory<Camera>{
 
     @Override
     public List<String> links() {
-        return List.of("sourceDataUrl:", "tokenDataUrl");
+        return List.of("sourceDataUrl", "tokenDataUrl");
     }
 
     @Override

@@ -59,7 +59,7 @@ public class Collector<T> {
         for (String link : links) {
             executor.execute(() -> {
                 try {
-                    data.addAll(new BigRouter<T>(explorer, factory, executor,
+                    data.addAll(new BigRouter<T>(explorer.getInstance(link), factory, executor,
                             downloaded, downloading).call());
                 } catch (Exception e) {
                     Thread.currentThread().interrupt();

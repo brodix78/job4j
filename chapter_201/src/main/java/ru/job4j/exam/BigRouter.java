@@ -30,9 +30,7 @@ public class BigRouter<T> implements Callable<List<FutureTask<T>>> {
         downloading.incrementAndGet();
         List<String> checkList = factory.links();
         List<FutureTask<T>> rsl = new ArrayList<>();
-        System.out.println("!!!");
         List<Map<String, String>> links = explorer.call();
-        System.out.println(links);
         for (Map<String, String> map : links) {
             if (map.keySet().containsAll(checkList)) {
                 FutureTask<T> newBorn = new FutureTask<T>(new SmallRouter<T>(explorer, factory, executor,

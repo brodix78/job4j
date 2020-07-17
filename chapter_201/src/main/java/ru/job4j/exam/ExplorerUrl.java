@@ -34,12 +34,11 @@ public class ExplorerUrl extends Explorer implements Callable<List<Map<String, S
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Elements tables = doc.select("body");
-        for (Element table : tables) {
-            rsl.append(String.format("%s", table.text()));
-
+        Elements body = doc.select("body");
+        for (Element table : body) {
+            System.out.println(converter.formatToMap(table.text()));
+            rsl.append(table.text());
         }
-
         return converter.formatToMap(rsl.toString());
     }
 
