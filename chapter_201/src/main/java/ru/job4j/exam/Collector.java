@@ -12,7 +12,7 @@ public class Collector<T> {
     private final ConcurrentSkipListSet<T> products = new ConcurrentSkipListSet<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final Factory<T> factory;
-    private final AtomicInteger downloaded = new AtomicInteger();
+    private AtomicInteger downloaded = new AtomicInteger();
     private final AtomicInteger downloading = new AtomicInteger();
     private final Sorter sorter = new Sorter();
 
@@ -25,7 +25,9 @@ public class Collector<T> {
 
         @Override
         public void run() {
+
             while (true) {
+                System.out.println("@@");
                 if (downloaded.get() == 0) {
                    try {
                         downloaded.wait();
@@ -83,9 +85,6 @@ public class Collector<T> {
                 e.printStackTrace();
             }
         }*/
-        for (T instance : products) {
-
-        }
         return null;
     }
 
