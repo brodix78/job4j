@@ -27,4 +27,10 @@ public class CameraFactory implements Factory<Camera>{
         }
         return camera;
     }
+
+    @Override
+    public Camera getCopy(Camera original) {
+        return new Camera(original.getId(), original.getUrlType(), original.getVideoUrl(),
+                original.getValue(), original.getTtl());
+    }
 }

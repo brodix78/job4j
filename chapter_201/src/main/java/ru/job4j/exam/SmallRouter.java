@@ -40,9 +40,8 @@ public class SmallRouter<T> implements Callable<T> {
             List<Map<String, String>> elements = fromLink.get();
             fields.putAll(elements.get(0));
         }
-        downloading.decrementAndGet();
         downloaded.incrementAndGet();
-        System.out.println(factory.getInstance((fields)));
+        downloading.decrementAndGet();
         return factory.getInstance(fields);
     }
 }

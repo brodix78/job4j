@@ -3,14 +3,14 @@ package ru.job4j.exam;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JsonConverter<T> implements Converter<T>{
+public class JsonConverter implements Converter{
 
-    public List<Map<String, String>> formatToMap(String json) {
+    public List<Map<String, String>> formatToMaps(String json) {
         List<Map<String, String>> call;
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -29,9 +29,14 @@ public class JsonConverter<T> implements Converter<T>{
         return call;
     }
 
-    @Override
-    public String toFormat(List<T> items) throws JsonProcessingException {
-        return new ObjectMapper().writeValueAsString(items);
+    public String asFormat(Object object) {
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = null;
+        try {
+            json = ow.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
-
 }

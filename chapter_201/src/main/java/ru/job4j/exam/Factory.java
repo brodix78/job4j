@@ -6,4 +6,5 @@ import java.util.Map;
 public interface Factory<T> {
     List<String> links();
     T getInstance(Map<String, String> fields);
+    T getCopy(T original);
 }

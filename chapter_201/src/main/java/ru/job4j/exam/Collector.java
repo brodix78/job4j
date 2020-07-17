@@ -1,36 +1,39 @@
 package ru.job4j.exam;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import net.jcip.annotations.ThreadSafe;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@ThreadSafe
 public class Collector<T> {
 
-    private final ConcurrentSkipListSet<FutureTask<T>> data = new ConcurrentSkipListSet<>();
-    private final ConcurrentSkipListSet<T> products = new ConcurrentSkipListSet<>();
+    private final CopyOnWriteArrayList<FutureTask<T>> data = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<T> products = new CopyOnWriteArrayList<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final Factory<T> factory;
-    private AtomicInteger downloaded = new AtomicInteger();
+    private final AtomicInteger downloaded = new AtomicInteger();
     private final AtomicInteger downloading = new AtomicInteger();
-    private final Sorter sorter = new Sorter();
+    volatile private boolean on;
 
-    public Collector(Factory<T> factory, Converter converter) {
+    public Collector(Factory<T> factory) {
         this.factory = factory;
-        executor.execute(sorter);
+        this.on = true;
+        executor.execute(new Storekeeper());
     }
 
-    private class Sorter implements Runnable {
+    private class Storekeeper implements Runnable {
 
         @Override
         public void run() {
-
-            while (true) {
-                System.out.println("@@");
-                if (downloaded.get() == 0) {
+            while (on) {
+                while (downloaded.get() == 0 && on) {
                    try {
-                        downloaded.wait();
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
@@ -38,14 +41,15 @@ public class Collector<T> {
                 Iterator<FutureTask<T>> iterator = data.iterator();
                 while (iterator.hasNext()) {
                     FutureTask<T> one = iterator.next();
+                    boolean allreadyIn;
                     if (one.isDone()) {
                         try {
                             T rsl = one.get();
-                            iterator.remove();
                             if (rsl != null) {
-                                products.add(rsl);
-                                this.notifyAll();
+                                System.out.println(downloaded.get() + "  " + rsl);
+                                boolean d = products.addIfAbsent(rsl);
                             }
+                            iterator.remove();
                         } catch (Exception e) {
                             Thread.currentThread().interrupt();
                         }
@@ -71,30 +75,38 @@ public class Collector<T> {
         }
     }
 
-
-    public String getDownloadedData(Converter<T> converter) {
+    public List<T> getFull() {
         try {
-            Thread.sleep(10000);
+            Thread.sleep(200);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-      /*  while (downloading.get() != 0 || downloaded.get() != 0) {
+      while (downloading.get() != 0 || downloaded.get() != 0) {
             try {
-                sorter.wait(1000);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }*/
-        return null;
+        }
+        return getDownloaded();
     }
 
-    public void stop() {
+    public List<T> getDownloaded() {
+        List<T> list = new ArrayList<>();
+        products.iterator().forEachRemaining(t -> list.add(factory.getCopy(t)));
+        return list;
+    }
+
+    public void off() {
         executor.shutdownNow();
+        on = false;
     }
 
-    private static void main(String[] args) {
-        Collector<Camera> collector = new Collector<>(new CameraFactory(), new JsonConverter());
+    public static void main(String[] args) throws JsonProcessingException {
+        Collector<Camera> collector = new Collector<>(new CameraFactory());
         collector.addData(new ExplorerUrl(new JsonConverter()), List.of("http://www.mocky.io/v2/5c51b9dd3400003252129fb5"));
-        System.out.println(collector.getDownloadedData(new JsonConverter()));
+        System.out.println(new JsonConverter().asFormat(collector.getFull()));
+        System.out.println(collector.getDownloaded());
+        collector.off();
     }
 }
