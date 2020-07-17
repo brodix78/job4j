@@ -1,9 +1,6 @@
 package ru.job4j.exam;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -19,10 +16,10 @@ public class SmallRouter<T> implements Callable<T> {
     private final AtomicInteger downloading;
 
 
-    public SmallRouter(Explorer explorer, Factory<T> child, ExecutorService executor, Map<String, String> map,
+    public SmallRouter(Explorer explorer, Factory<T> factory, ExecutorService executor, Map<String, String> map,
                        AtomicInteger downloaded, AtomicInteger downloading) {
         this.explorer = explorer;
-        this.factory = child;
+        this.factory = factory;
         this.executor = executor;
         this.map = map;
         this.downloaded = downloaded;
@@ -45,7 +42,7 @@ public class SmallRouter<T> implements Callable<T> {
         }
         downloading.decrementAndGet();
         downloaded.incrementAndGet();
-        downloaded.notifyAll();
-        return factory.getChild(fields);
+        System.out.println(factory.getInstance((fields)));
+        return factory.getInstance(fields);
     }
 }

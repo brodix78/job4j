@@ -22,15 +22,16 @@ public class Collector<T> {
     }
 
     private class Sorter implements Runnable {
+
         @Override
         public void run() {
             while (true) {
                 if (downloaded.get() == 0) {
-                   /* try {
+                   try {
                         downloaded.wait();
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
-                    }*/
+                    }
                 }
                 Iterator<FutureTask<T>> iterator = data.iterator();
                 while (iterator.hasNext()) {

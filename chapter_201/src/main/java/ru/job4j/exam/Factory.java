@@ -5,5 +5,5 @@ import java.util.Map;
 
 public interface Factory<T> {
     List<String> links();
-    T getChild(Map<String, String> fields);
+    T getInstance(Map<String, String> fields);
 }

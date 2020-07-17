@@ -14,4 +14,15 @@ public class Camera {
         this.value = value;
         this.ttl = ttl;
     }
+
+    @Override
+    public String toString() {
+        return "Camera{" +
+                "id='" + id + '\'' +
+                ", urlType='" + urlType + '\'' +
+                ", videoUrl='" + videoUrl + '\'' +
+                ", value='" + value + '\'' +
+                ", ttl=" + ttl +
+                '}';
+    }
 }
