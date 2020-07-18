@@ -12,8 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ThreadSafe
 public class Collector<T> {
 
-    private final LinkedBlockingDeque<FutureTask<T>> data = new LinkedBlockingDeque<>();
-    private final CopyOnWriteArrayList<T> products = new CopyOnWriteArrayList<>();
+    private final LinkedBlockingDeque<Future<T>> data = new LinkedBlockingDeque<>();
+    private final LinkedBlockingDeque<T> products = new LinkedBlockingDeque<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final Factory<T> factory;
     private final AtomicInteger downloaded = new AtomicInteger();
@@ -38,9 +38,9 @@ public class Collector<T> {
                         Thread.currentThread().interrupt();
                     }
                 }
-                Iterator<FutureTask<T>> iterator = data.iterator();
+                Iterator<Future<T>> iterator = data.iterator();
                 while (iterator.hasNext()) {
-                    FutureTask<T> one = iterator.next();
+                    Future<T> one = iterator.next();
                     if (one.isDone()) {
                         try {
                             T rsl = one.get();

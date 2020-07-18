@@ -2,6 +2,7 @@ package ru.job4j.exam;
 
 import java.util.*;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,7 +28,7 @@ public class SmallRouter<T> implements Callable<T> {
     }
 
     @Override
-    public T call() throws Exception {
+    public T call() {
         downloading.incrementAndGet();
         List<String> checkList = factory.links();
         Map<String, String> fields = new TreeMap(map);
@@ -37,11 +38,19 @@ public class SmallRouter<T> implements Callable<T> {
             fromLinks.add(fromLink);
         }
         for (Future<List<Map<String, String>>> fromLink : fromLinks) {
-            List<Map<String, String>> elements = fromLink.get();
-            fields.putAll(elements.get(0));
+            List<Map<String, String>> elements = null;
+            try {
+                elements = fromLink.get();
+            } catch (Exception e) {
+                fields = null;
+                break;
+            }
+            if (elements != null && elements.size() > 0) {
+                fields.putAll(elements.get(0));
+            }
         }
         downloaded.incrementAndGet();
         downloading.decrementAndGet();
-        return factory.getInstance(fields);
+        return fields != null ? factory.getInstance(fields) : null;
     }
 }

@@ -25,14 +25,10 @@ public class ExplorerUrl extends Explorer implements Callable<List<Map<String, S
     }
 
     @Override
-    public List<Map<String, String>> call() {
+    public List<Map<String, String>> call() throws Exception{
         Document doc = null;
         StringBuilder rsl = new StringBuilder();
-        try {
-            doc = Jsoup.connect(source).ignoreContentType(true).get();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        doc = Jsoup.connect(source).ignoreContentType(true).get();
         Elements body = doc.select("body");
         for (Element table : body) {
             rsl.append(table.text());

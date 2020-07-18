@@ -5,10 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BigRouter<T> implements Callable<List<FutureTask<T>>> {
+public class BigRouter<T> implements Callable<List<Future<T>>> {
 
     private final Explorer explorer;
     private final Factory<T> factory;
@@ -26,17 +27,20 @@ public class BigRouter<T> implements Callable<List<FutureTask<T>>> {
     }
 
     @Override
-    public List<FutureTask<T>> call() throws Exception {
+    public List<Future<T>> call() {
         downloading.incrementAndGet();
         List<String> checkList = factory.links();
-        List<FutureTask<T>> rsl = new ArrayList<>();
-        List<Map<String, String>> links = explorer.call();
-        for (Map<String, String> map : links) {
-            if (map.keySet().containsAll(checkList)) {
-                FutureTask<T> newBorn = new FutureTask<T>(new SmallRouter<T>(explorer, factory, executor,
-                        map, downloaded, downloading));
-                rsl.add(newBorn);
-                executor.submit(newBorn);
+        List<Future<T>> rsl = new ArrayList<>();
+        List<Map<String, String>> links = List.of();
+        try {
+            links = explorer.call();
+        } catch (Exception e) {}
+        if (links != null) {
+            for (Map<String, String> map : links) {
+                if (map.keySet().containsAll(checkList)) {
+                    rsl.add(executor.submit(new SmallRouter<T>(explorer, factory, executor,
+                            map, downloaded, downloading)));
+                }
             }
         }
         downloading.decrementAndGet();

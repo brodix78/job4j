@@ -5,6 +5,6 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 public abstract class Explorer implements Callable<List<Map<String, String>>> {
-    abstract public List<Map<String, String>> call();
+    abstract public List<Map<String, String>> call() throws Exception;
     abstract public Explorer getInstance(String source);
 }
