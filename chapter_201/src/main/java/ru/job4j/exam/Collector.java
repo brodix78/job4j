@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @ThreadSafe
 public class Collector<T> {
 
-    private final CopyOnWriteArrayList<FutureTask<T>> data = new CopyOnWriteArrayList<>();
+    private final LinkedBlockingDeque<FutureTask<T>> data = new LinkedBlockingDeque<>();
     private final CopyOnWriteArrayList<T> products = new CopyOnWriteArrayList<>();
     private final ExecutorService executor = Executors.newCachedThreadPool();
     private final Factory<T> factory;
@@ -33,7 +33,7 @@ public class Collector<T> {
             while (on) {
                 while (downloaded.get() == 0 && on) {
                    try {
-                        Thread.sleep(200);
+                        Thread.sleep(250);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
@@ -41,13 +41,11 @@ public class Collector<T> {
                 Iterator<FutureTask<T>> iterator = data.iterator();
                 while (iterator.hasNext()) {
                     FutureTask<T> one = iterator.next();
-                    boolean allreadyIn;
                     if (one.isDone()) {
                         try {
                             T rsl = one.get();
                             if (rsl != null) {
-                                System.out.println(downloaded.get() + "  " + rsl);
-                                boolean d = products.addIfAbsent(rsl);
+                                products.add(rsl);
                             }
                             iterator.remove();
                         } catch (Exception e) {
@@ -102,11 +100,10 @@ public class Collector<T> {
         on = false;
     }
 
-    public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) {
         Collector<Camera> collector = new Collector<>(new CameraFactory());
         collector.addData(new ExplorerUrl(new JsonConverter()), List.of("http://www.mocky.io/v2/5c51b9dd3400003252129fb5"));
         System.out.println(new JsonConverter().asFormat(collector.getFull()));
-        System.out.println(collector.getDownloaded());
         collector.off();
     }
 }

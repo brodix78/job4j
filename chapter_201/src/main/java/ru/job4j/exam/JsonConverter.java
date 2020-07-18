@@ -10,6 +10,7 @@ import java.util.Map;
 
 public class JsonConverter implements Converter{
 
+    @Override
     public List<Map<String, String>> formatToMaps(String json) {
         List<Map<String, String>> call;
         try {
@@ -29,6 +30,7 @@ public class JsonConverter implements Converter{
         return call;
     }
 
+    @Override
     public String asFormat(Object object) {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = null;
