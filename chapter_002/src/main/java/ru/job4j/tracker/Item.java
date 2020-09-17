@@ -1,15 +1,27 @@
 package ru.job4j.tracker;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "items")
 public class Item {
     private String id;
     private String name;
+
+    public Item(){}
 
     public Item(String name) {
         this.name = name;
     }
 
+
+    @Id
+    @GenericGenerator(name = "sequence_id", strategy = "ru.job4j.tracker.IdGenerator")
+    @GeneratedValue(generator = "sequence_id")
+    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -18,6 +30,7 @@ public class Item {
         this.id = id;
     }
 
+    @Column(name = "name")
     public String getName() {
         return name;
     }
