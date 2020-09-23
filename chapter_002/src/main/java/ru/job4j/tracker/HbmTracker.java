@@ -74,6 +74,7 @@ public class HbmTracker implements ITracker, AutoCloseable{
         Query query = session.createQuery("FROM items where name:=name");
         query.setParameter("name", name);
         List result = query.list();
+        session.getTransaction().commit();
         session.close();
         return result;
     }
