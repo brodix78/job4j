@@ -13,10 +13,8 @@
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL10Dialect</property>
         <property name="hibernate.hbm2ddl.auto">update</property>
-        <mapping class="ru.job4j.cars.Brand" />
-        <mapping class="ru.job4j.cars.Model" />
-        <mapping class="ru.job4j.cars.Car" />
-        <mapping class="ru.job4j.cars.Driver" />
-        <mapping class="ru.job4j.cars.Engine" />
+        <mapping resource="Engine.hbm.xml"/>
+        <mapping resource="Driver.hbm.xml"/>
+        <mapping resource="Car.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

@@ -21,6 +21,7 @@
         <module>agent</module>
         <module>chapter_201</module>
         <module>chapter_202</module>
+        <module>chapter_202_2</module>
     </modules>
 
     <properties>

@@ -1,0 +1,8 @@
+<hibernate-mapping>
+    <class name="ru.job4j.carsX.Engine" table="engine">
+        <id column="id" name="id" type="java.lang.Integer">
+            <generator class="identity"/>
+        </id>
+        <property column="model" name="model" type="java.lang.String"/>
+    </class>
+</hibernate-mapping>
