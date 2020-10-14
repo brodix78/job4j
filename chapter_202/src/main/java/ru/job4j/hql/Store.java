@@ -42,7 +42,7 @@ public class Store implements Closeable{
         });
     }
 
-    public List<Candidate> getCandidates(int id) {
+    public List<Candidate> getCandidates() {
         return trans(session ->
                 session.createQuery("from Candidate").list()
         );
