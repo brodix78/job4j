@@ -1,6 +1,5 @@
 package ru.job4j.tracker;
 
-import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -8,9 +7,7 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.query.Query;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class HbmTracker implements ITracker, AutoCloseable{
 
@@ -62,7 +59,7 @@ public class HbmTracker implements ITracker, AutoCloseable{
     public List<Item> findAll() {
         Session session = sf.openSession();
         session.beginTransaction();
-        List result = session.createQuery("from ru.job4j.tracker.Item").list();
+        List result = session.createQuery("from Item").list();
         session.getTransaction().commit();
         session.close();
         return result;
@@ -71,9 +68,8 @@ public class HbmTracker implements ITracker, AutoCloseable{
     @Override
     public List<Item> findByName(String name) {
         Session session = sf.openSession();
-        Query query = session.createQuery("FROM items where name:=name");
-        query.setParameter("name", name);
-        List result = query.list();
+        session.beginTransaction();
+        List result = session.createQuery("FROM Item WHERE name=:name").setParameter("name", name).list();
         session.getTransaction().commit();
         session.close();
         return result;

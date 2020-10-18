@@ -8,7 +8,14 @@ import java.util.Objects;
 @Entity
 @Table(name = "items")
 public class Item {
+
+    @Id
+    @GenericGenerator(name = "sequence_id", strategy = "ru.job4j.tracker.IdGenerator")
+    @GeneratedValue(generator = "sequence_id")
+    @Column(name = "id")
     private String id;
+
+    @Column(name = "name")
     private String name;
 
     public Item(){}
@@ -18,10 +25,6 @@ public class Item {
     }
 
 
-    @Id
-    @GenericGenerator(name = "sequence_id", strategy = "ru.job4j.tracker.IdGenerator")
-    @GeneratedValue(generator = "sequence_id")
-    @Column(name = "id")
     public String getId() {
         return id;
     }
@@ -30,7 +33,6 @@ public class Item {
         this.id = id;
     }
 
-    @Column(name = "name")
     public String getName() {
         return name;
     }
