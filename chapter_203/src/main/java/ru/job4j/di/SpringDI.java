@@ -12,5 +12,9 @@ public class SpringDI {
         ui.add("First subject");
         ui.add("Second subject");
         ui.print();
+        ui = context.getBean(StartUI.class);
+        ui.add("Third subject");
+        ui.add("Fourth subject");
+        ui.print();
     }
 }
